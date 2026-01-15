@@ -1,0 +1,108 @@
+# Implementation Plan - Personal Website
+
+## Goal
+Create a high-quality, premium-feel personal website for a developer to showcase work, blogs, notes, and experience to recruiters.
+
+## Technology Stack
+- **Framework**: Next.js 14+ (App Router)
+- **Styling**: Tailwind CSS + CSS Modules (for specific animations)
+- **Animations**: Framer Motion
+- **Icons**: Lucide React
+- **Content**: Markdown/MDX (using `next-mdx-remote` or `react-markdown` + `gray-matter`)
+- **Fonts**: Inter / Outfit (Google Fonts)
+
+## Architecture
+
+### Directory Structure
+```
+/app
+  /page.tsx          (Hero, About snippet, Featured)
+  /about/page.tsx    (Detailed About, Experience, Resume)
+  /projects
+    /page.tsx        (List of projects)
+    /[slug]/page.tsx (Project documentation/details)
+  /blogs
+    /page.tsx
+    /[slug]/page.tsx
+  /notes
+    /page.tsx
+    /[slug]/page.tsx
+/components
+  /ui                (Buttons, Cards, Badges)
+  /layout            (Navbar, Footer)
+  /sections          (HeroSection, ExperienceSection, StackSection)
+/content
+  /projects          (md files)
+  /blogs             (md files)
+  /notes             (md files)
+/lib
+  /markdown.ts       (Utils to read/parse MD files)
+```
+
+## User Review Required
+- None at this stage.
+
+## Proposed Changes
+
+### Core Setup
+- Initialize Next.js app.
+- Setup Tailwind with a custom "premium" color palette (slate/zinc + a vibrant accent).
+- Configure fonts.
+
+### Content Management
+- Create utility functions to read from filesystem.
+- Define frontmatter schema for Project (title, description, tech_stack, demo_link, repo_link, documentation_content).
+
+### UI Implementation
+- **Hero**: Big, bold text, clear CTA.
+- **Projects**: Card layout. Hover effects. "Read Documentation" button.
+- **Documentation**: Clean typography-focused layout (prose).
+- **Resume**: Simple button to trigger download of file in [public/assets/resume.pdf](file:///home/mohd-adil/Desktop/personal-website/public/assets/resume.pdf).
+
+### New Features (User Feedback)
+- **Dark Mode**: Use `next-themes` for system/light/dark toggle.
+- **Notes Hierarchy**: Refactor `content/notes` to support subdirectories (e.g., `content/notes/react/basics.md`).
+    - URL structure: `/notes/[category]/[slug]`.
+    - UI: Sidebar with collapsible categories.
+- **Recursive Notes**: Upgrade Notes to support unlimited nesting (`content/notes/a/b/c/note.md`).
+    - Change route to catch-all: `/notes/[...slug]`.
+    - Update `lib/markdown.ts` to return a recursive tree structure (nodes with `children`).
+    - recursive Sidebar component strings.
+- **Table of Contents**: Add an auto-generated index based on headings (H2, H3).
+    - Use `rehype-slug` to generate IDs for headings.
+    - Create a Client Component `TableOfContents` that observes headings or parses the content source.
+    - Layout: Sticky on the right side for Desktop (xl screens), hidden on Mobile.
+- **Images in Markdown**: Ensure local images work.
+    - Create a custom `MDXBox` component to handle `img` tags and map them to `next/image`.
+    - Configure MDX Remote to use this component.
+- **Content Expansion**:
+    - **Home Page**: Add `SummaryAboutSection` component before `StackSection`.
+    - **About Page**:
+        - `EducationSection`: College, Degree, CGPA, Year, Courses, Societies.
+        - `TechSection`: Reuse or adapt StackSection logic.
+        - `AchievementsSection`: List or Grid of awards.
+        - `HobbiesSection`: Simple textual or card-based intro.
+    - **Notes Styling**: Update Prose classes.
+        - Headings: `text-green-600` (or similar brand-green).
+        - Remove underline/link style from headings (make them look regular).
+- **Visual Refinement (Sharp Theme)**:
+    - **Font**: Switch to `Geist Sans` / `Geist Mono` or similar modern geometric font.
+    - **Padding**: Reduce `px-8` to `px-4` or `px-6` on mobile, but rely more on max-width.
+    - **Style**:
+        - **Home (Summary)**: Remove large rounded borders. Use border-l or border-b for "sharp" separation. High contrast text.
+        - **About**: Convert Education/Achievements to a Timeline view (like Work Experience). Remove generic card backgrounds.
+        - **Projects/Notes/Blogs**: Remove soft `bg-secondary` blocks. Use lines/dividers. Ensure Prose is high contrast.
+
+## Verification Plan
+### Automated Tests
+- None planned (Frontend only).
+### Manual Verification
+- Check all routes.
+- Verify Markdown rendering (headings, code blocks).
+- Test mobile view.
+- Verify Resume download.
+- **Verify Dark Mode toggle works and persists.**
+- **Verify Notes navigation and hierarchy.**
+- **Verify Deeply Nested Notes (e.g., Level 3 depth) render correctly.**
+- **Verify TOC appears on desktop and links jump to sections.**
+- **Verify Images load correctly in markdown.**
