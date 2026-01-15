@@ -26,7 +26,7 @@ export function AboutTechSection() {
                         transition={{ delay: index * 0.1 }}
                         className="group"
                     >
-                        <h3 className="text-lg font-bold mb-4 text-foreground flex items-center gap-2">
+                        <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
                             <span className="w-1 h-4 bg-brand rounded-none inline-block" />
                             {category}
                         </h3>

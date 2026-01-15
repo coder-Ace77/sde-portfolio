@@ -22,10 +22,10 @@ export default function AboutPage() {
                         Hi, I&apos;m <span className="text-brand">Mohd Adil</span>
                     </h1>
                     <div className="border-l-2 border-brand pl-6 space-y-4">
-                        <p className="text-xl text-muted-foreground leading-relaxed">
+                        <p className="text-xl leading-relaxed">
                             A dedicated software engineer with a passion for building scalable web applications and solving real-world problems through code.
                         </p>
-                        <p className="text-lg text-muted-foreground">
+                        <p className="text-lg">
                             I specialize in the JavaScript ecosystem, focusing on React, Next.js, and Node.js. My goal is to create intuitive digital experiences that make a difference.
                         </p>
                     </div>

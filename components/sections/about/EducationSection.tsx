@@ -41,16 +41,16 @@ export function EducationSection() {
 
                                 <h3 className="text-xl font-bold">{edu.school}</h3>
                                 <div className="text-foreground/90 font-medium">{edu.degree}</div>
-                                <div className="text-sm text-muted-foreground mb-4">{edu.grade}</div>
+                                <div className="text-sm mb-4">{edu.grade}</div>
 
-                                <p className="text-muted-foreground leading-relaxed mb-4">{edu.description}</p>
+                                <p className="leading-relaxed mb-4">{edu.description}</p>
 
                                 <div className="space-y-3">
                                     <div>
-                                        <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Key Courses</span>
+                                        <span className="text-xs font-semibold uppercase tracking-wider">Key Courses</span>
                                         <div className="flex flex-wrap gap-2 mt-1">
                                             {edu.courses.map(c => (
-                                                <span key={c} className="text-xs border border-border px-2 py-0.5 text-muted-foreground hover:text-foreground transition-colors">{c}</span>
+                                                <span key={c} className="text-xs border border-border px-2 py-0.5 hover:text-foreground transition-colors">{c}</span>
                                             ))}
                                         </div>
                                     </div>

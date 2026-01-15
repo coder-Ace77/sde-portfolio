@@ -36,7 +36,7 @@ export function ExperienceSection() {
                     >
                         <div className="flex flex-col md:flex-row gap-4 md:gap-10">
                             <div className="md:w-1/4 pt-1">
-                                <span className="text-sm font-mono text-muted-foreground flex items-center gap-2">
+                                <span className="text-sm font-mono flex items-center gap-2">
                                     <Calendar className="h-3 w-3" /> {exp.duration}
                                 </span>
                             </div>
@@ -53,22 +53,22 @@ export function ExperienceSection() {
                                 
                                 <h3 className="text-lg font-medium text-foreground/90">{exp.position}</h3>
 
-                                <p className="text-muted-foreground leading-relaxed mb-4">{exp.description}</p>
+                                <p className="leading-relaxed mb-4">{exp.description}</p>
 
                                 <div className="space-y-3">
                                     <div>
-                                        <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Key Contributions</span>
-                                        <ul className="list-disc list-inside text-sm text-muted-foreground mt-1 space-y-1">
+                                        <span className="text-xs font-semibold uppercase tracking-wider">Key Contributions</span>
+                                        <ul className="list-disc list-inside text-sm mt-1 space-y-1">
                                             {exp.achievements.map((achievement, i) => (
                                                 <li key={i} className="leading-relaxed">{achievement}</li>
                                             ))}
                                         </ul>
                                     </div>
                                     <div>
-                                        <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Stack</span>
+                                        <span className="text-xs font-semibold uppercase tracking-wider">Stack</span>
                                         <div className="flex flex-wrap gap-2 mt-1">
                                             {exp.technologies.map(tech => (
-                                                <span key={tech} className="text-xs border border-border px-2 py-0.5 text-muted-foreground hover:text-foreground transition-colors">
+                                                <span key={tech} className="text-xs border border-border px-2 py-0.5 hover:text-foreground transition-colors">
                                                     {tech}
                                                 </span>
                                             ))}

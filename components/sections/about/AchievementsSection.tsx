@@ -54,7 +54,7 @@ export function AchievementsSection() {
                                 <span className="text-sm font-mono text-muted-foreground">({item.date})</span>
                             </div>
                             <div className="text-sm font-medium text-foreground/80 mb-2">{item.issuer}</div>
-                            <p className="text-sm text-muted-foreground max-w-xl">{item.description}</p>
+                            <p className="text-sm max-w-xl">{item.description}</p>
                         </div>
                     </motion.div>
                 ))}

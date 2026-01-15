@@ -44,7 +44,7 @@ export function HobbiesSection() {
                     >
                         <hobby.icon className="h-8 w-8 text-foreground/70 group-hover:text-brand mb-3 transition-colors duration-300" />
                         <div className="font-bold mb-2">{hobby.name}</div>
-                        <div className="text-[11px] leading-relaxed text-muted-foreground text-center line-clamp-3">
+                        <div className="text-[11px] leading-relaxed text-center line-clamp-3">
                             {hobby.desc}
                         </div>
                     </motion.div>
