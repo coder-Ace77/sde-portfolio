@@ -64,10 +64,12 @@ export function Navbar() {
                             {item.name}
                         </Link>
                     ))}
-                    <Button variant="outline" size="sm" className="ml-4 gap-2">
-                        <FileText className="h-4 w-4" />
-                        <span>Resume</span>
-                    </Button>
+                    <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" download>
+                        <Button variant="outline" size="sm" className="ml-4 gap-2">
+                            <FileText className="h-4 w-4" />
+                            <span>Resume</span>
+                        </Button>
+                    </a>
                     <div className="ml-2">
                         <ThemeToggle />
                     </div>
@@ -105,10 +107,12 @@ export function Navbar() {
                                 </Link>
                             ))}
                             <div className="pt-4 border-t border-border flex flex-col gap-4">
-                                <Button className="w-full gap-2">
-                                    <FileText className="h-4 w-4" />
-                                    <span>Download Resume</span>
-                                </Button>
+                                <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" download className="w-full">
+                                    <Button className="w-full gap-2">
+                                        <FileText className="h-4 w-4" />
+                                        <span>Download Resume</span>
+                                    </Button>
+                                </a>
                                 <div className="flex items-center justify-between">
                                     <span className="text-sm font-medium text-muted-foreground">Switch Theme</span>
                                     <ThemeToggle />
