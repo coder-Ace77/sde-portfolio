@@ -1,6 +1,10 @@
-# Game Theory
-
 ---
+title: "Game theory"
+description: ""
+date: "2026-02-05"
+---
+
+
 
 Patterns
 
@@ -10,11 +14,12 @@ Patterns
 4. Sparsh grundy values
 5. Observation/Print and see types
 
+
 ## Combinatorial games:
 
 ### Definition
 
-It is a game that satisfies the following conditions.
+ It is a game that satisfies the following conditions.
 1. There are two players.
 2. There is a set, usually finite, of possible positions of the game.
 3. The rules of the game specify for both players and each position which moves to other positions are legal moves. If the rules make no distinction between the players, that is if both players have the same options of moving from each position, the game is called impartial; otherwise, the game is called partizan.
@@ -45,9 +50,9 @@ P-positions and N-positions are defined recursively by the following three state
 
 Or we canv define P postions as
 
-A position is a P position if all the links outgoing from `P` are `N`.
+A position is a P position if all the links outgoing from `P` are `N`. 
 
-we can define N position as
+we can define N position as 
 
 A position is N position if atleast one link from here is `P`
 
@@ -60,18 +65,20 @@ Solution: We can label the P and N positions for such games very easily by dp. H
 
 ### General solution
 
-Usually in substraction games is much harder to predict at which positions W or L will be rather this is more general observation -
+Usually in substraction games is much harder to predict at which positions W or L will be rather this is more general observation - 
 
-Suppose we build the string of positions by `P/N` or by `W/L`. We can define the substraction game by a string of T where every t in T is either W or L depending upon the position. This will be infinite string.
+Suppose we build the string of positions by `P/N` or by `W/L`. We can define the substraction game by a string of T where every t in T is either W or L depending upon the position. This will be infinite string. 
 
 Now here is the observation:
 
 Given a set of moves in S. The string T is always periodic. With period always dependent on the set S.
-Also the period has upper bound with `lcm(S)`. Thus for substraction games if `max(S)` is not very large we can always solve uptil `3*length of lcm of S` and then find the period using `kmp` algorithm. Once period is known it is bound to repeat and we can solve it pretty easily.
+Also the period has upper bound with `lcm(S)`. Thus for substraction games if `max(S)` is not very large we can always solve uptil `3*length of lcm of S` and then find the period using `kmp` algorithm. Once period is known it is bound to repeat and we can solve it pretty easily. 
+
 
 ### Theorum
 
 Every natural number can be written as sum of fibonacci numbers.
+
 
 ## Nim games
 
@@ -93,11 +100,11 @@ This game obeys the restrictions described above. Moreover, _any_ perfect-inform
 
 **Theorem.** The current player has a winning strategy if and only if the xor-sum of the pile sizes is non-zero.
 
-### Proof
+### Proof 
 
 The proof is as follows observe that in the terminal case all the piles are zero and so xor sum is zero. Now from any non-zero state `W` we can make a choice to move to zero-state `L`.
 
-For each `W` position there is a move to `L`. We can do this by looking at the largest pile and removing some stones from it so that xor sum becomes `0`.
+For each `W` position there is a move to `L`. We can do this by looking at the largest pile and removing some stones from it so that xor sum becomes `0`. 
 
 For  each `L` positions all the transitions lead to `W` positions. This concludes the proof.
 
@@ -105,11 +112,11 @@ Now with this said there are many variations of nim games which can be reduces t
 
 ### Problem 1
 
-Suppose in nim game a player can add/remove stones to the pile.
+Suppose in nim game a player can add/remove stones to the pile. 
 
 ### Solution
 
-Consider if there were only `reduction` of stones was possible then if this is a winning position `W` then removing stones makes sence and thus should be done. If however this is losing then just by the removal of stones even if this player adds the stones. In the next step other player will reduce exactly the same stones from same pile leading to player 1 being at the same spot. So a `L` state can't be converted to `W` by addition and `add` moves have no effect on the game. And final answer is again `xor sum`.
+Consider if there were only `reduction` of stones was possible then if this is a winning position `W` then removing stones makes sence and thus should be done. If however this is losing then just by the removal of stones even if this player adds the stones. In the next step other player will reduce exactly the same stones from same pile leading to player 1 being at the same spot. So a `L` state can't be converted to `W` by addition and `add` moves have no effect on the game. And final answer is again `xor sum`. 
 
 ### Problem 2
 

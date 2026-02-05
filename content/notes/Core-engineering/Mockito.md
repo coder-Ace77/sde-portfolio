@@ -1,6 +1,10 @@
-# Mockito
-
 ---
+title: "Mockito"
+description: ""
+date: "2026-02-05"
+---
+
+
 
 ### Working and tutorials:
 
@@ -8,7 +12,6 @@ Creating mock object.
 
 ```java
 MyService mockService = Mockito.mock(MyService.class);
-
 ```
 
 In **Mockito**, **stubbing** refers to the process of specifying the **behavior of a mock object** — essentially, telling the mock what to do when a specific method is called with specific parameters.
@@ -20,7 +23,6 @@ List<String> mockList = Mockito.mock(List.class);
 
 System.out.println(mockList.get(0)); // Output: null (default for object return types)
 System.out.println(mockList.size()); // Output: 0 (default for int)
-
 ```
 
 Stubbing and doing something
@@ -31,7 +33,6 @@ when(mockList.get(0)).thenReturn("Hello");
 
 System.out.println(mockList.get(0)); // Output: Hello
 System.out.println(mockList.get(1)); // Output: null (not stubbed)
-
 ```
 
 Verifying if the mock was called or not:
@@ -46,9 +47,8 @@ mockList.add("test");
 mockList.add("another");
 
 verify(mockList).add("test");
-verify(mockList).add("another");
+verify(mockList).add("another");    
 verify(mockList, times(2)).add(anyString());
-
 
 ```
 
@@ -67,7 +67,6 @@ class UserService {
         return user != null ? user.getName() : "Unknown";
     }
 }
-
 ```
 
 ```java
@@ -91,8 +90,8 @@ class UserServiceTest {
         verify(mockRepo).findById("123");
     }
 }
-
 ```
+
 
 Using annotations:
 
@@ -114,17 +113,16 @@ class UserServiceTest {
     }
 }
 
-
 ```
+
 
 Discussion::
 
-Note the first example the user repo is passed to UserService through constructor.
+Note the first example the user repo is passed to UserService through constructor. 
 
 ```java
 UserRepository mockRepo = Mockito.mock(UserRepository.class);
 UserService userService = new UserService(mockRepo);
-
 ```
 
 If your class had **multiple dependencies**, you'd have to manually create mocks for each and pass them all into the constructor (or setters). This gets **verbose and repetitive**, especially when testing service layers with many dependencies.
@@ -134,17 +132,15 @@ Now with @Mock
 ```java
 @Mock
 UserRepository userRepository;
-
 ```
 
 Mockito will create a mock version of `UserRepository` and store it in that field.
 
-This annotation tells Mockito to **create an instance of the class** and then **inject mocks into it**.
+This annotation tells Mockito to **create an instance of the class** and then **inject mocks into it**. 
 
 ```java
 @InjectMocks
 UserService userService;
-
 ```
 
 ## What If My Class Uses Spring’s `@Autowired`?
@@ -160,13 +156,12 @@ When you run your test with `@ExtendWith(MockitoExtension.class)` (for JUnit 5),
 1. **Scans the test class** for fields annotated with `@Mock` and creates mock instances using `Mockito.mock(...)`.
 2. **Scans for fields annotated with `@InjectMocks`**.
 3. When it finds an `@InjectMocks` field:
-
-- It creates an instance of the class.
-- It tries to **match the available mocks** to the class’s constructor, fields, or setter methods.
-- It **injects mocks** by:
-- Preferring constructor injection (if constructor parameters match mocks)
-- Then trying field injection
-- Then trying setter injection
+    - It creates an instance of the class.
+    - It tries to **match the available mocks** to the class’s constructor, fields, or setter methods.
+    - It **injects mocks** by:
+        - Preferring constructor injection (if constructor parameters match mocks)
+        - Then trying field injection
+        - Then trying setter injection
 4. After this, the `@InjectMocks` field is ready to be used with all its dependencies mocked.
 
 ### Spy:
@@ -210,7 +205,6 @@ public class SpyExample {
     }
 }
 
-
 ```
 
 ### Internals:
@@ -241,7 +235,6 @@ class UserServiceTest {
     }
 }
 
-
 ```
 
 Mockito provides a rich set of features beyond basic mocking. It supports **spying**, which allows you to partially mock real objects (real methods and mocked methods mixed).
@@ -250,13 +243,12 @@ Mockito provides a rich set of features beyond basic mocking. It supports **spyi
 
 Mockito isn't just magic — it uses powerful Java features like **reflection**, **dynamic proxies**, and **bytecode manipulation** to simulate the behavior of real objects. Let’s break down how this works step-by-step in detailed paragraphs.
 
-Whether you're telling it to return a specific value, throw an exception, or verify that something was invoked — Mockito controls the flow **without touching your real business logic**. This interception is made possible using **Java Reflection** and **bytecode generation**.
+ Whether you're telling it to return a specific value, throw an exception, or verify that something was invoked — Mockito controls the flow **without touching your real business logic**. This interception is made possible using **Java Reflection** and **bytecode generation**.
 
 When you call:
 
 ```java
 MyService service = Mockito.mock(MyService.class);
-
 ```
 
 Mockito internally uses **one of two strategies** to create the mock object:
@@ -277,7 +269,6 @@ The interception happens by overriding the method or using an invocation handler
 
 ```java
 when(mock.getName()).thenReturn("John");
-
 ```
 
 Mockito registers a **stubbed method** in its internal map. It uses a combination of:
@@ -290,7 +281,6 @@ to create a **key**. When the method is called during the test, Mockito checks t
 
 ```java
 verify(mock).getName();
-
 ```
 
 Mockito checks its internal call history (a **call log**) for the mock object. Every intercepted method call is recorded with details such as:
@@ -326,14 +316,13 @@ This is crucial because Mockito records **every method invocation** in an `Invoc
 `InvocationContainerImpl` is an internal class that acts as the **storage** for all method invocations and stubbing instructions related to a mock. It keeps two main things:
 
 1. A **history of all invocations** (as `Invocation` objects)
-
+    
 2. A list of **stubbing rules**, so that when a specific method is called with certain arguments, Mockito knows what to return
 
 `VerificationMode` is used when you run `verify(...)` statements. It defines **how Mockito checks whether a method was called**, how many times, and with what arguments. For example, when you write:
 
 ```java
 verify(mock, times(2)).doSomething();
-
 ```
 
 The `times(2)` part returns a `VerificationMode` instance that internally holds:
@@ -342,6 +331,7 @@ The `times(2)` part returns a `VerificationMode` instance that internally holds:
 - Possibly a **timeout or delay** (in asynchronous cases)
 - Optional modes like `never()`, `atLeast()`, `atMost()`, etc.
 
+
 When you create and use a mock, these components work together like this:
 
 1. `MockCreationSettings` stores how the mock is configured.
@@ -349,3 +339,4 @@ When you create and use a mock, these components work together like this:
 3. For each method call, an `Invocation` object is created.
 4. `InvocationContainerImpl` stores the `Invocation` and checks for matching stubbings.
 5. During `verify()`, the `VerificationMode` compares the expected vs. actual invocations.
+

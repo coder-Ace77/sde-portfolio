@@ -1,6 +1,10 @@
-# Yaml Files
-
 ---
+title: "YAML files"
+description: ""
+date: "2026-02-05"
+---
+
+
 
 YAML (short for "YAML Ain't Markup Language") is a human-readable data serialization format commonly used for configuration files, data exchange between languages, and storing hierarchical data.
 
@@ -15,7 +19,6 @@ Most basic unit where a key is followed by a colon and value.
 ```yaml
 name: John Doe
 age: 30
-
 ```
 
 Keys are strings and values are strings, numbers, boolean, lists, or other mappings. Values can also be other full fledged objects.
@@ -26,27 +29,23 @@ Lists are represented by dashes `-` followed by a space and the list item:
 
 ```yaml
 fruits:
-
-- Apple
-- Banana
-- Cherry
-
+  - Apple
+  - Banana
+  - Cherry
 ```
 
 #### 3.Nested structures:
 
 ```yaml
 person:
-name: John
-age: 30
-hobbies:
-
-- reading
-- hiking
-
+  name: John
+  age: 30
+  hobbies:
+    - reading
+    - hiking
 ```
 
-Note: comments are defined by #
+Note: comments are defined by # 
 
 #### Rules:
 
@@ -58,16 +57,15 @@ Note: comments are defined by #
 
 ```yaml
 description: |
-This is a
-multiline string
-that preserves line breaks.
+  This is a
+  multiline string
+  that preserves line breaks.
 
 summary: >
-This is a
-folded string
-where line breaks
-are replaced by spaces.
-
+  This is a
+  folded string
+  where line breaks
+  are replaced by spaces.
 ```
 
 #### Type casting:

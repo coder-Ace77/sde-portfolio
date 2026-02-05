@@ -1,8 +1,12 @@
-# React Testing
-
+---
+title: "React testing"
+description: ""
+date: "2026-02-05"
 ---
 
-There are a few ways to test React components.
+
+
+There are a few ways to test React components. 
 Broadly, they divide into two categories:
 
 - **Rendering component trees** in a simplified test environment and asserting on their output.
@@ -33,7 +37,7 @@ Jest supports both:
 - **jsdom environment** – simulates a browser, useful for React/component tests
 - **Node environment** – used for backend or server-side logic
 
-Note:: Jest doesn’t execute your raw source code directly.
+Note:: Jest doesn’t execute your raw source code directly. 
 If you're using modern JavaScript features or TypeScript, Jest integrates with **Babel** or **ts-jest** to transpile your code on the fly.
 This means your ES6+, JSX, or TypeScript code is converted into plain JavaScript that the test runner can understand. Jest uses a module called **`babel-jest`** for this by default.
 
@@ -55,20 +59,19 @@ jest.mock('./api'); // if needed
 // 3. Group tests using describe()
 describe('MyComponent', () => {
 
-    // 4. Write individual test cases
-    test('renders heading', () => {
-        render(<MyComponent />);
-        expect(screen.getByText(/hello/i)).toBeInTheDocument();
-    });
+  // 4. Write individual test cases
+  test('renders heading', () => {
+    render(<MyComponent />);
+    expect(screen.getByText(/hello/i)).toBeInTheDocument();
+  });
 
-    test('calls function on button click', () => {
-        const mockFn = jest.fn();
-        render(<MyComponent onClick={mockFn} />);
-        fireEvent.click(screen.getByText(/click me/i));
-        expect(mockFn).toHaveBeenCalled();
-    });
+  test('calls function on button click', () => {
+    const mockFn = jest.fn();
+    render(<MyComponent onClick={mockFn} />);
+    fireEvent.click(screen.getByText(/click me/i));
+    expect(mockFn).toHaveBeenCalled();
+  });
 });
-
 ```
 
 render,screen etc are part of RTL.
@@ -81,16 +84,14 @@ import { render } from '@testing-library/react';
 import Greeting from './Greeting';
 
 render(<Greeting name="Alice" />);
-
 ```
 
 After rendering, the component is mounted, and its DOM is now part of the test environment. Now you can interact with it or check its contents.
 
-The return value of a render is
+The return value of a render is 
 
 ```javascript
 const { container, getByText, debug } = render(<Greeting name="Alice" />);
-
 ```
 
 `container` – the root DOM node of the rendered component
@@ -113,7 +114,6 @@ import Greeting from './Greeting';
 
 render(<Greeting name="Alice" />);
 expect(screen.getByText(/hello, alice/i)).toBeInTheDocument();
-
 ```
 
 `screen` mirrors how a **user would find elements** — by label, role, placeholder, visible text — not by ID or class (which is discouraged).
@@ -133,10 +133,9 @@ import { render, screen } from '@testing-library/react';
 import Greeting from './Greeting';
 
 test('renders greeting message', () => {
-    render(<Greeting name="John" />);
-    expect(screen.getByText(/hello, john/i)).toBeInTheDocument();
+  render(<Greeting name="John" />);
+  expect(screen.getByText(/hello, john/i)).toBeInTheDocument();
 });
-
 ```
 
 ## FireEvent:
@@ -146,7 +145,6 @@ Unlike calling `onClick` manually, `fireEvent` goes through the proper bubbl
 
 ```javascript
 import { fireEvent } from '@testing-library/react';
-
 ```
 
 |Method|Description|Example|
@@ -160,9 +158,9 @@ import { fireEvent } from '@testing-library/react';
 |`dblClick()`|Simulates a double click|`fireEvent.dblClick(button)`|
 |`mouseOver()`|Simulates hover|`fireEvent.mouseOver(element)`|
 
+
 ```javascript
 test('increments counter on click', () => { render(<Counter />); const button = screen.getByText('Increment'); fireEvent.click(button); expect(screen.getByTestId('count')).toHaveTextContent('1'); });
-
 ```
 
 Clicks are simple however to simulate user input we can use change.
@@ -170,16 +168,14 @@ Clicks are simple however to simulate user input we can use change.
 ```javascript
 <input type="text" onChange={(e) => setName(e.target.value)} />
 
-// now test
+// now test 
 fireEvent.change(screen.getByRole('textbox'), { target: { value: 'John' } });
-
 ```
 
-Form submit
+Form submit 
 
 ```javascript
 fireEvent.submit(screen.getByRole('form'));
-
 ```
 
 Check boxes:
@@ -188,15 +184,17 @@ Check boxes:
 fireEvent.click(screen.getByLabelText('Accept Terms'));
 // or
 fireEvent.change(screen.getByLabelText('Accept Terms'), { target: { checked: true }});
-
 ```
 
+
 > [!NOTE] Refresher
-> Remember that event refers to the whole event object and event.target refers to the input element that triggered the change finally each node in form has value component which has the current value displayed in dom.
+> Remember that event refers to the whole event object and event.target refers to the input element that triggered the change finally each node in form has value component which has the current value displayed in dom. 
+
 
 Keydown events:
 
 ```javascript
 fireEvent.keyDown(input, { key: 'Enter', code: 'Enter' });
-
 ```
+
+

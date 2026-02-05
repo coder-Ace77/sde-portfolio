@@ -1,6 +1,10 @@
-# Spring Testing And Mockito
-
 ---
+title: "Spring testing and mockito"
+description: ""
+date: "2026-02-05"
+---
+
+
 
 Three types of tests
 
@@ -26,7 +30,6 @@ class OrderServiceIntegrationTest {
         // Verifies full flow — repository, service, etc.
     }
 }
-
 ```
 
 Behind the scenes, Spring Boot starts an `ApplicationContext`, autowires dependencies, reads `application.properties` or YAML files, and injects everything like it would in a real app. It's powerful but **slower**, so it's best to **limit its use to high-value integration tests**.
@@ -62,7 +65,6 @@ public class UserServiceIntegrationTest {
         Mockito.verify(userRepository).findById(1L);
     }
 }
-
 ```
 
 @Mock is provided by mockito and is used to create mocks in unit tests where spring context is not loaded. These mocks are not registered in spring application context.
@@ -97,22 +99,21 @@ class ProductControllerTest {
     @Test
     void shouldReturnProductById() throws Exception {
         when(productService.getProduct("P001"))
-        .thenReturn(new Product("P001", "Laptop"));
+            .thenReturn(new Product("P001", "Laptop"));
 
         mockMvc.perform(get("/products/P001"))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.name").value("Laptop"));
+               .andExpect(status().isOk())
+               .andExpect(jsonPath("$.name").value("Laptop"));
     }
 }
-
 ```
 
 ## 3. Slice testing:
 
 - Slice testing loads **only the Spring beans relevant to a particular layer**, e.g.:
-- Controller layer (`@WebMvcTest`)
-- Repository layer (`@DataJpaTest`)
-- Service layer (no built-in annotation, but you can use `@ContextConfiguration` with mocks)
+    - Controller layer (`@WebMvcTest`)
+    - Repository layer (`@DataJpaTest`)
+    - Service layer (no built-in annotation, but you can use `@ContextConfiguration` with mocks)
 - It’s **faster and lighter** than full `@SpringBootTest`.
 - Ideal for testing just **one layer’s behavior** with dependencies mocked or excluded.
 
@@ -138,7 +139,6 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 }
-
 ```
 
 ```java
@@ -155,8 +155,8 @@ public class UserControllerTest {
         Mockito.when(userService.getUserById(1L)).thenReturn(mockUser);
 
         mockMvc.perform(get("/users/1"))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.name").value("Alice"));
+               .andExpect(status().isOk())
+               .andExpect(jsonPath("$.name").value("Alice"));
     }
 
     @Test
@@ -164,10 +164,9 @@ public class UserControllerTest {
         Mockito.when(userService.getUserById(1L)).thenReturn(null);
 
         mockMvc.perform(get("/users/1"))
-        .andExpect(status().isNotFound());
+               .andExpect(status().isNotFound());
     }
 }
-
 ```
 
 ## Controller testing in depth:
@@ -202,11 +201,10 @@ class UserControllerTest {
         when(userService.findUser("123")).thenReturn(new User("123", "Alice"));
 
         mockMvc.perform(get("/users/123"))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.name").value("Alice"));
+               .andExpect(status().isOk())
+               .andExpect(jsonPath("$.name").value("Alice"));
     }
 }
-
 ```
 
 - We annotate the test with `@WebMvcTest` specifying the controller under test.
@@ -237,6 +235,7 @@ You start building a request using static methods from `MockMvcRequestBuilders`,
 - **Request body content** with `.content(String)` or `.content(byte[])`
 - **Content-Type and Accept headers** to specify media types, e.g., JSON or XML, using `.contentType(MediaType.APPLICATION_JSON)` and `.accept(MediaType.APPLICATION_JSON)`
 
+
 ##### Performing the Request
 
 Once configured, you execute the request with `mockMvc.perform(requestBuilder)`. This returns a `ResultActions` object, which lets you chain assertions about the response.
@@ -254,14 +253,13 @@ You can chain multiple `andExpect()` calls to check various parts of the respons
 
 ```java
 mockMvc.perform(post("/api/users")
-.contentType(MediaType.APPLICATION_JSON)
-.content("{\"name\":\"John\",\"email\":\"john@example.com\"}")
-.accept(MediaType.APPLICATION_JSON))
-.andExpect(status().isCreated())
-.andExpect(header().string("Location", "/api/users/1"))
-.andExpect(jsonPath("$.name").value("John"))
-.andDo(print());
-
+        .contentType(MediaType.APPLICATION_JSON)
+        .content("{\"name\":\"John\",\"email\":\"john@example.com\"}")
+        .accept(MediaType.APPLICATION_JSON))
+       .andExpect(status().isCreated())
+       .andExpect(header().string("Location", "/api/users/1"))
+       .andExpect(jsonPath("$.name").value("John"))
+       .andDo(print());
 ```
 
 ## Example:
@@ -287,11 +285,10 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<User> getUser(@PathVariable Integer id) {
         return userService.getUserById(id)
-        .map(ResponseEntity::ok)
-        .orElse(ResponseEntity.notFound().build());
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 }
-
 
 ```
 
@@ -311,10 +308,10 @@ public class UserControllerTest {
     @Test
     void testCreateUser() throws Exception {
         String userJson = """
-        {
-            "name": "Alice",
-            "email": "alice@example.com"
-        }
+            {
+                "name": "Alice",
+                "email": "alice@example.com"
+            }
         """;
 
         User createdUser = new User();
@@ -325,14 +322,14 @@ public class UserControllerTest {
         when(userService.createUser(any(User.class))).thenReturn(createdUser);
 
         mockMvc.perform(post("/users")
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(userJson)
-        .accept(MediaType.APPLICATION_JSON))
-        .andExpect(status().isCreated())
-        .andExpect(header().string("Location", "/users/1"))
-        .andExpect(jsonPath("$.id").value(1))  // MEANS JSON PATH OF RETURNED OBJECT
-        .andExpect(jsonPath("$.name").value("Alice"))
-        .andExpect(jsonPath("$.email").value("alice@example.com"));
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(userJson)
+                .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isCreated())
+            .andExpect(header().string("Location", "/users/1"))
+            .andExpect(jsonPath("$.id").value(1))  // MEANS JSON PATH OF RETURNED OBJECT
+            .andExpect(jsonPath("$.name").value("Alice"))
+            .andExpect(jsonPath("$.email").value("alice@example.com"));
     }
 
     @Test
@@ -345,11 +342,11 @@ public class UserControllerTest {
         when(userService.getUserById(1)).thenReturn(Optional.of(user));
 
         mockMvc.perform(get("/users/1")
-        .accept(MediaType.APPLICATION_JSON))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.id").value(1))
-        .andExpect(jsonPath("$.name").value("Bob"))
-        .andExpect(jsonPath("$.email").value("bob@example.com"));
+                .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id").value(1))
+            .andExpect(jsonPath("$.name").value("Bob"))
+            .andExpect(jsonPath("$.email").value("bob@example.com"));
     }
 
     @Test
@@ -357,11 +354,10 @@ public class UserControllerTest {
         when(userService.getUserById(999)).thenReturn(Optional.empty());
 
         mockMvc.perform(get("/users/999")
-        .accept(MediaType.APPLICATION_JSON))
-        .andExpect(status().isNotFound());
+                .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNotFound());
     }
 }
-
 ```
 
 `MockMvc` is part of Spring Test framework. It **mimics the behavior of a Servlet container** and dispatches mock HTTP requests through the Spring MVC stack **without needing an actual web server** (like Tomcat).
@@ -386,142 +382,141 @@ Internally, MockMvc uses a `DispatcherServlet` instance — the same front contr
 
 ```pgsql
 mockMvc.perform(request)
-↓
+    ↓
 create MockHttpServletRequest & MockHttpServletResponse
-↓
+    ↓
 DispatcherServlet.dispatchRequest(mockRequest, mockResponse)
-↓
+    ↓
 HandlerMapping → find controller method
-↓
+    ↓
 HandlerAdapter → invoke controller method
-↓
+    ↓
 Controller method executes → returns result
-↓
+    ↓
 ViewResolver / MessageConverter → prepare response content
-↓
+    ↓
 Write content to MockHttpServletResponse
-↓
+    ↓
 Return MvcResult with response accessible for assertions
-
 ```
 
 ### Workout example::
 
 ```java
-package com.example.demo.controller;
-
-import com.example.demo.modal.Product;
-import com.example.demo.repository.ProductRepository;
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.test.web.servlet.MockMvc;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-
-import java.lang.reflect.Array;
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-@WebMvcTest(ProductController.class)
-class ProductControllerTest {
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @MockitoBean
-    private ProductRepository productRepository;
-
-    @BeforeEach
-    void init(){
-
-        Product product = new Product();
-
-        product.setId(1L);
-        product.setName("Product 1");
-        product.setDescription("Product 1 description");
-        product.setPrice(100);
-        product.setCreatedAt(LocalDateTime.now());
-        product.setOwnerId(1L);
-
-        when(productRepository.findAll()).thenReturn(Collections.singletonList(product));
-
-        when(productRepository.findById(any())).thenReturn(Optional.of(product));
-
-        when(productRepository.getProductsPage(1,1)).thenReturn(List.of(product));
-
-        Page<Product> page = new PageImpl<>(List.of(product));
-
-        when(productRepository.findAll(any(Pageable.class))).thenReturn(page);
-    }
-
-    @Nested
-    @DisplayName("Get requests test")
-    class GetProductTests{
-
-        @Test
-        void allEndPointTest() throws Exception {
-            mockMvc.perform(get("/all")
-            .accept(MediaType.APPLICATION_JSON)).
-            andExpect(status().isOk())
-            .andExpect(jsonPath("$[0].id").value(1))
-            .andExpect(jsonPath("$[0].name").value("Product 1"));
-        }
-
-        @ParameterizedTest
-        @CsvSource({
-            "1",
-            "2",
-            "3",
-            "4"
-        })
-        void getByIdTest(String ids) throws Exception {
-            mockMvc.perform(get("/id")
-            .param("id",ids)
-            .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(content().string("Product 1"));
-        }
-
-        @Test
-        void testTheCustomPage() throws Exception {
-            mockMvc.perform(get("/custom-page")
-            .param("pageNo","1")
-            .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk());
-        }
-
-        @Test
-        void checkTheHello() throws Exception {
-            mockMvc.perform(get("/")
-            .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(content().string("Hello"));
-        }
-
-        @Test
-        void checkGetPage() throws Exception {
-            mockMvc.perform(get("/page")
-            .param("pageNo","1")
-            .accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk());
-        }
-    }
-
+package com.example.demo.controller;  
+  
+import com.example.demo.modal.Product;  
+import com.example.demo.repository.ProductRepository;  
+import org.junit.jupiter.api.*;  
+import org.junit.jupiter.params.ParameterizedTest;  
+import org.junit.jupiter.params.provider.CsvSource;  
+import org.springframework.beans.factory.annotation.Autowired;  
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;  
+import org.springframework.data.domain.Page;  
+import org.springframework.data.domain.PageImpl;  
+import org.springframework.data.domain.Pageable;  
+import org.springframework.http.MediaType;  
+import org.springframework.test.context.bean.override.mockito.MockitoBean;  
+import org.springframework.test.web.servlet.MockMvc;  
+  
+import static org.mockito.ArgumentMatchers.any;  
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;  
+  
+import java.lang.reflect.Array;  
+import java.time.LocalDateTime;  
+import java.util.Arrays;  
+import java.util.Collections;  
+import java.util.List;  
+import java.util.Optional;  
+  
+import static org.mockito.Mockito.when;  
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;  
+  
+@WebMvcTest(ProductController.class)  
+class ProductControllerTest {  
+  
+    @Autowired  
+    private MockMvc mockMvc;  
+  
+    @MockitoBean  
+    private ProductRepository productRepository;  
+  
+    @BeforeEach  
+    void init(){  
+  
+        Product product = new Product();  
+  
+        product.setId(1L);  
+        product.setName("Product 1");  
+        product.setDescription("Product 1 description");  
+        product.setPrice(100);  
+        product.setCreatedAt(LocalDateTime.now());  
+        product.setOwnerId(1L);  
+  
+        when(productRepository.findAll()).thenReturn(Collections.singletonList(product));  
+  
+        when(productRepository.findById(any())).thenReturn(Optional.of(product));  
+  
+        when(productRepository.getProductsPage(1,1)).thenReturn(List.of(product));  
+  
+        Page<Product> page = new PageImpl<>(List.of(product));  
+  
+        when(productRepository.findAll(any(Pageable.class))).thenReturn(page);  
+    }  
+  
+    @Nested  
+    @DisplayName("Get requests test")  
+    class GetProductTests{  
+  
+        @Test  
+        void allEndPointTest() throws Exception {  
+            mockMvc.perform(get("/all")  
+                    .accept(MediaType.APPLICATION_JSON)).  
+                    andExpect(status().isOk())  
+                    .andExpect(jsonPath("$[0].id").value(1))  
+                    .andExpect(jsonPath("$[0].name").value("Product 1"));  
+        }  
+  
+        @ParameterizedTest  
+        @CsvSource({  
+                "1",  
+                "2",  
+                "3",  
+                "4"  
+        })  
+        void getByIdTest(String ids) throws Exception {  
+            mockMvc.perform(get("/id")  
+                .param("id",ids)  
+                .accept(MediaType.APPLICATION_JSON))  
+                .andExpect(status().isOk())  
+                .andExpect(content().string("Product 1"));  
+        }  
+  
+        @Test  
+        void testTheCustomPage() throws Exception {  
+            mockMvc.perform(get("/custom-page")  
+                    .param("pageNo","1")  
+                    .accept(MediaType.APPLICATION_JSON))  
+                    .andExpect(status().isOk());  
+        }  
+  
+        @Test  
+        void checkTheHello() throws Exception {  
+            mockMvc.perform(get("/")  
+                .accept(MediaType.APPLICATION_JSON))  
+                .andExpect(status().isOk())  
+                .andExpect(content().string("Hello"));  
+        }  
+  
+        @Test  
+        void checkGetPage() throws Exception {  
+            mockMvc.perform(get("/page")  
+                    .param("pageNo","1")  
+                    .accept(MediaType.APPLICATION_JSON))  
+                    .andExpect(status().isOk());  
+        }  
+    }  
+  
 }
-
 ```
+

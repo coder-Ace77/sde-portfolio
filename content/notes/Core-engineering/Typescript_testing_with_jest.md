@@ -1,20 +1,22 @@
-# Typescript Testing With Jest
-
 ---
+title: "Typescript testing with jest"
+description: ""
+date: "2026-02-05"
+---
+
+
 
 ```bash
 npm install jest @types/jest ts-jest
-
 ```
 
 Then make jest.config.js
 
 ```javascript
 module.exports = {
-    present: 'ts-jest',
-    testMatch: ['**/*.test.ts'],
+	present: 'ts-jest',
+	testMatch: ['**/*.test.ts'],
 };
-
 ```
 
 Then we define the testing
@@ -24,12 +26,11 @@ Small exmaple
 ```typescript
 
 describe('name',()=>{
-    test('name',()=>{
-        const actual = toCentimeter(6,3);
-        expect(actual).toEqual(expected);
-    })
+	test('name',()=>{
+		const actual = toCentimeter(6,3);
+		expect(actual).toEqual(expected);
+	})
 })
-
 ```
 
 Some differnece while testing may occur while mocking
@@ -39,7 +40,6 @@ const mockFn = vi.fn<() => void>();
 
 // vi as replacement of jest and so on
 const mockFetch = vi.fn<() => Promise<Response>>();
-
 ```
 
 We also have types for what kind of element we are expecting
@@ -47,47 +47,45 @@ We also have types for what kind of element we are expecting
 ```typescript
 const button: HTMLButtonElement = screen.getByRole('button');
 expect(button).toBeDisabled();
-
 ```
 
-example of mocking and spying
+example of mocking and spying 
 
 ```ts
 
 const mockTodo = {
-    userId: 1,
-    id: 5,
-    title: "Test title",
-    completed: true,
+  userId: 1,
+  id: 5,
+  title: "Test title",
+  completed: true,
 };
 
 describe('Home screen tests',()=>{
-    test('Render test',()=>{
-        render(<Home></Home>);
-        const element = screen.getByText(/title/i);
-        expect(element).toBeInTheDocument();
-    })
+    test('Render test',()=>{
+        render(<Home></Home>);
+        const element = screen.getByText(/title/i);
+        expect(element).toBeInTheDocument();
+    })
 
-    test('Renders after button click',()=>{
-        const fetchMock = vi.fn(); // mocking an inner function of module
-        vi.spyOn(useHandleFetchModule,'useHandleFetch').mockReturnValue([
-        mockTodo,
-        fetchMock
-        ]); // spying on module
-        render(<Home/>);
-        const button = screen.getByRole('button',{name:/click me/i}); // doing click and then fetchMock is called by
-        expect(button).toBeInTheDocument();
+    test('Renders after button click',()=>{
+        const fetchMock = vi.fn(); // mocking an inner function of module
+        vi.spyOn(useHandleFetchModule,'useHandleFetch').mockReturnValue([
+            mockTodo,
+            fetchMock
+        ]); // spying on module
+        render(<Home/>);
+        const button = screen.getByRole('button',{name:/click me/i}); // doing click and then fetchMock is called by 
+        expect(button).toBeInTheDocument();
 
-        fireEvent.click(button);
+        fireEvent.click(button);
 
-        expect(fetchMock).toHaveBeenCalledWith('/todos/1');
-        expect(screen.getByText(/User name/i)).toBeInTheDocument();
-        expect(screen.getByText(/1/)).toBeInTheDocument();
-        expect(screen.getByText(/Test title/i)).toBeInTheDocument();
-        expect(screen.getByText(/Yes/)).toBeInTheDocument();
-    })
+        expect(fetchMock).toHaveBeenCalledWith('/todos/1');
+        expect(screen.getByText(/User name/i)).toBeInTheDocument();
+        expect(screen.getByText(/1/)).toBeInTheDocument();
+        expect(screen.getByText(/Test title/i)).toBeInTheDocument();
+        expect(screen.getByText(/Yes/)).toBeInTheDocument();
+    })
 })
-
 ```
 
 ### Testing request calls:
@@ -108,32 +106,31 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 export const UserList = () => {
-    const [users, setUsers] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState('');
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-    useEffect(() => {
-        axios.get('/api/users')
-        .then(res => {
-            setUsers(res.data);
-            setError('');
-        })
-        .catch(() => setError('Failed to load users'))
-        .finally(() => setLoading(false));
-    }, []);
+  useEffect(() => {
+    axios.get('/api/users')
+      .then(res => {
+        setUsers(res.data);
+        setError('');
+      })
+      .catch(() => setError('Failed to load users'))
+      .finally(() => setLoading(false));
+  }, []);
 
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>{error}</p>;
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>{error}</p>;
 
-    return (
+  return (
     <ul>
-    {users.map(user => (
+      {users.map(user => (
         <li key={user.id}>{user.name}</li>
-        ))}
+      ))}
     </ul>
-    );
+  );
 };
-
 ```
 
 How to do tests:
@@ -147,78 +144,76 @@ import axios from 'axios';
 jest.mock('axios'); // 🧠 Intercepts all axios calls for mocking
 
 describe('UserList API behavior', () => {
-    beforeEach(() => {
-        jest.clearAllMocks(); // 🔁 Clean mocks before each test
+  beforeEach(() => {
+    jest.clearAllMocks(); // 🔁 Clean mocks before each test
+  });
+
+  test('renders loading state initially', () => {
+    axios.get.mockResolvedValue({ data: [] }); // fake response
+    render(<UserList />);
+    expect(screen.getByText(/loading/i)).toBeInTheDocument(); // ✅ check loading
+  });
+
+  test('renders user list after successful API call', async () => {
+    const mockUsers = [
+      { id: 1, name: 'Alice' },
+      { id: 2, name: 'Bob' },
+    ];
+
+    axios.get.mockResolvedValue({ data: mockUsers }); // 🧪 Mock success
+
+    render(<UserList />);
+
+    // 🔄 Wait for the async data to be rendered
+    await waitFor(() => {
+      expect(screen.getByText('Alice')).toBeInTheDocument();
+      expect(screen.getByText('Bob')).toBeInTheDocument();
     });
+  });
 
-    test('renders loading state initially', () => {
-        axios.get.mockResolvedValue({ data: [] }); // fake response
-        render(<UserList />);
-        expect(screen.getByText(/loading/i)).toBeInTheDocument(); // ✅ check loading
+  test('shows error message when API fails', async () => {
+    axios.get.mockRejectedValue(new Error('API failed')); // ❌ Mock failure
+
+    render(<UserList />);
+
+    await waitFor(() => {
+      expect(screen.getByText(/failed to load users/i)).toBeInTheDocument();
     });
-
-    test('renders user list after successful API call', async () => {
-        const mockUsers = [
-        { id: 1, name: 'Alice' },
-        { id: 2, name: 'Bob' },
-        ];
-
-        axios.get.mockResolvedValue({ data: mockUsers }); // 🧪 Mock success
-
-        render(<UserList />);
-
-        // 🔄 Wait for the async data to be rendered
-        await waitFor(() => {
-            expect(screen.getByText('Alice')).toBeInTheDocument();
-            expect(screen.getByText('Bob')).toBeInTheDocument();
-        });
-    });
-
-    test('shows error message when API fails', async () => {
-        axios.get.mockRejectedValue(new Error('API failed')); // ❌ Mock failure
-
-        render(<UserList />);
-
-        await waitFor(() => {
-            expect(screen.getByText(/failed to load users/i)).toBeInTheDocument();
-        });
-    });
+  });
 });
-
 ```
 
 `mockResolvedValue(value)` is a Jest method that **mocks a function to return a resolved Promise** with the given `value`.
 
 It's most often used with asynchronous functions (like API calls) that return Promises — e.g., `axios.get()`, `fetch()`, or custom async functions. Also since promise is reolved we can simply await and wait for some time.
 
-MOcking fetch: Fetch is available as global variable. So we need to mock it as
+MOcking fetch: Fetch is available as global variable. So we need to mock it as 
 
 ```ts
 import { render, screen, waitFor } from '@testing-library/react';
 import { FetchUser } from './FetchUser';
 
 describe('FetchUser component', () => {
-    beforeEach(() => {
-        global.fetch = jest.fn(() =>
-        Promise.resolve({
-            json: () => Promise.resolve({ name: 'Alice' }),
-        })
-        );
+  beforeEach(() => {
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        json: () => Promise.resolve({ name: 'Alice' }),
+      })
+    );
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
+  test('renders fetched user', async () => {
+    render(<FetchUser />);
+
+    expect(screen.getByText(/loading/i)).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(screen.getByText(/Alice/)).toBeInTheDocument();
     });
-
-    afterEach(() => {
-        jest.resetAllMocks();
-    });
-
-    test('renders fetched user', async () => {
-        render(<FetchUser />);
-
-        expect(screen.getByText(/loading/i)).toBeInTheDocument();
-
-        await waitFor(() => {
-            expect(screen.getByText(/Alice/)).toBeInTheDocument();
-        });
-    });
+  });
 });
-
 ```

@@ -1,12 +1,15 @@
-# Basics And Data Structure
-
 ---
+title: "Basics and data structure"
+description: ""
+date: "2026-02-05"
+---
+
+
 
 Python follows the dynamic and string typing model. Dynamic model means type of variable is determined at the run time not compile time and strong typing means implicit type convertions are not allowed.
 
 ```python
 "1"+1  # error
-
 ```
 
 Every object in Python is represented by a **structure in C** (in CPython, the default interpreter). Now there are variaous implementation of python the default is cpython. In cpython everything is PyObject.
@@ -16,7 +19,6 @@ typedef struct _object {
     Py_ssize_t ob_refcnt;  // reference count
     struct _typeobject *ob_type;  // pointer to type info
 } PyObject;
-
 ```
 
 Every value inherits from `PyObject`.- `ob_type` points to the **type definition** (like `PyLong_Type`, `PyList_Type`, etc.).`ob_refcnt` is used for **reference counting** (part of garbage collection).
@@ -28,7 +30,6 @@ Python uses **references** to objects rather than storing the actual values in v
 ```python
 a = [1, 2, 3]
 b = a
-
 ```
 
 its memory view
@@ -40,21 +41,19 @@ Heap:
 Stack / Variables:
 a ──► [1, 2, 3]
 b ──┘
-
 ```
 
-so mutating one effects other.
+so mutating one effects other. 
 
-Shallow copying creates new container, but the elements inside still refernce same objects as original.So although the pointer list is new but the pointers inside pointer list is older one. To do shallow copy
+Shallow copying creates new container, but the elements inside still refernce same objects as original.So although the pointer list is new but the pointers inside pointer list is older one. To do shallow copy 
 
-we have three methods
+we have three methods 
 
 ```python
 import copy
 
-a = [[1, 2], [3, 4]]
+a = 1, 2], [3, 4
 b = a.copy()   # or copy.copy(a)
-
 ```
 
 ```rust
@@ -65,7 +64,6 @@ Heap:
 New list object:
 b = [ref->object1, ref->object2]
 a = [ref->object1, ref->object2]
-
 ```
 
 **Shallow copy:** new container, same references inside.
@@ -74,7 +72,6 @@ A **deep copy** creates a **new container AND recursively copies all nested obje
 
 ```python
 b = copy.deepcopy(a)
-
 ```
 
 ```python
@@ -88,7 +85,6 @@ Deep copy heap:
 
 b = [ref->object1', ref->object2']
 a = [ref->object1, ref->object2]
-
 ```
 
 Now understand the diffence with normal `b=a` b is only a new pointer but a and b both point to the same internal c list. With shallow copy `b=a.copy()` the pointer of b interally are diffenrt variables than of a. so now chaning `b[index]=new_val` won't effect a. But if it were a list that would not be recursively copied. So here comes deep copy.
@@ -108,7 +104,6 @@ Strings are immutable and stored as unicode. Python uses **hash caching** for fa
 s1 = "hello"
 s2 = "hello"
 print(s1 is s2)  # True (interned)
-
 ```
 
 #### List and tuples:
@@ -129,7 +124,6 @@ typedef struct {
     PyObject **ob_item;  // Pointer to array of PyObject* elements
     Py_ssize_t allocated; // Total allocated slots (capacity)
 } PyListObject;
-
 ```
 
 When appending, if the list is full, Python **over-allocates** to reduce reallocations.
@@ -141,12 +135,11 @@ typedef struct {
     PyObject_VAR_HEAD
     PyObject *ob_item[1];  // Inline array of PyObject* elements
 } PyTupleObject;
-
 ```
 
 Operations:
 
-Python has basic indexing opertor - `[]`
+Python has basic indexing opertor - `[]` 
 
 ```python
 
@@ -158,7 +151,7 @@ a[start:end] # it is slicing returns a new subarray start is inclusive while end
 
 lst.append(100) # to append element at the end
 
-lst.extend([1,2,3,4]) # adds multiple elements
+lst.extend([1,2,3,4]) # adds multiple elements 
 
 lst.insert(index,val) # inserting element at certain index and shifts others to right
 
@@ -179,7 +172,6 @@ c = a+b # concatination of two lists
 b = 3*a # repetion of list
 
 if 10 in a: # membership test
-
 ```
 
 ```python
@@ -190,7 +182,6 @@ b = t[1:3] # slicing creates new tuple
 c = a+b # concatination
 
 for i in t: # iteration
-
 ```
 
 ### Dictionary:
@@ -205,7 +196,6 @@ typedef struct {
     PyObject **values;     // Array of values
     size_t mask;           // Table size - 1 (power of 2)
 } PyDictObject;
-
 ```
 
 Important operations:
@@ -236,17 +226,15 @@ del d["b"] # marks slot as deleted
 for k in d: ... # iteration
 for k, v in d.items(): ... # iteration
 
-
 ```
 
 ### Type objects in python:
 
-**type objects** in Python — the foundation of _how every object knows what it is_.
+**type objects** in Python — the foundation of _how every object knows what it is_.  
 This is part of Python’s **data model** and **object system internals**.
 
-In Python, **everything is an object**, including functions, classes, numbers, and even types themselves.
+In Python, **everything is an object**, including functions, classes, numbers, and even types themselves.  
 Each object has an associated **type object** that defines:
-
 - What operations it supports
 - How it behaves internally (its C struct)
 - How it interacts with other objects
@@ -254,7 +242,6 @@ Each object has an associated **type object** that defines:
 ```python
 a = 10
 print(type(a))  # <class 'int'>
-
 ```
 
 In CPython, every type object is a `PyTypeObject` struct, which defines how instances of that type behave.
@@ -270,18 +257,16 @@ typedef struct _typeobject {
     as_mapping *tp_as_mapping; // Dict-like operations
     ...
 } PyTypeObject;
-
 ```
 
 each PyObject has a field `ob_type` `type(x)` just returns this pointer
 
 ### Strings:
 
-Strings in python are immutable meaning altough we can access element by
+Strings in python are immutable meaning altough we can access element by 
 ```python
 s = "abs"
 s[0] # accessing element but we can not change it or mutate it
-
 ```
 
 common operations:
@@ -304,14 +289,13 @@ common operations:
 |`s.startswith()/endswith()`|Prefix/suffix check|O(k)|
 |`s.format()` / `f"..."`|String formatting|O(n)|
 
-String slicing
+String slicing 
 
 ```python
 s = "Python"
 print(s[0])     # 'P'
 print(s[-1])    # 'n' negative index means from end
 print(s[1:4])   # 'yth'
-
 ```
 
 concatenation
@@ -319,10 +303,9 @@ concatenation
 ```python
 s = ""
 for i in range(5):
-s += str(i)
-
+    s += str(i)
+    
 s = ''.join(str(i) for i in range(5)) # efficient
-
 ```
 
 String formatting styles
@@ -335,12 +318,11 @@ String formatting styles
 
 ### Sets:
 
-They are unique collection of objects.
+They are unique collection of objects. 
 
 ```python
 s = set()
 s = set(lst)
 
 s.add(1) # adding element to a set
-
 ```

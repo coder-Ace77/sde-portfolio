@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Outfit } from "next/font/google";
+import { Lora, Outfit } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Navbar } from "@/components/layout/Navbar";
@@ -7,10 +7,11 @@ import { Footer } from "@/components/layout/Footer";
 
 import { ThemeProvider } from "@/components/providers/theme-provider";
 
-const inter = Inter({
+const lora = Lora({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-lora",
   display: "swap",
+  weight: ["400", "500", "600", "700"],
 });
 
 const outfit = Outfit({
@@ -31,9 +32,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css"
+        />
+      </head>
       <body
         className={cn(
-          inter.variable,
+          lora.variable,
           outfit.variable,
           "min-h-screen bg-background font-sans antialiased"
         )}

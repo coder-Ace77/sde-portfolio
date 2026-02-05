@@ -1,10 +1,12 @@
-# Api Gateway And Loadbalancer
-
+---
+title: "API gateway and loadbalancer"
+description: ""
+date: "2026-02-05"
 ---
 
 Especially in a microservice architecture, an API gateway sits in front of your system and is responsible for routing incoming requests to the appropriate backend service.The gateway is also typically responsible for handling cross-cutting concerns like authentication, rate limiting, and logging.
 
-![Alt](/img/Pasted_image_20251013114410.png)
+![Pasted image 20251013114410.png](/notes-images/Pasted%20image%2020251013114410.png)
 
 Most common api gateways are AWS API gateway or nginx.
 
@@ -12,7 +14,7 @@ Most system design problems will require you to design a system that can handle 
 
 The reality is that you need a load balancer wherever you have multiple machines capable of handling the same request.
 
-![Alt](/img/Pasted_image_20251013114953.png)
+![Pasted image 20251013114953.png](/notes-images/Pasted%20image%2020251013114953.png)
 
 Note that sometimes you'll need to have specific features from your load balancer, like sticky sessions or persistent connections. The most common decision to make is whether to use an L4 (layer 4) or L7 (layer 7) load balancer.
 
@@ -31,13 +33,13 @@ Suppose we are having microservice architectiure and a reuqest comes first it wi
 
 In kubernetes Each microservice has a **Kubernetes Service** object that acts as an internal **load balancer + service discovery**. The API Gateway (Ingress Controller) routes external requests into the cluster.
 
-Now api gateway can perform many tasks -
+Now api gateway can perform many tasks - 
 
 ### Request validation
 
 This validation includes checking that the request URL is valid, required headers are present, and the request body (if any) matches the expected format.
 
-This early validation is important because it helps catch obvious issues before they reach your backend services. For example, if a mobile app sends a malformed JSON payload or forgets to include a required API key, there's no point in routing that request further into your system.
+This early validation is important because it helps catch obvious issues before they reach your backend services. For example, if a mobile app sends a malformed JSON payload or forgets to include a required API key, there's no point in routing that request further into your system. 
 
 ### Middleware task
 
@@ -56,7 +58,7 @@ API gateway can handle many middleware tasks like
 - Throttle traffic
 - Integrate with service discovery
 
-### Routing
+### Routing 
 
 The gateway maintains a routing table that maps incoming requests to backend services. This mapping is typically based on a combination of:
 
@@ -71,7 +73,7 @@ While most services communicate via HTTP, in some cases your backend services mi
 
 The gateway would, thus, transform the request into the appropriate protocol before sending it to the backend service. This is nice because it allows your services to use whatever protocol or format is most efficient without clients needing to know about it.
 
-### Caching
+### Caching 
 
 Before sending the response back to the client, the gateway can optionally cache the response. This is useful for frequently accessed data that doesn't change often and, importantly, is not user specific. If your expectation is that a given API request will return the same result for a given input, caching it makes sense.
 
@@ -89,6 +91,7 @@ Another option that works well particularly for large applications with users sp
 2. **DNS-based Routing**: Use GeoDNS to route users to the nearest gateway
 3. **Configuration Synchronization**: Ensure routing rules and policies are consistent across regions
 
+
 With a microservices architecture, an API Gateway becomes almost essential. Without one, clients would need to know about and communicate with multiple services directly, leading to tighter coupling and more complex client code. The gateway provides a clean separation between your internal service architecture and your external API surface.
 
 The most straightforward approach to handling increased load is horizontal scaling. API Gateways are typically stateless, making them ideal candidates for horizontal scaling. You can add more gateway instances behind a load balancer to distribute incoming requests.
@@ -101,6 +104,6 @@ While API Gateways are primarily known for routing and middleware functionality,
 This can typically be abstracted away during an interview. Drawing a single box to handle "API Gateway and Load Balancer" is usually sufficient. You don't want to get bogged down in the details of your entry points as they're more likely to be a distraction from the core functionality of your system.
 
 There are mainly two types of load balancing associated with api gateways.
-
-1) Client-to-Gateway Load Balancing (typically handled by a dedicated load balancer in front of gateway instances),
-2) Gateway-to-Service Load Balancing (the gateway itself balancing across backend service instances).
+ 
+ 1) Client-to-Gateway Load Balancing (typically handled by a dedicated load balancer in front of gateway instances),
+ 2) Gateway-to-Service Load Balancing (the gateway itself balancing across backend service instances).

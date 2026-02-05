@@ -1,20 +1,26 @@
-# Jdbc
-
+---
+title: "JDBC"
+description: ""
+date: "2026-02-05"
 ---
 
-Java database connectivity is java api to interact with realtional databases.
-Java provides the JDBC API, which includes classes like `DriverManager` that help manage database drivers. JDBC driver manager are used to manager the `many` drivers and then a driver knows how to talk to database using api.
+
+
+Java database connectivity is java api to interact with realtional databases. 
+Java provides the JDBC API, which includes classes like `DriverManager` that help manage database drivers. JDBC driver manager are used to manager the `many` drivers and then a driver knows how to talk to database using api. 
 
 The **JDBC Driver** is what knows how to communicate with the specific **database** (e.g., MySQL, Oracle) using the database's native protocol (often via sockets).
 
 - The **DriverManager** helps **select the correct driver** for the JDBC URL you use (like `jdbc:mysql://...`).
+
 
 > [!NOTE] Diver
 > > **A piece of software that allows a higher-level program (like an operating system or application) to communicate with a specific hardware device or external system.**
 
 ### Type 1:
 
-It is JDBC ODBC bridge driver.
+It is JDBC ODBC bridge driver. 
+
 
 > [!NOTE] ODBC
 > **ODBC** stands for **Open Database Connectivity**.
@@ -23,7 +29,6 @@ When an app wants to interact with a database, it sends SQL queries to the ODBC 
 
 ```bash
 Java App → JDBC API → JDBC-ODBC Bridge → ODBC Driver → Database
-
 ```
 
 Requires **ODBC drivers** installed on the client machine.
@@ -34,7 +39,6 @@ Converts JDBC calls into native database calls using database specified native l
 
 ```bash
 Java App → JDBC API → Native API (via JNI) → Database
-
 ```
 
 ### Type 3:
@@ -43,7 +47,6 @@ It is network protocol driver where JDBC calls to a **middleware server** (writt
 
 ```bash
 Java App → JDBC API → Middleware Server → Database
-
 ```
 
 This is slow as we need one middleware server which slows it down.
@@ -53,7 +56,6 @@ This is slow as we need one middleware server which slows it down.
 
 ```bash
 Java App → JDBC API → Type 4 Driver → Database
-
 ```
 
 - **No native libraries**, fully **cross-platform**.
@@ -63,11 +65,10 @@ Java App → JDBC API → Type 4 Driver → Database
 #### JDBC format to connect:
 
 JDBC url is a string which specifies:
-Which db to connect to , where it is located host or post , which db name to use
+Which db to connect to , where it is located host or post , which db name to use 
 
 ```bash
 jdbc:<subprotocol>:<subname>
-
 ```
 
 subprotocol: the **database type or driver name** (e.g., mysql, postgresql, oracle).
@@ -77,7 +78,6 @@ eg:
 
 ```bash
 jdbc:postgresql://<host>:<port>/<database>
-
 ```
 
 ### Tutorial on how to connect:
@@ -86,11 +86,10 @@ First we need to add the dependency to pom
 
 ```xml
 <dependency>
-<groupId>mysql</groupId>
-<artifactId>mysql-connector-java</artifactId>
-<version>8.0.33</version> <!-- check for latest version -->
+  <groupId>mysql</groupId>
+  <artifactId>mysql-connector-java</artifactId>
+  <version>8.0.33</version> <!-- check for latest version -->
 </dependency>
-
 ```
 
 code to connect and query
@@ -132,16 +131,15 @@ public class JdbcExample {
             conn.close();
 
         } catch (Exception e) {
-        e.printStackTrace();
+            e.printStackTrace();
+        }
     }
 }
-}
-
 ```
 
-#### Statements :
+#### Statements : 
 
-Statements in JDBC are used to send SQL queries or commands to database. There are three kinds of statements:
+Statements in JDBC are used to send SQL queries or commands to database. There are three kinds of statements: 
 
 | Statement Type        | Purpose                                                | Use Case                                                           |
 | --------------------- | ------------------------------------------------------ | ------------------------------------------------------------------ |
@@ -157,7 +155,6 @@ Statements in JDBC are used to send SQL queries or commands to database. There a
 ```bash
 Statement stmt = conn.createStatement();
 ResultSet rs = stmt.executeQuery("SELECT * FROM users");
-
 ```
 
 #### Prepared statments:
@@ -170,7 +167,6 @@ PreparedStatement pstmt = conn.prepareStatement(sql);
 pstmt.setInt(1, 5); // set parameter 1 to value 5
 
 ResultSet rs = pstmt.executeQuery();
-
 ```
 
 #### Callable statements:
@@ -181,7 +177,6 @@ They are used to execute stored flows. Used to execute **stored procedures** or 
 CallableStatement cstmt = conn.prepareCall("{call getUserById(?)}");
 cstmt.setInt(1, 5);
 ResultSet rs = cstmt.executeQuery();
-
 ```
 
 ### Result set:
@@ -192,7 +187,7 @@ A **ResultSet** is a **Java object** that represents the data returned by a **SQ
 - The JDBC driver wraps those rows into a **ResultSet** object.
 - You can then **iterate over** this ResultSet to read the data row-by-row.
 
-Result set object has internal cursor pointing to current row.
+Result set object has internal cursor pointing to current row. 
 
 ```java
 Statement stmt = conn.createStatement();
@@ -206,7 +201,6 @@ while (rs.next()) { // moves cursor to next row, returns false when no more rows
 
 rs.close();
 stmt.close();
-
 ```
 
 |SQL Command|JDBC Method|Returns|
@@ -221,10 +215,13 @@ if (hasResultSet) {
     ResultSet rs = stmt.getResultSet();
     // Not applicable in this case
 } else {
-int updateCount = stmt.getUpdateCount();
-System.out.println("Rows updated: " + updateCount);
+    int updateCount = stmt.getUpdateCount();
+    System.out.println("Rows updated: " + updateCount);
 }
-
 ```
 
-execute returns a boolean and result is ResultSet rs.
+execute returns a boolean and result is ResultSet rs. 
+
+
+
+

@@ -1,6 +1,10 @@
-# Districuted Locking
-
 ---
+title: "Districuted locking"
+description: ""
+date: "2026-02-05"
+---
+
+
 
 #### Schenario : Ticket master
 
@@ -26,3 +30,4 @@ Another handy feature of distributed locks is that they can be set to expire aft
 **Deadlocks**: Deadlocks can occur when two or more processes are waiting for each other to release a lock. Think about a situation where two processes are trying to acquire two locks at the same time. One process acquires lock A and then tries to acquire lock B, while the other process acquires lock B and then tries to acquire lock A. This can lead to a situation where both processes are waiting for each other to release a lock, causing a deadlock. You should be prepared to discuss how to prevent this - a common mistake is to have locks pulled from far-flung pieces of infrastructure or your code, this makes it hard to recognize and prevent deadlocks.
 
 **Locking Granularity**: Distributed locks can be used to lock a single resource or a group of resources. For example, you might want to lock a single ticket in a ticketing system or you might want to lock a group of tickets in a section of a stadium.
+

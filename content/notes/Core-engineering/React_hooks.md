@@ -1,6 +1,10 @@
-# React Hooks
-
 ---
+title: "React hooks"
+description: ""
+date: "2026-02-05"
+---
+
+
 
 **React Hooks** as a way to add **state and lifecycle features** to **functional components**. All hooks start with use and they must be called on the top level of functional component.  They can't work inside nested functions etc.
 ### useState:
@@ -9,7 +13,6 @@ With `useState`, you can declare state variables in a functional component and u
 
 ```jsx
 const [state, setState] = useState(initialState);
-
 ```
 
 - **`state`**: This is the current value of the state variable. It represents the state value at any given point in time.
@@ -18,7 +21,7 @@ const [state, setState] = useState(initialState);
 
 - **initial Render**: When the component first renders, the `useState` hook returns the initial value (i.e., the value provided as `initialState`).
 - **State Update**: Calling the `setState` function triggers a re-render of the component, and React will update the value of `state` to the new value.
-
+    
 - **Subsequent Renders**: After the state is updated, React remembers the updated state and uses it in the subsequent renders until the state changes again.
 
 ### useEffect:
@@ -33,17 +36,16 @@ It allows you to **perform side effects** in **functional components**. Side eff
 
 ```jsx
 useEffect(() => {
-    // Code for the side effect
+  // Code for the side effect
 }, [dependencies]);
-
 ```
 
 - **First Argument (`() => {}`)**: The function that contains the **side effect** code. This function is executed **after** the component renders.
-
+    
 - **Second Argument (`[dependencies]`)**: An array of values that React watches for changes. This array determines when the effect should be executed:
-- If no array is provided, the effect runs **after every render**.
-- If an empty array (`[]`) is provided, the effect runs only **once**, after the first render (like `componentDidMount` in class components).
-- If an array with variables is provided, the effect will run when **any** of those variables change.
+    - If no array is provided, the effect runs **after every render**.
+    - If an empty array (`[]`) is provided, the effect runs only **once**, after the first render (like `componentDidMount` in class components).
+    - If an array with variables is provided, the effect will run when **any** of those variables change.
 
 Some side effects (e.g., subscriptions, event listeners) need to be cleaned up when a component unmounts or when certain dependencies change. To handle this, you can return a **cleanup function** inside `useEffect`.
 
@@ -68,21 +70,20 @@ const ThemeContext = createContext();
 
 // Create a provider component
 function App({ children }) {
-const [theme, setTheme] = useState('light');
+  const [theme, setTheme] = useState('light');
 
-const toggleTheme = () => {
+  const toggleTheme = () => {
     setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
-};
+  };
 
-return (
-<ThemeContext.Provider value={{ theme, toggleTheme }}>
-{children}
-</ThemeContext.Provider>
-);
+  return (
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
 }
 
 export { App, ThemeContext };
-
 ```
 
 ```jsx
@@ -90,48 +91,45 @@ import React, { useContext } from 'react';
 import { ThemeContext } from './ThemeProvider';
 
 function ThemedComponent() {
-    const { theme, toggleTheme } = useContext(ThemeContext); // accepting themecontext
+  const { theme, toggleTheme } = useContext(ThemeContext); // accepting themecontext
 
-    return (
+  return (
     <div style={{ backgroundColor: theme === 'light' ? '#fff' : '#333', color: theme === 'light' ? '#000' : '#fff' }}>
-    <h1>The current theme is {theme}</h1>
-    <button onClick={toggleTheme}>Toggle Theme</button>
+      <h1>The current theme is {theme}</h1>
+      <button onClick={toggleTheme}>Toggle Theme</button>
     </div>
-    );
+  );
 }
 
 export default ThemedComponent;
-
 ```
 
 Another example
 
 ```jsx
 const moods = {
-    happy:'happy mood',
-    sad:'sad mood'
+	happy:'happy mood',
+	sad:'sad mood'
 }
 
 const MoodContext = createContext(moods);
 
 function App(props){
-
-    return (
-    <MoodContext.Provider value={moods.happy}>
-    <ChildComponent/> // any child compoent can access moods object now
-    </MoodContext.Provider>
-    );
+	
+	return (
+		<MoodContext.Provider value={moods.happy}>
+			<ChildComponent/> // any child compoent can access moods object now
+		</MoodContext.Provider>
+	);
 }
-
 
 ```
 
 ```
 function ChildComponent(){
-    const mood = useContext(MoodContext);
-    return <p>{mood}</p>
+	const mood = useContext(MoodContext);
+	return <p>{mood}</p>
 }
-
 ```
 
 ###### Context API:
@@ -151,13 +149,12 @@ import React, { createContext, useState } from 'react';
 
 // Create a Context object
 const MyContext = createContext();
-
 ```
 
 - **`MyContext`**: This is the context object that will hold the shared value.
 - The `createContext()` function returns an object with two main properties:
-- `Provider`: A component that is used to **provide** the context value to the tree.
-- `Consumer`: A component that **consumes** the context value.
+    - `Provider`: A component that is used to **provide** the context value to the tree.
+    - `Consumer`: A component that **consumes** the context value.
 
 The `Provider` component is used to make the context value available to all components inside it. You typically use it at a higher level in the component tree, often at the root level of your app, so all the nested components can access the context.
 
@@ -167,18 +164,17 @@ import { MyContext } from './MyContext';
 import SomeComponent from './SomeComponent';
 
 function App() {
-    const [value, setValue] = useState('Hello, World!');
+  const [value, setValue] = useState('Hello, World!');
 
-    return (
+  return (
     // The Provider makes the `value` available to all child components
     <MyContext.Provider value={value}>
-    <SomeComponent />
+      <SomeComponent />
     </MyContext.Provider>
-    );
+  );
 }
 
 export default App;
-
 ```
 
 You can access the context value using the `useContext` hook in functional components.
@@ -188,13 +184,12 @@ import React, { useContext } from 'react';
 import { MyContext } from './MyContext';
 
 function SomeComponent() {
-    const value = useContext(MyContext);  // Accessing the context value
+  const value = useContext(MyContext);  // Accessing the context value
 
-    return <h1>{value}</h1>;
+  return <h1>{value}</h1>;
 }
 
 export default SomeComponent;
-
 ```
 
 Before the introduction of hooks, `React.createContext()` provided a **`Consumer`** component to access context in class components or functional components that do not use hooks.
@@ -204,15 +199,14 @@ import React from 'react';
 import { MyContext } from './MyContext';
 
 function SomeComponent() {
-    return (
+  return (
     <MyContext.Consumer>
-    {value => <h1>{value}</h1>}
+      {value => <h1>{value}</h1>}
     </MyContext.Consumer>
-    );
+  );
 }
 
 export default SomeComponent;
-
 ```
 ### useRef
 
@@ -220,7 +214,6 @@ The `useRef` hook in React is used to persist values across renders without caus
 
 ```jsx
 const myRef = useRef(initialValue);
-
 ```
 
 ##### What `useRef` Does:
@@ -232,22 +225,21 @@ const myRef = useRef(initialValue);
 import React, { useRef } from 'react';
 
 function FocusInput() {
-    const inputRef = useRef(null);  // Create a ref to access the input element
+  const inputRef = useRef(null);  // Create a ref to access the input element
 
-    const handleClick = () => {
-        inputRef.current.focus();  // Focus the input field using the ref
-    };
+  const handleClick = () => {
+    inputRef.current.focus();  // Focus the input field using the ref
+  };
 
-    return (
+  return (
     <div>
-    <input ref={inputRef} type="text" placeholder="Click button to focus" />
-    <button onClick={handleClick}>Focus the input</button>
+      <input ref={inputRef} type="text" placeholder="Click button to focus" />
+      <button onClick={handleClick}>Focus the input</button>
     </div>
-    );
+  );
 }
 
 export default FocusInput;
-
 ```
 
 - **`inputRef.current`**: After the component has rendered, `inputRef.current` will refer to the DOM node for the input field. We use `.focus()` to programmatically focus on the input.
@@ -259,24 +251,23 @@ export default FocusInput;
 import React, { useState, useEffect, useRef } from 'react';
 
 function PreviousValue() {
-    const [count, setCount] = useState(0);
-    const prevCountRef = useRef();  // Create a ref to store the previous count
+  const [count, setCount] = useState(0);
+  const prevCountRef = useRef();  // Create a ref to store the previous count
 
-    useEffect(() => {
-        prevCountRef.current = count;  // Update the ref value after each render
-    }, [count]);  // Run this effect whenever `count` changes
+  useEffect(() => {
+    prevCountRef.current = count;  // Update the ref value after each render
+  }, [count]);  // Run this effect whenever `count` changes
 
-    return (
+  return (
     <div>
-    <h1>Current Count: {count}</h1>
-    <h2>Previous Count: {prevCountRef.current}</h2>
-    <button onClick={() => setCount(count + 1)}>Increment</button>
+      <h1>Current Count: {count}</h1>
+      <h2>Previous Count: {prevCountRef.current}</h2>
+      <button onClick={() => setCount(count + 1)}>Increment</button>
     </div>
-    );
+  );
 }
 
 export default PreviousValue;
-
 ```
 
 ### useReducer:
@@ -292,17 +283,16 @@ The reducer function then returns a **new state** based on the current state and
 
 ```jsx
 function reducer(state, action) {
-    switch (action.type) {
-        case 'ACTION_TYPE':
-        return {
-            ...state,
-            property: action.payload
-        };
-        default:
-        return state;
-    }
+  switch (action.type) {
+    case 'ACTION_TYPE':
+      return {
+        ...state,
+        property: action.payload
+      };
+    default:
+      return state;
+  }
 }
-
 ```
 
 - **state**: The current state of your component or application.
@@ -313,7 +303,6 @@ useReducer is the hook that will allow to have this pattern
 
 ```jsx
 const [state, dispatch] = useReducer(reducer, initialState);
-
 ```
 
 - **`reducer`**: The reducer function that defines how the state changes based on actions.
@@ -327,18 +316,17 @@ const [state, dispatch] = useReducer(reducer, initialState);
 const initialState = { count: 0 };
 
 function counterReducer(state, action) {
-    switch (action.type) {
-        case 'increment':
-        return { count: state.count + 1 };
-        case 'decrement':
-        return { count: state.count - 1 };
-        case 'reset':
-        return initialState;
-        default:
-        return state;
-    }
+  switch (action.type) {
+    case 'increment':
+      return { count: state.count + 1 };
+    case 'decrement':
+      return { count: state.count - 1 };
+    case 'reset':
+      return initialState;
+    default:
+      return state;
+  }
 }
-
 ```
 
 **Reducer**:
@@ -353,20 +341,19 @@ Now use it in a component
 import React, { useReducer } from 'react';
 
 function Counter() {
-    const [state, dispatch] = useReducer(counterReducer, initialState);
+  const [state, dispatch] = useReducer(counterReducer, initialState);
 
-    return (
+  return (
     <div>
-    <h1>Counter: {state.count}</h1>
-    <button onClick={() => dispatch({ type: 'increment' })}>Increment</button>
-    <button onClick={() => dispatch({ type: 'decrement' })}>Decrement</button>
-    <button onClick={() => dispatch({ type: 'reset' })}>Reset</button>
+      <h1>Counter: {state.count}</h1>
+      <button onClick={() => dispatch({ type: 'increment' })}>Increment</button>
+      <button onClick={() => dispatch({ type: 'decrement' })}>Decrement</button>
+      <button onClick={() => dispatch({ type: 'reset' })}>Reset</button>
     </div>
-    );
+  );
 }
 
 export default Counter;
-
 ```
 
 **`dispatch`**: This function is used to send an action to the reducer. Each time you call `dispatch({ type: 'actionType' })`, it triggers the reducer function and updates the state accordingly.
@@ -388,29 +375,28 @@ const initialState = { count: 0 };
 
 // Reducer function
 function appReducer(state, action) {
-    switch (action.type) {
-        case 'increment':
-        return { count: state.count + 1 };
-        case 'decrement':
-        return { count: state.count - 1 };
-        default:
-        return state;
-    }
+  switch (action.type) {
+    case 'increment':
+      return { count: state.count + 1 };
+    case 'decrement':
+      return { count: state.count - 1 };
+    default:
+      return state;
+  }
 }
 
 // Context provider component
 function StateProvider({ children }) {
-const [state, dispatch] = useReducer(appReducer, initialState);
+  const [state, dispatch] = useReducer(appReducer, initialState);
 
-return (
-<StateContext.Provider value={{ state, dispatch }}>
-{children}
-</StateContext.Provider>
-);
+  return (
+    <StateContext.Provider value={{ state, dispatch }}>
+      {children}
+    </StateContext.Provider>
+  );
 }
 
 export { StateProvider, StateContext };
-
 ```
 
 Consume in a component:
@@ -420,23 +406,22 @@ import React, { useContext } from 'react';
 import { StateContext } from './StateProvider';
 
 function Counter() {
-    const { state, dispatch } = useContext(StateContext);
+  const { state, dispatch } = useContext(StateContext);
 
-    return (
+  return (
     <div>
-    <h1>Count: {state.count}</h1>
-    <button onClick={() => dispatch({ type: 'increment' })}>Increment</button>
-    <button onClick={() => dispatch({ type: 'decrement' })}>Decrement</button>
+      <h1>Count: {state.count}</h1>
+      <button onClick={() => dispatch({ type: 'increment' })}>Increment</button>
+      <button onClick={() => dispatch({ type: 'decrement' })}>Decrement</button>
     </div>
-    );
+  );
 }
 
 export default Counter;
-
 ```
 
 - **Context**: React's Context API provides a way to share data (like state) across components, without passing props manually at each level.
-
+    
 - **Reducer**: A reducer function is used to manage complex state transitions. It receives the current state and an action, and returns a new state based on the action.
 
 First, we need to create a **context** to store the state and a **reducer** to update the state.
@@ -446,18 +431,17 @@ First, we need to create a **context** to store the state and a **reducer** to u
 export const initialState = { count: 0 };
 
 export function counterReducer(state, action) {
-    switch (action.type) {
-        case 'increment':
-        return { count: state.count + 1 };
-        case 'decrement':
-        return { count: state.count - 1 };
-        case 'reset':
-        return initialState;
-        default:
-        return state;
-    }
+  switch (action.type) {
+    case 'increment':
+      return { count: state.count + 1 };
+    case 'decrement':
+      return { count: state.count - 1 };
+    case 'reset':
+      return initialState;
+    default:
+      return state;
+  }
 }
-
 ```
 
 Next, we create a **context provider** that will use the `useReducer` hook to manage the state and provide the state and dispatch function to the rest of the app.
@@ -472,15 +456,14 @@ export const StateContext = createContext();
 
 // Create the provider component
 export function StateProvider({ children }) {
-const [state, dispatch] = useReducer(counterReducer, initialState);
+  const [state, dispatch] = useReducer(counterReducer, initialState);
 
-return (
-<StateContext.Provider value={{ state, dispatch }}>
-{children}
-</StateContext.Provider>
-);
+  return (
+    <StateContext.Provider value={{ state, dispatch }}>
+      {children}
+    </StateContext.Provider>
+  );
 }
-
 ```
 
 - **`StateContext`** is a Context object that will store the global state.
@@ -493,20 +476,19 @@ import React, { useContext } from 'react';
 import { StateContext } from './StateProvider';
 
 function Counter() {
-    const { state, dispatch } = useContext(StateContext);
+  const { state, dispatch } = useContext(StateContext);
 
-    return (
+  return (
     <div>
-    <h1>Counter: {state.count}</h1>
-    <button onClick={() => dispatch({ type: 'increment' })}>Increment</button>
-    <button onClick={() => dispatch({ type: 'decrement' })}>Decrement</button>
-    <button onClick={() => dispatch({ type: 'reset' })}>Reset</button>
+      <h1>Counter: {state.count}</h1>
+      <button onClick={() => dispatch({ type: 'increment' })}>Increment</button>
+      <button onClick={() => dispatch({ type: 'decrement' })}>Decrement</button>
+      <button onClick={() => dispatch({ type: 'reset' })}>Reset</button>
     </div>
-    );
+  );
 }
 
 export default Counter;
-
 ```
 
 finally we can wrap the Provider
@@ -518,15 +500,14 @@ import { StateProvider } from './StateProvider';
 import Counter from './Counter';
 
 function App() {
-    return (
+  return (
     <StateProvider>
-    <Counter />
+      <Counter />
     </StateProvider>
-    );
+  );
 }
 
 export default App;
-
 ```
 
 #### useMemo:
@@ -537,7 +518,6 @@ for example
 
 ```jsx
 const expensiveCount = useMemo(()=>{
-    return count**2;
-},[count]) // dependency here
-
+	return count**2;
+},[count]) // dependency here 
 ```

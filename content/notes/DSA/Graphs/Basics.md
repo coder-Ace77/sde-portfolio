@@ -1,6 +1,10 @@
-# Basics
-
 ---
+title: "Basics"
+description: ""
+date: "2026-02-05"
+---
+
+
 
 A graph consists of nodes and edges. In this book, the variable n denotes the number of nodes in a graph, and the variable m denotes the number of edges.
 
@@ -22,7 +26,7 @@ A graph is simple if no edge starts and ends at the same node, and there are no 
 
 ## Representation:
 
-In the adjacency list representation, each node x in the graph is assigned an adjacency list that consists of nodes to which there is an edge from x.
+In the adjacency list representation, each node x in the graph is assigned an adjacency list that consists of nodes to which there is an edge from x. 
 
 An adjacency matrix is a two-dimensional array that indicates which edges the graph contains. We can efficiently check from an adjacency matrix if there is an edge between two node
 
@@ -34,14 +38,13 @@ Depth-first search (DFS) is a straightforward graph traversal technique. The alg
 
 ```cpp
 void dfs(int node){
-    if(visited[node])return;
-    visited[node]=1;
-
-    for(auto child:adj[node]){
-        dfs(child);
-    }
+	if(visited[node])return;
+	visited[node]=1;
+	
+	for(auto child:adj[node]){
+		dfs(child);
+	}
 }
-
 ```
 
 ### BFS
@@ -53,16 +56,15 @@ visited[x] = true;
 distance[x] = 0;
 q.push(x);
 while (!q.empty()) {
-    int s = q.front(); q.pop();
-    // process node s
-    for (auto u : adj[s]) {
-        if (visited[u]) continue;
-        visited[u] = true;
-        distance[u] = distance[s]+1;
-        q.push(u);
-    }
+	int s = q.front(); q.pop();
+	// process node s
+	for (auto u : adj[s]) {
+	if (visited[u]) continue;
+	visited[u] = true;
+	distance[u] = distance[s]+1;
+	q.push(u);
+	}
 }
-
 ```
 
 ## Applications
@@ -75,11 +77,11 @@ while (!q.empty()) {
 ```cpp
 int mx_size = 0 , no_of_components = 0;
 for(int node=0;node<n;node++){
-    if(!vis[node]){
-        int size = dfs(node);
-        mx_size = max(mx_size , size);
-        no_of_components++;
-    }
+	if(!vis[node]){
+		int size = dfs(node);
+		mx_size = max(mx_size , size);
+		no_of_components++;
+	}
 }
-
 ```
+

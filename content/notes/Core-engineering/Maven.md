@@ -1,6 +1,10 @@
-# Maven
-
 ---
+title: "Maven"
+description: ""
+date: "2026-02-05"
+---
+
+
 
 ### Maven plugins:
 
@@ -18,7 +22,6 @@ Each maven plugin can have multiple tasks each of which is called goals, which c
 ```bash
 mvn [plugin-name]:[goal-name]
 mvn compile:compile
-
 ```
 
 There are two types of plugins:
@@ -37,48 +40,47 @@ Structure of maven plugin:
 example:
 ```xml
 <build>
-<plugins>
-<plugin>
-<!-- GroupId: Identifies the plugin's organization -->
-<groupId>org.apache.maven.plugins</groupId>
+  <plugins>
+    <plugin>
+      <!-- GroupId: Identifies the plugin's organization -->
+      <groupId>org.apache.maven.plugins</groupId>
 
-<!-- ArtifactId: Name of the plugin -->
-<artifactId>maven-compiler-plugin</artifactId>
+      <!-- ArtifactId: Name of the plugin -->
+      <artifactId>maven-compiler-plugin</artifactId>
 
-<!-- Version: Specific version of the plugin -->
-<version>3.10.1</version>
+      <!-- Version: Specific version of the plugin -->
+      <version>3.10.1</version>
 
-<!-- Configuration: Optional plugin-specific settings -->
-<configuration>
-<source>1.8</source>
-<target>1.8</target>
-<encoding>UTF-8</encoding>
-<compilerArgs>
-<arg>-Xlint:all</arg>
-</compilerArgs>
-</configuration>
+      <!-- Configuration: Optional plugin-specific settings -->
+      <configuration>
+        <source>1.8</source>
+        <target>1.8</target>
+        <encoding>UTF-8</encoding>
+        <compilerArgs>
+          <arg>-Xlint:all</arg>
+        </compilerArgs>
+      </configuration>
 
-<!-- Executions: Define plugin execution phases and goals -->
-<executions>
-<execution>
-<id>default-compile</id> <!-- Optional ID for the execution -->
-<phase>compile</phase> <!-- When to run -->
-<goals>
-<goal>compile</goal> <!-- What goal to run -->
-</goals>
-</execution>
-<execution>
-<id>default-test-compile</id>
-<phase>test-compile</phase>
-<goals>
-<goal>testCompile</goal>
-</goals>
-</execution>
-</executions>
-</plugin>
-</plugins>
+      <!-- Executions: Define plugin execution phases and goals -->
+      <executions>
+        <execution>
+          <id>default-compile</id> <!-- Optional ID for the execution -->
+          <phase>compile</phase> <!-- When to run -->
+          <goals>
+            <goal>compile</goal> <!-- What goal to run -->
+          </goals>
+        </execution>
+        <execution>
+          <id>default-test-compile</id>
+          <phase>test-compile</phase>
+          <goals>
+            <goal>testCompile</goal>
+          </goals>
+        </execution>
+      </executions>
+    </plugin>
+  </plugins>
 </build>
-
 
 ```
 
@@ -89,18 +91,17 @@ The `<executions>` block inside a plugin tells Maven:
 
 ```xml
 <executions>
-<execution>
-<id>custom-id</id>       <!-- Optional identifier -->
-<phase>compile</phase>   <!-- When to run -->
-<goals>
-<goal>compile</goal>   <!-- What to run -->
-</goals>
-<configuration>          <!-- Optional: overrides plugin-wide config -->
-<!-- goal-specific settings -->
-</configuration>
-</execution>
+  <execution>
+    <id>custom-id</id>       <!-- Optional identifier -->
+    <phase>compile</phase>   <!-- When to run -->
+    <goals>
+      <goal>compile</goal>   <!-- What to run -->
+    </goals>
+    <configuration>          <!-- Optional: overrides plugin-wide config -->
+      <!-- goal-specific settings -->
+    </configuration>
+  </execution>
 </executions>
-
 ```
 
 Goals are just the set of executions in a given lifecycle. Phases are important to understand.
@@ -121,11 +122,10 @@ In default life cycle the following are important phases:
 6. install: Install the package into local repo. - Copies the built JAR/WAR and POM to your local repo.
 7. deploy: Copy the final package to a remote repository (for sharing with others).
 
-We can run any phase by
+We can run any phase by 
 
 ```sh
 mvn <phase-name>
-
 ```
 
 There are always **pre** and **post** phases to register **goals**, which must run prior to, or after a particular phase.
@@ -134,7 +134,6 @@ eg:
 
 ```
 mvn compile
-
 ```
 
 And Maven will automatically run all preceding phases in the correct order.
@@ -160,23 +159,22 @@ Project object model is a fundamental unit of work in Maven. The POM contains in
 POM also contains the goals and plugins. While executing a task or goal, Maven looks for the POM in the current directory. It reads the POM, gets the needed configuration information, and then executes the goal.
 
 ```xml
-<project xmlns = "http://maven.apache.org/POM/4.0.0" xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation = "http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-<modelVersion>4.0.0</modelVersion>
-<groupId>com.companyname.project-group</groupId>
-<artifactId>project</artifactId>
-<version>1.0</version>
+<project xmlns = "http://maven.apache.org/POM/4.0.0" xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation = "http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"> 
+	<modelVersion>4.0.0</modelVersion> 
+	<groupId>com.companyname.project-group</groupId>
+	<artifactId>project</artifactId> 
+	<version>1.0</version>
 </project>
-
 ```
 
 - All POM files require the **project** element and three mandatory fields: **groupId, artifactId, version**.
 
-Group Id:
-This is an Id of project's group. This is generally unique amongst an organization or a project. For example, a banking group com.company.bank has all bank related projects.
+Group Id: 
+	This is an Id of project's group. This is generally unique amongst an organization or a project. For example, a banking group com.company.bank has all bank related projects.
 artifact Id:
-This is an Id of the project. This is generally name of the project. For example, consumer-banking. Along with the groupId, the artifactId defines the artifact's location within the repository.
+	This is an Id of the project. This is generally name of the project. For example, consumer-banking. Along with the groupId, the artifactId defines the artifact's location within the repository.
 version:
-This is the version of the project. Along with the groupId, It is used within an artifact's repository to separate versions from each other.
+	This is the version of the project. Along with the groupId, It is used within an artifact's repository to separate versions from each other. 
 
 Important plugins:
 
@@ -184,40 +182,37 @@ Important plugins:
 
 ```xml
 <plugin>
-<groupId>org.apache.maven.plugins</groupId>
-<artifactId>maven-compiler-plugin</artifactId>
-<version>3.10.1</version>
-<configuration>
-<source>1.8</source>
-<target>1.8</target>
-</configuration>
+  <groupId>org.apache.maven.plugins</groupId>
+  <artifactId>maven-compiler-plugin</artifactId>
+  <version>3.10.1</version>
+  <configuration>
+    <source>1.8</source>
+    <target>1.8</target>
+  </configuration>
 </plugin>
-
 ```
 
 2. Jar plugin:
 
 ```xml
 <plugin>
-<groupId>org.apache.maven.plugins</groupId>
-<artifactId>maven-jar-plugin</artifactId>
-<version>3.3.0</version>
-<configuration>
-<archive>
-<manifest>
-<mainClass>com.example.Main</mainClass>
-</manifest>
-</archive>
-</configuration>
+  <groupId>org.apache.maven.plugins</groupId>
+  <artifactId>maven-jar-plugin</artifactId>
+  <version>3.3.0</version>
+  <configuration>
+    <archive>
+      <manifest>
+        <mainClass>com.example.Main</mainClass>
+      </manifest>
+    </archive>
+  </configuration>
 </plugin>
-
 
 ```
 
 ### Sping-boot plugin:
 
 Spring boot plugin is used to simplyfy building, running and deploying spring-boot applications.
-
 - Run your app (`spring-boot:run`)
 - Package your app as an executable JAR/WAR (`spring-boot:repackage`)
 - Build Docker images (`spring-boot:build-image`)
@@ -226,14 +221,17 @@ We can add plugin like this--
 
 ```xml
 <build>
-<plugins>
-<plugin>
-<groupId>org.springframework.boot</groupId>
-<artifactId>spring-boot-maven-plugin</artifactId>
-</plugin>
-</plugins>
+  <plugins>
+    <plugin>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-maven-plugin</artifactId>
+    </plugin>
+  </plugins>
 </build>
-
 ```
 
 repackage: is bound to package phase
+
+
+
+

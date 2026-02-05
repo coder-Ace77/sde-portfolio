@@ -1,16 +1,22 @@
-# Databases
+---
+title: "Databases"
+description: ""
+date: "2026-02-05"
+---
+
+
 
 ## **RDS and aurora**
 
 RDS - Relational Database service a managed db service and allows to create the db in cloud.
-This service supports many databases -
+This service supports many databases - 
 
 1. Postgres
-2. Mysql
+2. Mysql 
 3. MariaDb
 4. Aurora(Amazon propriotory)
 
-RDS is a managed service and provides -
+RDS is a managed service and provides - 
 
 - Scaling by deploying more read replicas.
 - Monitoring dashboards
@@ -18,15 +24,15 @@ RDS is a managed service and provides -
 
 But we can not ssh into our db service. Aurora is cloud optimised in context of AWS and gives over 5x performance boost. Storage increases automatically.
 
-Aurora also comes with serverless tier where least management is required. Here we pay per second and is therefore more cost effective. Behind the schene there is going to be a proxy fleet which is managed by aurora.
+Aurora also comes with serverless tier where least management is required. Here we pay per second and is therefore more cost effective. Behind the schene there is going to be a proxy fleet which is managed by aurora. 
 
 We can create snapshots of RDS and can be really handy if we want to use the snapshot elsewhere.
 
 Read Replicas - We  can create upto 15 read replicas writing will be done only to mean RDs. This improves the performacne for read heavy workloads.
 
-MultiAZ - They provide the high availability meaning if failover happens in a AZ then failover will be triggered by the AWS and failover db (secondry db) will takeover. Note that failover db is in different AZ and is not used untill main db is there.
+MultiAZ - They provide the high availability meaning if failover happens in a AZ then failover will be triggered by the AWS and failover db (secondry db) will takeover. Note that failover db is in different AZ and is not used untill main db is there. 
 
-Finally we can have Multi-region deployments where read replicas are spread across multiple regions to have better read performance.
+Finally we can have Multi-region deployments where read replicas are spread across multiple regions to have better read performance. 
 
 ## Elastic cache
 
@@ -34,6 +40,7 @@ There are inmemory database build on top of -
 
 1. Redis
 2. Memcache
+
 
 ## Dynamo db
 
@@ -59,12 +66,12 @@ The partition key determines **where the item is stored**, while the sort key al
 - Low latency
 - Global and fault tolerant
 
+
 DynamoDB allows two modes:
 
 **1. Provisioned Capacity**
 
 You specify:
-
 - Read Capacity Units (RCU)
 - Write Capacity Units (WCU)
 
@@ -82,25 +89,25 @@ DynamoDB is fundamentally built on **partitioning** — distributing data across
 DynamoDB tables can be created with **two possible primary key designs**:
 
 1. Simple primary key(Partiton key) - No two items in a table can have the same partition key.DynamoDB uses this key **only to decide which partition (node) stores the item**.
-2. Composite primary key(Partition Key + Sort Key)
+2. Composite primary key(Partition Key + Sort Key) 
+	- Partition Key = Hash Key
+	- Sort Key = Range Key
+	Items can share the same partition key but need **unique sort keys**.
 
-- Partition Key = Hash Key
-- Sort Key = Range Key
-Items can share the same partition key but need **unique sort keys**.
+Note that it is serverless and flexible so even if data is stored in tables each row can have complelety diffrenet set of attributes. 
 
-Note that it is serverless and flexible so even if data is stored in tables each row can have complelety diffrenet set of attributes.
+Global tables are the way by which we can make a dynamo db table accessible in multiple regions. When this happens each table is replaicated in every region and each region's replica is both readable/writable. 
 
-Global tables are the way by which we can make a dynamo db table accessible in multiple regions. When this happens each table is replaicated in every region and each region's replica is both readable/writable.
 
 ### Redshift
 
 Amazon Redshift is AWS’s **fully managed, petabyte-scale data warehouse** service designed for **analytics**, **BI workloads**, and **complex SQL queries** on very large datasets. It allows organizations to run massively parallel analytical queries across structured and semi-structured data at high speed and low cost.
 
 Redshift is used for **analytics**, not transactional workloads.
-Redshift stores data **column-wise**, not row-wise.
+Redshift stores data **column-wise**, not row-wise.  
 This improves performance for analytical queries that scan specific columns rather than entire rows.
 
-Redshift distributes data across multiple nodes in a **cluster**.
+Redshift distributes data across multiple nodes in a **cluster**.  
 Tasks are run in parallel, making large queries extremely fast.
 
 There is also an option to go serverless with redshift. A new mode where you **don’t manage clusters**, only pay per second of compute used.
@@ -121,16 +128,16 @@ Amazon EMR (Elastic MapReduce) provides the managed solution by offering a fully
 
 ### Amazon Athena
 
-Serverless query tools to perform analysis against the S3 objects.
+Serverless query tools to perform analysis against the S3 objects. 
 
-### Amazon Quicksight
+### Amazon Quicksight 
 
-Serverless ML powered bussinees intelligence to create interactive dashboards.
+Serverless ML powered bussinees intelligence to create interactive dashboards. 
 
 ### Document DB
 
 It is an NoSql db campatible with mongodb and is counterpart with the RDS for Mongodb.
-It is highly scalable, fully managed and highly available and can automatically grow.
+It is highly scalable, fully managed and highly available and can automatically grow. 
 
 ### Neptune
 
@@ -138,17 +145,21 @@ IT is fully managed graph db. Highly available across multiple AZ
 
 ### TimeStream
 
-It is fully managed serverless time series database and it automatically scales up/down to adject based on capacity. Sotres and analyses trillions of events per day.
+It is fully managed serverless time series database and it automatically scales up/down to adject based on capacity. Sotres and analyses trillions of events per day. 
 
 ### Amazon managed blockchain
 
-It is managed service to join public blockchains or create own scalable private network. It is compatable with frameworks like hyperledger and and fabric.
+It is managed service to join public blockchains or create own scalable private network. It is compatable with frameworks like hyperledger and and fabric. 
 
 ### Amazon Glue
 
-Managed extract,transform and Load(ETL) service. and used for transformation of data.
+Managed extract,transform and Load(ETL) service. and used for transformation of data. 
 
-### DMS
+### DMS 
 
-Database migration service fully managed db to migrate dbs. Origin db remains available through out and supports homogenous migration- Same tech to same
+Database migration service fully managed db to migrate dbs. Origin db remains available through out and supports homogenous migration- Same tech to same 
 Or Heterogenous migration - One tech to different
+
+
+
+

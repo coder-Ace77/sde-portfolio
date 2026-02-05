@@ -1,18 +1,19 @@
-# Important Opertions In Python
-
 ---
+title: "Important opertions in python"
+description: ""
+date: "2026-02-05"
+---
+
 #### Range:
 
 ```python
-for i in range(0,100):
-
+for i in range(0,100): 
 ```
 
-Now above for loop is essentiaslly a for each loop range is a generator . It takes three numbers `(start,stop,step)` start and step are optionals and stop is exclusive. But we can get lsit from it
+Now above for loop is essentiaslly a for each loop range is a generator . It takes three numbers `(start,stop,step)` start and step are optionals and stop is exclusive. But we can get lsit from it 
 
 ```python
 list(range(1,10,2))
-
 ```
 
 #### Enumerate:
@@ -20,12 +21,11 @@ list(range(1,10,2))
 ```python
 word = "something good"
 for item in enumerate(word):
-print(item) # item here is a 2 tuple with first entry index and second char
-
+	print(item) # item here is a 2 tuple with first entry index and second char
+	
 # for loops also support tuple unpacking
-for index,char in enumerate(word):
-print(index,char)
-
+for index,char in enumerate(word): 
+	print(index,char)
 ```
 
 Above we see tuple unpacking which is used almost everywhere in python it can come on the left of = or in places like for loops
@@ -36,8 +36,7 @@ It is also a generator. It pairs up corresponding index elements so that we can 
 
 ```python
 for a,b in zip(l1,l2):
-print(a,b)
-
+	print(a,b)
 ```
 
 ### in:
@@ -46,9 +45,8 @@ check for the existance in a various iterables
 
 ```python
 key in dict # checking if key is in a dict
-val in dict.values() #
+val in dict.values() # 
 x in l # check in list or string
-
 ```
 
 ### Random library:
@@ -58,15 +56,14 @@ from random import shuffle,randint
 
 shuffle(myList) # shuffles the list in place
 randint(lower,upper) # geenrates a random number between lower and upper range
-
 ```
 
 ### Input:
 
 ```python
-res = input("Text to show while taking input") # it accepts things as strings
-
+res = input("Text to show while taking input") # it accepts things as strings 
 ```
+
 
 Type casting (or type conversion) means **changing the data type** of a value into another type — e.g., converting a string to an integer.
 
@@ -85,7 +82,6 @@ y = 2.5      # float
 result = x + y
 print(result)       # 12.5
 print(type(result)) # <class 'float'>
-
 ```
 
 explicit
@@ -100,13 +96,12 @@ explicit
 | `tuple()` | Tuple                             |
 | `set()`   | Set                               |
 | `dict()`  | Dictionary (with valid structure) |
-examples
+examples 
 
 ```python
 pairs = [("a", 1), ("b", 2)]
 d = dict(pairs)
 print(d)   # {'a': 1, 'b': 2}
-
 ```
 
 ### List comprehensions:
@@ -117,7 +112,6 @@ general syntax
 
 ```python
 new_list = [ expression for item in iterable if condition ]
-
 ```
 
 | Part           | Meaning                                                        |
@@ -126,30 +120,27 @@ new_list = [ expression for item in iterable if condition ]
 | `item`         | The variable representing each element from the iterable.      |
 | `iterable`     | A sequence (like a list, tuple, string, range, etc.).          |
 | `if condition` | _(optional)_ Filters which items to include.                   |
-List comprehension is the syntax sugar for
+List comprehension is the syntax sugar for 
 
 ```python
 result = []
 for item in iterable:
-if condition:
-result.append(expression)
-
+    if condition:
+        result.append(expression)
 ```
 
 In the front any expression is formidable any function call or any thing
 
-such as
+such as 
 
 ```python
 l = [('EVEN' if x%2==0 else 'ODD') for x in range(0,11)]
-
 ```
 
 We can also do nested list comprehension this however gives us 1d list only not a two d list.
 
 ```python
 l = [x*y for x in [1,2,3] for y in [1,2,3]]
-
 ```
 
 With that any number of such nested loops are possible

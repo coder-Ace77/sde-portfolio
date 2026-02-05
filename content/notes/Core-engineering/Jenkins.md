@@ -1,18 +1,22 @@
-# Jenkins
-
 ---
+title: "Jenkins"
+description: ""
+date: "2026-02-05"
+---
+
+
 
 Jenkins is a **Continuous Integration (CI)** and **Continuous Delivery (CD)** tool.
 
 ### **Jenkins Master (Controller)**
 
 - The **central server** that manages the entire system.
-
+    
 - Responsible for:
-- Scheduling build jobs.
-- Dispatching builds to agents (slaves).
-- Monitoring agents and builds.
-- Managing the UI, user requests, and job configurations.
+    - Scheduling build jobs.
+    - Dispatching builds to agents (slaves).
+    - Monitoring agents and builds.
+    - Managing the UI, user requests, and job configurations.
 - Runs the **web interface** and API.
 
 ### 2. **Jenkins Agents (Slaves)**

@@ -1,6 +1,10 @@
-# Docker Compose
-
 ---
+title: "Docker compose"
+description: ""
+date: "2026-02-05"
+---
+
+
 
 As your application grows, it often requires more than one container. Docker Compose allows you to **define and manage multi-container Docker applications** using a simple, human-readable YAML file called `docker-compose.yml`. Instead of running multiple commands, you define all your services in one file and launch everything with a single `docker-compose up`.
 
@@ -27,23 +31,21 @@ Basic syntax::
 version: '3.9'  # Compose file format version
 
 services:       # Group of services (containers)
-web:
-image: nginx
-ports:
-
-- "8080:80"
-db:
-image: postgres
-environment:
-POSTGRES_USER: user
-POSTGRES_PASSWORD: pass
+  web:
+    image: nginx
+    ports:
+      - "8080:80"
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
 
 volumes:        # Named volumes
-db_data:
+  db_data:
 
 networks:       # Custom networks (optional)
-app_net:
-
+  app_net:
 ```
 
 #### Anatomy of docker-compose file
@@ -53,9 +55,10 @@ We know that yaml file follows hierarical structure. On top level
 1. version: specifies the version of docker compose file. Optional and not recommended for newer versions.
 2. service: Core section where you define each container service.
 
-Each **service**:
-Runs one container (but can be scaled to more)
-Has its own configuration: image, ports, volumes, dependencies, etc.
+	Each **service**:
+		Runs one container (but can be scaled to more)
+		Has its own configuration: image, ports, volumes, dependencies, etc.
+
 
 > [!NOTE] Options in service
 > 1. Image: specifies docker image to use.
@@ -73,27 +76,21 @@ Has its own configuration: image, ports, volumes, dependencies, etc.
 version:  '3.9'
 
 services:
-web:
-image:nodejs
-ports:
-
-- "<host>:<container>" #list here
-volumes:
-
-- ./code:/app  #list here
-environments:
-
-- NODE_ENV=production
-- API_KEY=some key
-depends_on:
-
-- db
-command: ["npm", "start"]
-networks:
-
-- frontend
-- backend
-
+  web:
+    image:nodejs
+    ports:
+	  - "<host>:<container>" #list here
+	volumes:
+	  - ./code:/app  #list here
+	environments:
+	  - NODE_ENV=production
+	  - API_KEY=some key
+	depends_on:
+	  - db
+	command: ["npm", "start"]  	
+	networks:
+	  - frontend
+	  - backend
 ```
 
 #### Other top level sections:
@@ -109,16 +106,14 @@ eg::
 ```yaml
 
 services:
-db:
-image: postgres
+  db:
+    image: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
 volumes:
-
-- db-data:/var/lib/postgresql/data
-
-volumes:
-db-data:
-driver: local
-
+  db-data:
+    driver: local
 ```
 
 Docker containers have a life cycle and volumes do persist after a docker compose life cycle.
@@ -133,29 +128,27 @@ Top-level **`networks`** define custom Docker networks that control how containe
 ```yaml
 
 services:
-web:
-image: nginx
-networks:
-
-- frontend
-app:
-image: my-app
-networks:
-
-- frontend
-- backend
+  web:
+    image: nginx
+    networks:
+      - frontend
+  app:
+    image: my-app
+    networks:
+      - frontend
+      - backend
 
 networks:
-frontend:
-driver: bridge
-backend:
-driver: bridge
-
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge
 
 ```
 
 - When you run `docker-compose up`, Docker automatically creates any defined networks if they don't already exist.
-- Now networks won't persist by default but gets removed however the networks with external to be true will remain persistant.
+- Now networks won't persist by default but gets removed however the networks with external to be true will remain persistant. 
+
 
 ### Key terms in docker compose:
 
@@ -163,12 +156,10 @@ driver: bridge
 
 ```yaml
 services:
-web:
-image: nginx
-ports:
-
-- "80:80"
-
+  web:
+    image: nginx
+    ports:
+      - "80:80"
 ```
 
 ### Docker compose CLI basic commands:
@@ -177,7 +168,6 @@ ports:
 docker compose up
 
 docker compose up -d %% detached mode %%
-
 
 ```
 
@@ -190,14 +180,12 @@ what it does:
 
 ```shell
 docker compose down
-
 ```
 
 This command stops all the containers started by `up`, and removes containers, default networks, and optionally volumes.
 
 ```shell
 docker compose down --volumes
-
 ```
 
 Removes volumes that are orphan also.
@@ -209,13 +197,11 @@ These are the images listed in `compose.yaml`
 docker compose build
 
 docker compose build web %% building only web service%%
-
 ```
 
 ```bash
 %% to list all the containers %%
 docker compose ps
-
 ```
 
 `docker compose` is the **modern replacement** for the older `docker-compose` command. Instead of being a separate Python-based tool (`docker-compose`), it is now **natively integrated into the Docker CLI** as a **Go-based implementation**.
@@ -223,21 +209,18 @@ docker compose ps
 ```bash
 docker compose logs
 docker compose logs -f web  # Follow logs for a specific service
-
 ```
 
 Running a command inside a running service
 
 ```shell
 docker compose exec web bash
-
 ```
 
 Restarting services
 
 ```bash
 docker compose restart web
-
 ```
 
 #### Environment variables:
@@ -246,16 +229,14 @@ We can inject the values in compose files from environment variables as well. Th
 
 ```yaml
 environment:
-
-- DB_USER=${POSTGRES_USER}
-
+  - DB_USER=${POSTGRES_USER}
 ```
 
 and its fetched from .env file
 
 ```env
 POSTGRES_USER=admin
-
 ```
 
 we can scale the services using docker compose scale flag but we also need some reverse proxy to handle the coming requests and load balance them.
+

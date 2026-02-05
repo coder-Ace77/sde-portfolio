@@ -1,10 +1,14 @@
-# Tries
-
 ---
+title: "Tries"
+description: ""
+date: "2026-02-05"
+---
+
+
 
 Tries is a tree like datastructure where each node can point to maximum of `characters ch` of vocabulary.  A **Trie (prefix tree)** is a tree-based data structure used for **storing strings** efficiently, especially useful for **prefix-based operations** (like autocomplete, dictionary search, etc.).
 
-Each node represents a **character**, and a path from root to a terminal node represents a **word**.
+Each node represents a **character**, and a path from root to a terminal node represents a **word**.  
 Each node also keeps a flag indicating if it’s the **end of a word**.
 
 ```cpp
@@ -16,7 +20,6 @@ struct TrieNode {
         for (int i = 0; i < 26; i++) child[i] = nullptr;
     }
 };
-
 ```
 
 ## Recursive implementation
@@ -29,10 +32,9 @@ void insertRec(TrieNode* node, const string& word, int i = 0) {
     }
     int idx = word[i] - 'a';
     if (!node->child[idx])
-    node->child[idx] = new TrieNode();
+        node->child[idx] = new TrieNode();
     insertRec(node->child[idx], word, i + 1);
 }
-
 ```
 
 search
@@ -44,10 +46,9 @@ bool searchRec(TrieNode* node, const string& word, int i = 0) {
     int idx = word[i] - 'a';
     return searchRec(node->child[idx], word, i + 1);
 }
-
 ```
 
-delete
+delete 
 
 ```cpp
 bool deleteRec(TrieNode* node, const string& word, int i = 0) {
@@ -56,7 +57,7 @@ bool deleteRec(TrieNode* node, const string& word, int i = 0) {
         if (!node->end) return false;
         node->end = false;
         for (int j = 0; j < 26; j++)
-        if (node->child[j]) return false; // still has children
+            if (node->child[j]) return false; // still has children
         return true; // delete this node
     }
     int idx = word[i] - 'a';
@@ -64,16 +65,15 @@ bool deleteRec(TrieNode* node, const string& word, int i = 0) {
         delete node->child[idx];
         node->child[idx] = nullptr;
         if (!node->end)
-        for (int j = 0; j < 26; j++)
-        if (node->child[j]) return false;
+            for (int j = 0; j < 26; j++)
+                if (node->child[j]) return false;
         return true;
     }
     return false;
 }
-
 ```
 
-Sometimes we can maintian the additional data with each node for example number of nodes ending at certain point. Maintaining this kind of datastrucrture is often easy to maintain and use in problems.
+Sometimes we can maintian the additional data with each node for example number of nodes ending at certain point. Maintaining this kind of datastrucrture is often easy to maintain and use in problems. 
 
 ## Iterative
 
@@ -83,12 +83,11 @@ void insertIter(TrieNode* root, const string& word) {
     for (char c : word) {
         int idx = c - 'a';
         if (!cur->child[idx])
-        cur->child[idx] = new TrieNode();
+            cur->child[idx] = new TrieNode();
         cur = cur->child[idx];
     }
     cur->end = true;
 }
-
 ```
 
 ```cpp
@@ -101,7 +100,6 @@ bool searchIter(TrieNode* root, const string& word) {
     }
     return cur->end;
 }
-
 ```
 
 ## Usage of tries in xor operations
@@ -114,45 +112,43 @@ y using a binary trie, one can efficiently search for the number that gives the 
 
 ```cpp
 int search(int n){
-    Node* curr = root;
-    int ans=0;
-    for(int b=31;b>=0;b--){
-        int bit = ((n>>b)&1);
-        if(curr->links[1-bit]==nullptr){
-            curr = curr->links[bit];
-        }else{
-        curr = curr->links[1-bit];
-        ans|=(1<<b);
-    }
+	Node* curr = root;
+	int ans=0;
+	for(int b=31;b>=0;b--){
+		int bit = ((n>>b)&1);
+		if(curr->links[1-bit]==nullptr){
+			curr = curr->links[bit];
+		}else{
+			curr = curr->links[1-bit];
+			ans|=(1<<b);
+		}
+	}
+	return ans;
 }
-return ans;
-}
-
 ```
 
-One thing to node about trie is that don't visualize the trie node as holding some character. Always try to think in terms of paths and linkages.
+One thing to node about trie is that don't visualize the trie node as holding some character. Always try to think in terms of paths and linkages. 
 
 ### Problems
 
-One good problem can be to enable wild card matching. For example `.` can match any character so how do one support that. We can implement recursive solution to do that. When we reach any `.` we can recursively check any of the branches down.
-In the worst case this will have time complexity of all going through all nodes of tree. However if there is restirction of atmost 1 `.` Then it will be almost same complexity.
+One good problem can be to enable wild card matching. For example `.` can match any character so how do one support that. We can implement recursive solution to do that. When we reach any `.` we can recursively check any of the branches down. 
+In the worst case this will have time complexity of all going through all nodes of tree. However if there is restirction of atmost 1 `.` Then it will be almost same complexity. 
 
 ```cpp
 bool search(int index,string &word,Node* curr){
-    int n = word.size();
-    if(index==n)return curr!=nullptr && curr->isEnding;
-    if(word[index]=='.'){
-        for(int i=0;i<26;i++){
-            if(curr->links[i]!=nullptr){
-                if(search(index+1,word,curr->links[i]))return true;
-            }
-        }
-        return false;
-    }else{
-    if(curr->links[word[index]-'a']==nullptr)return false;
-    else return search(index+1,word,curr->links[word[index]-'a']);
+	int n = word.size();
+	if(index==n)return curr!=nullptr && curr->isEnding;
+	if(word[index]=='.'){
+		for(int i=0;i<26;i++){
+			if(curr->links[i]!=nullptr){
+				if(search(index+1,word,curr->links[i]))return true;
+			}	
+		}
+		return false;	
+	}else{
+		if(curr->links[word[index]-'a']==nullptr)return false;	
+		else return search(index+1,word,curr->links[word[index]-'a']);
+	}
+	return false;
 }
-return false;
-}
-
 ```

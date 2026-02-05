@@ -1,12 +1,16 @@
-# Core Concepts
-
 ---
+title: "Core concepts"
+description: ""
+date: "2026-02-05"
+---
+
+
 
 ## Scaling:
 
-There are two kinds of scaling horizontal scaling and vertical scaling.
+There are two kinds of scaling horizontal scaling and vertical scaling. 
 
-![Alt](/img/Pasted_image_20251010143705.png)
+![Pasted image 20251010143705.png](/notes-images/Pasted%20image%2020251010143705.png)
 
 It is important to note that horizontal scaling is much more complicated than vertical scaling and adding more machines is not a free lunch.Oftentimes by scaling you're forced to contend with the distribution of work, data, and state across your system.
 
@@ -18,7 +22,7 @@ In any distributed data system, you can only guarantee at most two of the follow
 
 1. consistency: all nodes/users see the same data all the time
 2. availability: every request gets response(either successful or not)
-3. partition tolerance: system works despite network failure between nodes.
+3. partition tolerance: system works despite network failure between nodes. 
 
 Note that partition tolerance is a must and always be supported so system should be working. So we need to prioritize between consisitency and availability.
 
@@ -31,11 +35,10 @@ Let’s consider what happens **when a network partition occurs**:
 - Another client reads from **B**.
 
 Now:
-
 - If **B** responds immediately → it might return the **old value (x=3)** ⇒ violates **Consistency**.
 - If **B** refuses or delays the request until it reconnects to A ⇒ violates **Availability**.
 
-Thus, **under a partition**, you must **sacrifice either consistency or availability**.
+Thus, **under a partition**, you must **sacrifice either consistency or availability**.  
 That’s the essence of CAP.
 
 Now cases:
@@ -59,17 +62,16 @@ Now to design strong consistent systems we may be needed to go ahead with some p
 - limited to single node (single db will have no such issues)
 - accept higher latency
 - discuss concensus protocol
-- tools -
-- postgres
-- NoSql with strong consistency(Dynamo DB)
+- tools - 
+	- postgres
+	- NoSql with strong consistency(Dynamo DB)
 
 With availability we can go  with
-
-- multiple read replicas
+- multiple read replicas 
 - eventual consistency
 - cassandra or dynamo db
 
-Different parts of system can prioritize different requirements -
+Different parts of system can prioritize different requirements - 
 
 for instance we can have availability for events but consistency for booking tickets
 
@@ -96,6 +98,7 @@ It measures **how widely one component’s output is distributed**.
 If you do need to talk to other nodes (a concept known as "fan-out"), keep the number small. A common anti-pattern is to have requests which fan out to many different nodes and then the results are all gathered together. This "scatter gather" pattern can be problematic because it can lead to a lot of network traffic, is sensitive to failures in each connection, and suffers from tail latency issues if the final result is dependent on every response.
 
 Note that since there will be many services handling the same database. This introduces synchronization challenges.
+
 
 > [!NOTE] Synchronization
 > **Synchronization** means keeping **multiple processes, threads, or distributed components** consistent and coordinated when they access or modify **shared data or resources**.
@@ -126,6 +129,7 @@ Websockets are necessary if you need realtime, bidirectional communication betwe
 
 Lastly, Server Sent Events (SSE) are a great way to send updates from the server to the client. They're similar to long polling, but they're more efficient for unidirectional communication from the server to the client. SSE allows the server to push updates to the client whenever new data is available, without the client having to make repeated requests as in long polling. This is achieved through a single, long-lived HTTP connection, making it more suitable for scenarios where the server frequently updates data that needs to be sent to the client. Unlike Websockets, SSE is designed specifically for server-to-client communication and does not support client-to-server messaging. This makes SSE simpler to implement and integrate into existing HTTP infrastructure, such as load balancers and firewalls, without the need for special handling.
 
+
 > [!NOTE] Note
 > Statefulness is a major source of complexity for systems. Where possible, relegating your state to a message broker or a database is a great way to simplify your system. This enables your services to be stateless and horizontally scalable while still maintaining stateful communication with your clients.
 
@@ -134,7 +138,7 @@ Lastly, Server Sent Events (SSE) are a great way to send updates from the server
 Finally one may be required to handle security related question:
 
 Authorization: Only allowed user is given access to the resource.
-Authentication: User is what they claim to be.
+Authentication: User is what they claim to be. 
 
 When designing production systems, security should be top of mind. While system design interviews are rarely going to require you to do detailed security testing of your design, they are looking for you to emphasize security where appropriate. This means that you should be prepared to discuss how you'll secure your system at every level. Some of the most common security concerns are:
 
@@ -154,8 +158,8 @@ Data protection is the process of ensuring that data is protected from unauthori
 
 ## Concurrency
 
-Sequencial concurrency happens when requests go one by one in order of commming.
-Parallel execution happens when multiple tasks are running parallely. Each CPU core can be think of as single unit. Parallelism is about doing multiple tasks simultaneouly concurrency is about managing multiple tasks. In concurrency single processor can be made to give you illusion that multiple process are running at the same time.
+Sequencial concurrency happens when requests go one by one in order of commming. 
+Parallel execution happens when multiple tasks are running parallely. Each CPU core can be think of as single unit. Parallelism is about doing multiple tasks simultaneouly concurrency is about managing multiple tasks. In concurrency single processor can be made to give you illusion that multiple process are running at the same time. 
 
 In a single core env only concurrency can be achieved while in multicore both can be achieved simultaneously.
 
@@ -173,6 +177,6 @@ common concurrency issues:
 | **Starvation**          | One thread never gets CPU time or access to a resource because others monopolize it.                                  | High-priority threads continuously run, low-priority thread never executes.                                   |
 | **Atomicity violation** | Operation assumed to be atomic actually isn’t.                                                                        | `if (!flag) flag = true;` executed by two threads — both see `flag = false` and both set it `true`.           |
 | **Order violation**     | One thread depends on another’s operation order, but it’s not enforced.                                               | Thread B reads variable before Thread A initializes it.                                                       |
-Now concurrency errors can occur at memory level. For example two threads sprwned tried to access same memory data. However it can also occur with any other resource like database , cache etc.
+Now concurrency errors can occur at memory level. For example two threads sprwned tried to access same memory data. However it can also occur with any other resource like database , cache etc. 
 
 Note that languages like nodejs avoid shared memory concurency so concurrency errors not happen there but in langauges like java and c++ which do not have any of the internal transaction mechanism so we need to use locks or mutexes.

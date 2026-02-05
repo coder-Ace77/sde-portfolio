@@ -1,6 +1,10 @@
-# Testing In React
-
 ---
+title: "Testing in react"
+description: ""
+date: "2026-02-05"
+---
+
+
 
 ### React testing:
 
@@ -27,28 +31,26 @@ import { render } from '@testing-library/react';
 import MyComponent from './MyComponent';
 
 test('renders the component', () => {
-    const { getByText } = render(<MyComponent />);
-    expect(getByText('Hello, world!')).toBeInTheDocument();
+  const { getByText } = render(<MyComponent />);
+  expect(getByText('Hello, world!')).toBeInTheDocument();
 });
-
 ```
 
 render return signature:
 
 ```js
 const {
-    getByText,
-    getByRole,
-    getByTestId,
-    queryByText,
-    findByText,
-    container,
-    rerender,
-    unmount,
-    debug,
-    ...others
+  getByText,
+  getByRole,
+  getByTestId,
+  queryByText,
+  findByText,
+  container,
+  rerender,
+  unmount,
+  debug,
+  ...others
 } = render(<MyComponent />);
-
 ```
 
 |Function / Property|Description|
@@ -66,11 +68,11 @@ const {
 - **It renders the React component** inside that container using `ReactDOM.render()` (or internally via `createRoot` if using React 18+).
 - **It wraps the container** in RTL’s custom logic to allow querying and interaction.
 
+
 In the context of **React Testing Library (RTL)**, the `container` is a **DOM element (usually a `<div>`)** where your React component gets rendered during a test. It's part of the object returned by the `render()` function:
 
 ```js
 const { container } = render(<MyComponent />);
-
 ```
 
 While RTL encourages using **queries like `getByRole`, `getByText`, etc.** (to mimic how users find elements), `container` gives you **direct access to the DOM**.
@@ -78,7 +80,6 @@ While RTL encourages using **queries like `getByRole`, `getByText`, etc.** (to m
 ```js
 const button = container.querySelector('button');
 expect(button).toBeTruthy();
-
 ```
 
 ### Screen:
@@ -88,7 +89,6 @@ expect(button).toBeTruthy();
 ```js
 render(<MyComponent />);
 screen.getByRole('button');
-
 ```
 
 |Function|Description|
@@ -107,7 +107,6 @@ screen.getByRole('button');
 
 ```js
 await screen.findByText(/loaded/i);
-
 ```
 
 > Internally uses `waitFor()` to keep checking until the element appears or times out.
@@ -119,7 +118,6 @@ These are the plural versions — they return an **array** of matching elements.
 ```js
 const items = screen.getAllByRole('listitem');
 expect(items).toHaveLength(3);
-
 ```
 
 ### Get by Role:
@@ -138,12 +136,10 @@ any div can also attain an aria role.
 ```js
 <button>Click me</button> <!-- implicit role="button" -->
 <div role="button">Click me</div> <!-- explicit role="button" -->
-
 ```
 
 ```js
 const button = screen.getByRole('button', { name: /submit/i });
-
 ```
 
 - The **accessible name** is the string that screen readers use to identify the element.
@@ -154,7 +150,6 @@ const button = screen.getByRole('button', { name: /submit/i });
 
 ```js
 <button aria-label="Close dialog">X</button>
-
 ```
 
 - `aria-checked` — for checkboxes and radio buttons (true/false/mixed)
@@ -176,14 +171,12 @@ expect(button).toBeInTheDocument(); // element exists
 expect(button).toBeVisible();       // element is visible
 expect(button).toBeEnabled();       // not disabled
 expect(button).toHaveClass('btn-primary'); // has CSS class
-
 ```
 
 ```js
 expect(button.textContent).toBe('Submit');
 expect(button.getAttribute('type')).toBe('submit');
 expect(button).toHaveAttribute('aria-label', 'Submit form');
-
 ```
 
 ### find
@@ -194,7 +187,6 @@ expect(button).toHaveAttribute('aria-label', 'Submit form');
 
 ```js
 const element = await screen.findByText(text, options?, waitForOptions?);
-
 ```
 
 Working:
@@ -206,34 +198,33 @@ Working:
 
 ```js
 function UserGreeting() {
-    const [name, setName] = React.useState(null);
+  const [name, setName] = React.useState(null);
 
-    React.useEffect(() => {
-        setTimeout(() => {
-            setName('Alice');
-        }, 500);
-    }, []);
+  React.useEffect(() => {
+    setTimeout(() => {
+      setName('Alice');
+    }, 500);
+  }, []);
 
-    // return <div>{name ? `Hello, ${name}!` : 'Loading...'}</div>;
+  // return <div>{name ? `Hello, ${name}!` : 'Loading...'}</div>;
 }
-
 ```
 
 ```js
 import { render, screen } from '@testing-library/react';
 
 test('shows greeting after loading', async () => {
-    render(<UserGreeting />);
+  render(<UserGreeting />);
 
-    expect(screen.getByText(/loading/i)).toBeInTheDocument();
+  expect(screen.getByText(/loading/i)).toBeInTheDocument();
 
-    // Wait for the greeting text to appear asynchronously
-    const greeting = await screen.findByText(/hello, alice!/i);
-    expect(greeting).toBeInTheDocument();
+  // Wait for the greeting text to appear asynchronously
+  const greeting = await screen.findByText(/hello, alice!/i);
+  expect(greeting).toBeInTheDocument();
 });
 
-
 ```
+
 
 ```js
 // Case-sensitive, exact match:
@@ -242,5 +233,5 @@ await screen.findByText('Submit', { exact: true });
 // Custom timeout (e.g., wait up to 3000ms)
 await screen.findByText(/loaded/i, {}, { timeout: 3000 });
 
-
 ```
+

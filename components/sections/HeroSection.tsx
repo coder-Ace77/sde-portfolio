@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { ArrowRight, Github} from "lucide-react";
+import { ArrowRight, Github } from "lucide-react";
 import Link from "next/link";
 
 export function HeroSection() {
@@ -20,12 +20,11 @@ export function HeroSection() {
                         Available for new opportunities
                     </div>
                     <h1 className="max-w-4xl text-4xl font-bold tracking-tighter leading-[1.1] font-display sm:text-6xl md:text-7xl antialiased">
-                        Building scalable <br/>
+                        Building scalable <br />
                         <span className="text-muted-foreground/80">Distributed Applications</span>
                     </h1>
                     <p className="mt-6 max-w-2xl text-lg text-muted-foreground sm:text-xl leading-relaxed">
                         I'm <span className="text-foreground font-medium">Mohd Adil</span>, a software engineer specializing in building exceptional digital experiences.
-                        Currently focused on accessible, human-centered products.
                     </p>
                 </motion.div>
 

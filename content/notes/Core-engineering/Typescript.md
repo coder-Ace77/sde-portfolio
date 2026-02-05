@@ -1,6 +1,10 @@
-# Typescript
-
 ---
+title: "Typescript"
+description: ""
+date: "2026-02-05"
+---
+
+
 
 Typescript is an statci language meaning every variable has a type and must remain same through life of variable.
 
@@ -10,17 +14,16 @@ Typescript can figure out the types implicitely.
 let x = 5; // number
 let y:number = 5; // explicit
 let z:string = 5; // error
-
 ```
 
 By default a variable is declared with any type if not automatically inferred. Note that any means it won't have any type safety.
 
 ```typescript
 let x; // any type
-
 ```
 
 ### Types category:
+
 
 In **TypeScript**, a **type** is a way to describe the shape, structure, and behavior of **data**. Types allow the compiler to check that your code uses values correctly — making your code **more predictable**, **readable**, and **safe**.
 
@@ -42,17 +45,16 @@ These are the most basic types in TypeScript.
 let name: string = "Alice";
 let age: number = 30;
 let isAdmin: boolean = true;
-
 ```
+
 
 ### Object literal
 
 ```ts
 let user: { name: string; age: number } = {
-name: "John",
-age: 25
+  name: "John",
+  age: 25
 };
-
 ```
 
 ### Arrays
@@ -60,7 +62,6 @@ age: 25
 ```ts
 let numbers: number[] = [1, 2, 3];
 let strings: Array<string> = ["a", "b"];
-
 ```
 
 ### Tuples
@@ -69,7 +70,6 @@ Fixed-length arrays with specific types.
 
 ```ts
 let point: [number, number] = [10, 20];
-
 ```
 
 ### Union (`|`): Value can be one of several types
@@ -78,7 +78,6 @@ let point: [number, number] = [10, 20];
 let id: string | number;
 id = 123;
 id = "abc";
-
 ```
 
 ### Intersection (`&`): Combine multiple types into one
@@ -87,22 +86,21 @@ id = "abc";
 type A = { name: string };
 type B = { age: number };
 type C = A & B; // { name: string, age: number }
-
 ```
+
 
 Custom names for any type.
 
 ```ts
 type User = {
-    id: number;
-    name: string;
+  id: number;
+  name: string;
 };
 
 let user: User = {
-    id: 1,
-    name: "Jane"
+  id: 1,
+  name: "Jane"
 };
-
 ```
 
 ## 👤 5. **Interfaces**
@@ -111,21 +109,19 @@ Another way to define object shapes. Preferred when extending or implementing.
 
 ```ts
 interface Product {
-    id: number;
-    title: string;
+  id: number;
+  title: string;
 }
 
 const p: Product = { id: 10, title: "Book" };
-
 ```
 
 Interfaces support **extension**:
 
 ```ts
 interface Book extends Product {
-    author: string;
+  author: string;
 }
-
 ```
 
 ## 🧠 6. **Literal Types**
@@ -136,7 +132,6 @@ Limit a value to exact strings, numbers, or booleans.
 let direction: "left" | "right";
 direction = "left"; // ✅
 direction = "up";   // ❌
-
 ```
 
 ## 🚀 7. **Function Types**
@@ -147,7 +142,6 @@ Define the shape of functions.
 let greet: (name: string) => string;
 
 greet = (name) => `Hello, ${name}`;
-
 ```
 
 ## 🧬 8. **Generics**
@@ -156,12 +150,12 @@ Reusable, type-safe components or functions.
 
 ```ts
 function identity<T>(value: T): T {
-    return value;
+  return value;
 }
 
 let output = identity<number>(123);
-
 ```
+
 
 ## ❓ 9. **`any`, `unknown`, `never`, `void`**
 
@@ -174,13 +168,12 @@ let output = identity<number>(123);
 
 ```ts
 function log(message: string): void {
-    console.log(message);
+  console.log(message);
 }
 
 function fail(): never {
-    throw new Error("Error!");
+  throw new Error("Error!");
 }
-
 ```
 
 ## 🔐 10. **Enums**
@@ -189,23 +182,21 @@ Named constants.
 
 ```ts
 enum Direction {
-    Up, // by default we values starting from 0,1...
-    Down,
-    Left,
-    Right
+  Up, // by default we values starting from 0,1...
+  Down,
+  Left,
+  Right
 }
 
 let dir: Direction = Direction.Left;
-
 ```
 
 ### Functions:
 
 ```typescript
 function doSomething(x:number,y:string)string{
-    return toString(x)+y;
+	return toString(x)+y;
 }
-
 ```
 
 Numbers , boleans and strings are primitive datatypes. We can have objects in javascript to handle the type here we form interfaces or types. Both can be used to define the shape of an object.
@@ -217,56 +208,51 @@ With some caveats:
 
 ```typescript
 interface Person{
-    name:string;
-    age?:number;
+	name:string;
+	age?:number;
 }
 
 type User = {
-    name:string,
-    age:number,
-    isAdmin?:boolean
+	name:string,
+	age:number,
+	isAdmin?:boolean
 }
-
 ```
 
-In both we can make any property optional by ?
+In both we can make any property optional by ? 
 
-Using it
+Using it 
 
 ```typescript
 function doSomething(userObj:User){
-
+	
 }
-
 ```
 
 Arrays also have types:
 
 ```typescript
 function doSomething(arr:string[]){
-    arr[0] = 3; // error
+	arr[0] = 3; // error
 }
-
 ```
 
 Union and intersection help us to accept two different things in a given type. Unions and intersection bascially define a new type
 
 ```typescript
 type User = {
-    age:number | string,
+	age:number | string,
 }
 
 let arr:(string|number)[] = []; // array with two kind of types.
-
 ```
 
 Intersection allows us to have fields of both the types
 
 ```typescript
 type Person = User & {
-    gender:'Male' | 'Female'
+	gender:'Male' | 'Female'
 }
-
 ```
 
 Note that | also works with literals which means gender can only have two values.
@@ -280,20 +266,18 @@ type Admin = { role: "admin" };
 type Guest = { role: "guest" };
 
 type User = Admin | Guest;
-
 ```
 
 Extending an interface:
 
 ```typescript
 interface Person {
-    name: string;
+  name: string;
 }
 
 interface Employee extends Person {
-    jobTitle: string;
+  jobTitle: string;
 }
-
 ```
 
 Type can also alias complex types eg
@@ -301,7 +285,6 @@ Type can also alias complex types eg
 ```typescript
 type ID = string | number;
 type Tuple = [number, string];
-
 ```
 
 #### Tuples:
@@ -310,7 +293,6 @@ Typescript has support for tuples as well.
 
 ```typescript
 type MyTuple = [number , string , boolean?]; // tuple with 3 fields again boolean is made optional using ?
-
 ```
 
 #### Generics:
@@ -319,17 +301,15 @@ Generics allow us to pass the type as well into an object.
 
 ```typescript
 function identity<T>(value: T): T { // T can now be used inside
-    return value;
-}
-
+  return value;
+} 
 ```
 
-However we don't create generic types but use them.
+However we don't create generic types but use them. 
 
 ```typescript
 const [data,setData] = useState<string>("Hi");
 // however the type can be auto inferred.
-
 ```
 
 ### Basics in react:
@@ -340,77 +320,73 @@ React functional component is of type FC.  It can be ommited as well.
 import {FC} from 'react';
 
 const MyComponent:FC = (props) =>{
-    // only props.children accessible.
+	// only props.children accessible.
 }
-
 ```
 
-By default only known react prop is children.
+By default only known react prop is children. 
 To get others as well we can define an interface which will extend to others as well.
 
 ```typescript
 interface MyProps{
-    foo:number;
-    bar:string;
+	foo:number;
+	bar:string;
 }
 
 const MyComponent:FC<MyProps> = (props)=>{
-    return {props.foo}
+	return {props.foo}
 };
 
 // one way is to type like this but then we can't use destructuring.
 
 const MyComp = (props:{text:string})=>{
-props.text
+	props.text
 }
 
 // another way which will allow destructing is as follows
 
 type CardProps = {
-    text: string,
-    count?: number
+	text: string,
+	count?: number
 }
 
 export function Card({text,count}:CardProps){
-// now we can use the text and count as normal
+	// now we can use the text and count as normal
 }
 
 // passing count is optional
 
 <Card test={"Hello"} count={32}/>
-
 ```
 
 Now children type
 
 ```typescript
 type CardProps = {
-    children: React.ReactNode // children has type ReactNode which is anything which can rendered in react
+	children: React.ReactNode // children has type ReactNode which is anything which can rendered in react
 }
 
 export function Card({children}:CardProps){
-// now we can use children
+	// now we can use children
 }
 
 `<Card>
 </Card>` // passing like this means children is undefined so no error.
 
 // but in the following line it means children is missing and is unacceptable
-'<Card/>'
-
+'<Card/>' 
 ```
 
 Now setter functions also have a type eg - setData they will have a type. So if you are passing a type it needs to be done in a way suppose card takes setCount
 
 ```typescript
 type CardProps = {
-    setCount: React.Dispatch<React.SetStateAction<number>> // number from state
+	setCount: React.Dispatch<React.SetStateAction<number>> // number from state
 }
 
 export function Card({setCount}:CardProps){
-
+	
 }
-
 
 ```
 
@@ -419,47 +395,44 @@ Say we also pass some other method then we also need to have types here as well
 ```typescript
 // from earlier comp
 function alertMessage(message:string)string{ // can also be inferred
-    alert(message);
-    // return message;
+	alert(message);
+	// return message;
 }
 
 //  now in paased function
 type CardProps = {
-    alertMessage: (message:string)=>void // method signature
+	alertMessage: (message:string)=>void // method signature 
 }
 
 export function Card({alertMessage}: CardProps){
-
+	
 }
-
 ```
 
-In map statements typescript is intelligent enough to understand that we don't need to explicitely type
+In map statements typescript is intelligent enough to understand that we don't need to explicitely type 
 
 ```typescript
 return ({users.map(user => {
-    return (); // use user no explicit typing
+		return (); // use user no explicit typing
+	});
 });
-});
-
 ```
 
 Now in child component
 
 ```typescript
 type CardProps = {
-    user:User
+	user:User
 }
 
 type User = {
-    name:string,
-    age:number
+	name:string,
+	age:number
 }
 
 export function Card({user}:CardProps){
-return (); // use the prop
+	return (); // use the prop
 }
-
 
 ```
 
@@ -469,37 +442,35 @@ Using union for styling
 ```typescript
 
 type CardProps = {
-    color: "red" | "blue" | "purple"
+	color: "red" | "blue" | "purple"
 }
 
 // mapping
 const colorMap = {
-    red: "bg-red-500"
-    blue: ".."
+	red: "bg-red-500"
+	blue: ".."
 }
-
 ```
 
-Note that null can not come with any datatype we have to make it union to signify that some datatype might be null as well. This is actually important when dealing with apis
+Note that null can not come with any datatype we have to make it union to signify that some datatype might be null as well. This is actually important when dealing with apis 
 
 ```typescript
 type User = {
-    name:string,
-    age:number
+	name:string,
+	age:number
 }
 
 function App(){
-    const [user,setUser] = useState<User | null>(null); // inital null
-    return (
-    // but we can't access any of properties of user
-    user.name // <- user can be null as well typescript will give an error
-    user?.name // <- says that user can be null
-    )
+	const [user,setUser] = useState<User | null>(null); // inital null 
+	return (
+		// but we can't access any of properties of user
+		user.name // <- user can be null as well typescript will give an error
+		user?.name // <- says that user can be null 
+	)
 }
-
 ```
 
-What is ? exactly -
+What is ? exactly - 
 
 - This is **optional chaining**.
 - It safely checks if `user` is **not null or undefined** before accessing `.name`.
@@ -510,50 +481,48 @@ Additonally we can use loading as well
 
 ```typescript
 type User = {
-    name: string;
-    age: number;
+  name: string;
+  age: number;
 };
 
 function App() {
-    const [user, setUser] = useState<User | null>(null);
-    const [loading, setLoading] = useState<boolean>(true);
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
-    useEffect(() => {
-        // Simulate fetching user data
-        setTimeout(() => {
-            setUser({ name: "Alice", age: 30 });
-            setLoading(false); // Done loading
-        }, 2000); // 2 seconds delay
-    }, []);
+  useEffect(() => {
+    // Simulate fetching user data
+    setTimeout(() => {
+      setUser({ name: "Alice", age: 30 });
+      setLoading(false); // Done loading
+    }, 2000); // 2 seconds delay
+  }, []);
 
-    if (loading) {
-        return <p>Loading...</p>;
-    }
+  if (loading) {
+    return <p>Loading...</p>;
+  }
 
-    return (
+  return (
     {!loading && user && user.name} // direclty writing user.name will give error because typescript won't know that loeading will remove this condition.
-    );
+  );
 }
-
 ```
 
 ### Type events in react:
 
-Similary we have to define type of event as well we can copy type from event object.
+ Similary we have to define type of event as well we can copy type from event object.
 
 ```typescript
 const App = () =>{
-    const handleClick = (e:React.MouseEvent<HTMLButtonElement,MouseEvent>){
-
-    }
-
-    return (
-    <button onClick = {(e) => handleClick(e)}>
-    CLICK
-    '</button>'
-    )
+	const handleClick = (e:React.MouseEvent<HTMLButtonElement,MouseEvent>){
+	
+	}
+	
+	return (
+		<button onClick = {(e) => handleClick(e)}>
+		CLICK
+		'</button>'
+	)
 }
-
 ```
 
 #### Generics:
@@ -565,18 +534,17 @@ Lets define a hook that will give us data from url
 import {useState,useEffect} from 'react';
 
 export function useFetch(url:string){
-    const [data,setData] = useState(null);
-    useEffect(()=>{
-        async function fetchData(){
-            let response = await fetch(url);
-            let jsonData = await response.json();
-            setData(jsonData);
-        }
-        fetchData();
-    },[url]);
-    return data;
+	const [data,setData] = useState(null);
+	useEffect(()=>{
+		async function fetchData(){
+			let response = await fetch(url);
+			let jsonData = await response.json();
+			setData(jsonData);	
+		}
+		fetchData();
+	},[url]);
+	return data;
 }
-
 ```
 
 While this is pretty good it does not have types. Typing with generics
@@ -585,61 +553,58 @@ While this is pretty good it does not have types. Typing with generics
 import {useState,useEffect} from 'react';
 
 export function useFetch<T>(url:string):T | null{
-    const [data,setData] = useState<T | null>(null);
-    useEffect(()=>{
-        async function fetchData(){
-            let response = await fetch(url);
-            let jsonData:T = await response.json(); // says json data should be type t
-            setData(jsonData);
-        }
-        fetchData();
-    },[url]);
-    return data;
+	const [data,setData] = useState<T | null>(null);
+	useEffect(()=>{
+		async function fetchData(){
+			let response = await fetch(url);
+			let jsonData:T = await response.json(); // says json data should be type t
+			setData(jsonData);	
+		}
+		fetchData();
+	},[url]);
+	return data;
 }
-
 ```
 
 - `useEffect` starts executing `fetchData()`
 - It fetches data asynchronously
-
+    
 - After data is fetched and parsed:
-- `setData(jsonData)` is called
-- This causes the component (and the hook) to **re-run**
-
+    - `setData(jsonData)` is called
+    - This causes the component (and the hook) to **re-run**
+        
 - On the next render:
-- The hook runs again
-- `useState` now holds the new `data` value
-- `return data;` returns the **actual fetched data**
+    - The hook runs again
+    - `useState` now holds the new `data` value
+    - `return data;` returns the **actual fetched data**
 
 Now the type can be used.
 
 ```typescript
 const data = useFetch<string>("url here");
-
 ```
 
 ### TSCONFIG
 
 ```json
 {
-    "compilerOptions": {
-        // compilation rules and settings
-    },
-    "include": [
+  "compilerOptions": {
+    // compilation rules and settings
+  },
+  "include": [
     // files or directories to include
-    ],
-    "exclude": [
+  ],
+  "exclude": [
     // files or directories to ignore
-    ],
-    "files": [
+  ],
+  "files": [
     // optional, explicitly listed files
-    ],
-    "extends": "base-config.json",
-    "references": [
+  ],
+  "extends": "base-config.json",
+  "references": [
     // for project references in monorepos
-    ]
+  ]
 }
-
 ```
 
 | Option                             | Description                                                                              |
@@ -659,16 +624,15 @@ const data = useFetch<string>("url here");
 
 ```json
 {
-    "compilerOptions": {
-        "target": "ES6",
-        "module": "CommonJS",
-        "strict": true,
-        "esModuleInterop": true,
-        "outDir": "./dist",
-        "rootDir": "./src",
-        "sourceMap": true,
-        "skipLibCheck": true
-    }
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "CommonJS",
+    "strict": true,
+    "esModuleInterop": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "sourceMap": true,
+    "skipLibCheck": true
+  }
 }
-
 ```

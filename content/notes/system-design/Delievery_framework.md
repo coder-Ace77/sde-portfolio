@@ -1,10 +1,14 @@
-# Delievery Framework
-
 ---
+title: "Delievery framework"
+description: ""
+date: "2026-02-05"
+---
+
+
 
 These are the basic steps of delievery framework.
 
-![Alt](/img/Pasted_image_20251010134636.png)
+![Pasted image 20251010134636.png](/notes-images/Pasted%20image%2020251010134636.png)
 
 ## Requirements:
 
@@ -41,20 +45,21 @@ For example, if you were designing a system like Twitter, you might have the fol
 Coming up with non-functional requirements can be challenging, especially if you're not familiar with the domain. Here is a checklist of things to consider that might help you identify the most important non-functional requirements for your system. You'll want to identify the top 3-5 that are most relevant to your system.
 
 1. **CAP Theorem**: Should your system prioritize consistency or availability? Note, partition tolerance is a given in distributed systems.
-
+    
 2. **Environment Constraints**: Are there any constraints on the environment in which your system will run? For example, are you running on a mobile device with limited battery life? Running on devices with limited memory or limited bandwidth (e.g. streaming video on 3G)?
-
+    
 3. **Scalability**: All systems need to scale, but does this system have unique scaling requirements? For example, does it have bursty traffic at a specific time of day? Are there events, like holidays, that will cause a significant increase in traffic? Also consider the read vs write ratio here. Does your system need to scale reads or writes more?
-
+    
 4. **Latency**: How quickly does the system need to respond to user requests? Specifically consider any requests that require meaningful computation. For example, low latency search when designing Yelp.
-
+    
 5. **Durability**: How important is it that the data in your system is not lost? For example, a social network might be able to tolerate some data loss, but a banking system cannot.
-
+    
 6. **Security**: How secure does the system need to be? Consider data protection, access control, and compliance with regulations.
-
+    
 7. **Fault Tolerance**: How well does the system need to handle failures? Consider redundancy, failover, and recovery mechanisms.
-
+    
 8. **Compliance**: Are there legal or regulatory requirements the system needs to meet? Consider industry standards, data protection laws, and other regulations.
+
 
 ### Capacity estimation:
 
@@ -65,13 +70,13 @@ Coming up with non-functional requirements can be challenging, especially if you
 Storage capacity is used to define how much storage we will be needing in next this span of time.
 
 Here we will figure out the request per second (rps) of the application.
-For instance with 20k users and each making 5 todos per day with read:write ratio of 5:1.
+For instance with 20k users and each making 5 todos per day with read:write ratio of 5:1. 
 
-Our rps is `20k*5` = 100K/d and
+Our rps is `20k*5` = 100K/d and 
 rps = `100k/10^5`
 
 which is 1 write req per second and 5 read req per second due to read and write ratio.
-Now with 6 req/s our bandwidth is `20kb*6=120kb`
+Now with 6 req/s our bandwidth is `20kb*6=120kb`  
 
 ### Core entities:
 
@@ -82,6 +87,7 @@ For our Twitter example, our core entities are rather simple:
 - User
 - Tweet
 - Follow
+
 
 ### API or system requirements:
 
@@ -100,7 +106,7 @@ For twitter we can define them as --
 ```cpp
 POST /v1/tweets
 body: {
-    "text": string
+  "text": string
 }
 
 GET /v1/tweets/{tweetId} -> Tweet
@@ -108,7 +114,6 @@ GET /v1/tweets/{tweetId} -> Tweet
 POST /v1/users/{userId}/follows
 
 GET /v1/feed -> Tweet[]
-
 ```
 
 Notice how we use plural resource names (tweets, not tweet) and put the userId in the path for the follow endpoint since it's required to identify which user to follow. The tweet endpoint doesn't include userId because we get that from the authentication token in the request header.
@@ -131,11 +136,12 @@ For a web crawler, this might look like:
 
 Now that you have a clear understanding of the requirements, entities, and API of your system, you can start to design the high-level architecture. This consists of drawing boxes and arrows to represent the different components of your system and how they interact. Components are basic building blocks like servers, databases, caches, etc
 
+
 Focus on a relatively simple design that meets the core functional requirements, and then layer on complexity to satisfy the non-functional requirements in your deep dives section. It's natural to identify areas where you can add complexity, like caches or message queues, while in the high-level design. We encourage you to note these areas with a simple verbal callout and written note, and then move on.
 
 For instance following can be the good design
 
-![Alt](/img/Pasted_image_20251010143216.png)
+![Pasted image 20251010143216.png](/notes-images/Pasted%20image%2020251010143216.png)
 
 ## Deep dive:
 

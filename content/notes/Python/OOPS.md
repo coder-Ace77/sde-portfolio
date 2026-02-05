@@ -1,5 +1,10 @@
-
 ---
+title: "OOPS"
+description: ""
+date: "2026-02-05"
+---
+
+
 
 We define obejcts in python using class keyword
 

@@ -1,10 +1,13 @@
-# Spring Boot Data
-
+---
+title: "Spring Boot Data and JPA"
+description: "Overview of JPA, Hibernate, and Spring Boot Data"
+date: "2026-02-05"
 ---
 
 ### JPA:
 
 **JPA** stands for **Java Persistence API**. It is a specification in Java that provides a standardized way to manage relational data in Java applications. JPA acts as a bridge between object-oriented programming and relational databases by handling the mapping of Java objects to database tables and vice versa. This process is known as **Object-Relational Mapping (ORM)**.
+
 
 JPA defines how Java classes (entities) are mapped to database tables and how they interact with the database using components like the **EntityManager**, **Persistence Context**, and **transactions**. It simplifies database operations by abstracting the complexities of SQL and providing a rich API for managing data. It is actually **specification** (part of Java EE, now Jakarta EE).
 
@@ -38,13 +41,14 @@ JDBC operates through a layered architecture, typically using one of two models:
 
 - **Two-Tier Architecture**: The Java application communicates directly with the database using a JDBC driver.
 - **Three-Tier Architecture**: The application interacts with a middle-tier service, which processes queries and communicates with the database.
--
+- 
 JDBC drivers play a critical role in this process. There are four types of drivers:
 
 1. Type-1 (JDBC-ODBC Bridge, deprecated).
 2. Type-2 (Native API driver).
 3. Type-3 (Network Protocol driver).
 4. Type-4 (Thin driver, widely used for its platform independence).
+
 
 ---
 
@@ -56,7 +60,6 @@ To configure your custom datasource we can define it inside application.properti
 app.datasource.url=jdbc:h2:mem:mydb
 app.datasource.username=sa
 app.datasource.pool-size=30
-
 ```
 
 ### Using spring data repository:
@@ -90,7 +93,6 @@ public class User {
     @Column(unique = true, nullable = false) // Must be unique and not null
     private String email;
 }
-
 ```
 
 The `@Entity` annotation is mandatory for any class that you want Hibernate to manage as a persistent entity. By placing this annotation, you are telling Hibernate: _“This class should be mapped to a table in the database.”_
@@ -139,7 +141,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // Custom query methods can be defined here
     User findByEmail(String email);
 }
-
 ```
 
 ## **Built-in Methods of JpaRepository**
@@ -147,31 +148,31 @@ public interface UserRepository extends JpaRepository<User, Long> {
 By extending `JpaRepository`, you get access to a wide variety of methods without writing any implementation yourself. Some of the most important ones are:
 
 - **Save and Update**:
-- `save(S entity)` → Saves an entity or updates it if it already exists.
-- `saveAll(Iterable<S> entities)` → Saves multiple entities at once.
+    - `save(S entity)` → Saves an entity or updates it if it already exists.
+    - `saveAll(Iterable<S> entities)` → Saves multiple entities at once.
 - **Read (Find)**:
-
-- `findById(ID id)` → Finds an entity by its primary key.
-- `findAll()` → Returns all entities.
-- `findAllById(Iterable<ID> ids)` → Finds multiple entities by their IDs.
-- `count()` → Returns the total number of entities.
-
+    
+    - `findById(ID id)` → Finds an entity by its primary key.
+    - `findAll()` → Returns all entities.
+    - `findAllById(Iterable<ID> ids)` → Finds multiple entities by their IDs.
+    - `count()` → Returns the total number of entities.
+    
 - **Delete**:
-
-- `deleteById(ID id)` → Deletes an entity by its ID.
-- `delete(T entity)` → Deletes a given entity.
-- `deleteAll()` → Deletes all records in the table.
-
+    
+    - `deleteById(ID id)` → Deletes an entity by its ID.
+    - `delete(T entity)` → Deletes a given entity.
+    - `deleteAll()` → Deletes all records in the table.
+        
 - **Pagination and Sorting**:
-
-- `findAll(Pageable pageable)` → Returns a paginated list of entities.
-- `findAll(Sort sort)` → Returns all entities sorted according to given criteria.
-
+    
+    - `findAll(Pageable pageable)` → Returns a paginated list of entities.
+    - `findAll(Sort sort)` → Returns all entities sorted according to given criteria.
+        
 - **JPA-Specific Features**:
-
-- `flush()` → Synchronizes persistence context with the database.
-- `saveAndFlush(T entity)` → Saves an entity and immediately flushes changes.
-- `deleteInBatch(Iterable<T> entities)` → Deletes a batch of entities efficiently.
+    
+    - `flush()` → Synchronizes persistence context with the database.
+    - `saveAndFlush(T entity)` → Saves an entity and immediately flushes changes.
+    - `deleteInBatch(Iterable<T> entities)` → Deletes a batch of entities efficiently.
 
 One of the most powerful features of JPA Repository is **query derivation from method names**. You can define methods in the repository interface following a specific naming convention, and Spring Data JPA will generate the query automatically.
 
@@ -185,7 +186,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findByNameStartingWith(String prefix); // LIKE 'prefix%'
     List<User> findByNameEndingWith(String suffix);   // LIKE '%suffix'
 }
-
 ```
 
 Writing the custom queries:
@@ -193,15 +193,13 @@ Writing the custom queries:
 ```java
 @Query("SELECT u FROM User u WHERE u.email = ?1")
 User getUserByEmail(String email);
-
 ```
 
-Now there are two options either use JPQL or use native SQL
+Now there are two options either use JPQL or use native SQL 
 
 ```java
 @Query("SELECT u FROM User u WHERE u.email = ?1")
 User getUserByEmail(String email);
-
 ```
 
 Here, `User` refers to the entity class, not the table name. JPQL works with entities, not raw tables.
@@ -209,7 +207,6 @@ Here, `User` refers to the entity class, not the table name. JPQL works with ent
 ```java
 @Query(value = "SELECT * FROM users WHERE email = ?1", nativeQuery = true)
 User getUserByEmailNative(String email);
-
 ```
 
 Example with pagination:
@@ -220,5 +217,4 @@ Page<User> findAll(Pageable pageable);
 // in service layer
 
 Page<User> usersPage = userRepository.findAll(PageRequest.of(0, 5, Sort.by("name").ascending()));
-
 ```

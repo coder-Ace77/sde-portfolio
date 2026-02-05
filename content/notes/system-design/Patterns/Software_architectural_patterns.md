@@ -1,43 +1,46 @@
-# Software Architectural Patterns
-
+---
+title: "Software architectural patterns"
+description: ""
+date: "2026-02-05"
 ---
 
-Software architectural patterns are the general solutions to the commonly occuring system design problems. They involve multiple components.
+
+
+Software architectural patterns are the general solutions to the commonly occuring system design problems. They involve multiple components. 
 
 ## Multi tier architecture
 
 The idea is to divide the architecture into multiple physical and logical tiers.
 
-Logical separation - Limits the responsibility of each tier.
+Logical separation - Limits the responsibility of each tier. 
 
 Physical separation - Allows each tier to be separately-
-
 - Developed
 - Upgraded
 - Scaled
 
-Note that multilayer architecture and multitier are two different things -
+Note that multilayer architecture and multitier are two different things - 
 
-- Multilayer is used to define an application where there is an internal logical separation inside a single application into multiple layers and modules. However all the layers will be running as the single unit at runtime and this is the distinction with multi tier architecture where tiers means different run times.
+- Multilayer is used to define an application where there is an internal logical separation inside a single application into multiple layers and modules. However all the layers will be running as the single unit at runtime and this is the distinction with multi tier architecture where tiers means different run times. 
 
-Key features
+Key features 
 
-- There are multiple tiers with certain ordering. The applications of adjacent tiers can communicate with client and server model but not allowed to skip a tier.
+- There are multiple tiers with certain ordering. The applications of adjacent tiers can communicate with client and server model but not allowed to skip a tier. 
 
 ### Three tier architecture
 
-Three tiers -
+Three tiers - 
 
-- Top tier (UI) - User interface - (presentation layer) - Client uses it to interact with the application in entirety. It normally does not have any bussiness logic.
+- Top tier (UI) - User interface - (presentation layer) - Client uses it to interact with the application in entirety. It normally does not have any bussiness logic. 
 - Application tier / Logic tier - It provides the functionalities.
 - Data tier - Responsible for the storage and persistance of user specific data. Eg - Database
 
-It however has one major drawback. It is monolithic bussiness tier. Monolithic means each Application logic instance is bulky and needs high cpu demand and memory.
+It however has one major drawback. It is monolithic bussiness tier. Monolithic means each Application logic instance is bulky and needs high cpu demand and memory. 
 
 ### Two tier architecture
 
 - Bussiness + UI layer in one application - Eg mobile application
-- Data tier -
+- Data tier - 
 
 ### Four tier architecture
 
@@ -48,7 +51,7 @@ It however has one major drawback. It is monolithic bussiness tier. Monolithic m
 
 ### Microservice architecture
 
-Microservice architecture organises bussiness logic as collection of loosely coupled and independently deployed services.
+Microservice architecture organises bussiness logic as collection of loosely coupled and independently deployed services. 
 
 In a **microservice architecture**, instead of building one huge application, you split the system into **many small, independent services**, each responsible for **one business capability**.
 
@@ -76,7 +79,7 @@ Each service does one thing well and doesn’t reach into another service’s da
 
 In microservices, **each service owns its data**.
 
-The Order Service has its own database.
+The Order Service has its own database.  
 The User Service has its own database.
 
 No service directly queries another service’s database. Ever.
@@ -90,7 +93,7 @@ In **event-driven architecture**, systems don’t directly call each other to sa
 Other parts of the system **react** to that event if they are interested.
 No tight coupling. No direct dependency.
 
-Suppose user places an order -
+Suppose user places an order - 
 
 The **Order Service** saves the order and then publishes an event:
 **OrderPlaced**

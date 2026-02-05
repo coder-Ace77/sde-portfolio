@@ -2,7 +2,7 @@
 @plugin "@tailwindcss/typography";
 
 @theme {
-  --font-sans: var(--font-inter);
+  --font-sans: var(--font-lora);
   --font-display: var(--font-outfit);
 
   --color-background: var(--background);
@@ -40,21 +40,24 @@
   --radius-md: calc(var(--radius) - 0.125rem);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 0.25rem);
+
+  --note-font-size: 20px;
+  --note-wrapper-width: 768px;
 }
 
 :root {
-  --background: #ffffff;
-  --foreground: #09090b;
+  --background: #fafaf9;
+  --foreground: #18181b;
   --card: #ffffff;
-  --card-foreground: #09090b;
+  --card-foreground: #18181b;
   --popover: #ffffff;
-  --popover-foreground: #09090b;
+  --popover-foreground: #18181b;
   --primary: #18181b;
-  --primary-foreground: #f0f0f0;
+  --primary-foreground: #fafafa;
   --secondary: #f4f4f5;
   --secondary-foreground: #18181b;
   --muted: #f4f4f5;
-  --muted-foreground: #71717a;
+  --muted-foreground: #52525b;
   --accent: #f4f4f5;
   --accent-foreground: #18181b;
   --destructive: #ef4444;
@@ -110,6 +113,9 @@
     --tw-prose-bold: var(--foreground);
     --tw-prose-links: var(--brand);
     --tw-prose-quotes: var(--foreground);
+    line-height: 1.8;
+    letter-spacing: 0.01em;
+    font-size: 20px;
   }
 
   .dark .prose {
@@ -118,6 +124,26 @@
     --tw-prose-bold: var(--foreground);
     --tw-prose-links: var(--brand);
     --tw-prose-quotes: var(--foreground);
+    line-height: 1.8;
+    letter-spacing: 0.01em;
+  }
+
+  /* Better paragraph spacing */
+  .prose p {
+    margin-top: 1.25em;
+    margin-bottom: 1.25em;
+  }
+
+  /* Better list spacing */
+  .prose ul,
+  .prose ol {
+    margin-top: 1.25em;
+    margin-bottom: 1.25em;
+  }
+
+  .prose li {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
   }
 }
 
@@ -127,4 +153,108 @@
 
 @utility bg-brand {
   background-color: var(--brand);
+}
+
+/* Syntax Highlighting Styles */
+@layer base {
+
+  /* Light mode syntax highlighting */
+  :root {
+    --code-bg: #f6f8fa;
+    --code-text: #24292f;
+    --code-comment: #6e7781;
+    --code-keyword: #cf222e;
+    --code-string: #0a3069;
+    --code-function: #8250df;
+    --code-variable: #953800;
+    --code-number: #0550ae;
+    --code-operator: #cf222e;
+  }
+
+  /* Dark mode syntax highlighting */
+  .dark {
+    --code-bg: #0d1117;
+    --code-text: #e6edf3;
+    --code-comment: #8b949e;
+    --code-keyword: #ff7b72;
+    --code-string: #a5d6ff;
+    --code-function: #d2a8ff;
+    --code-variable: #ffa657;
+    --code-number: #79c0ff;
+    --code-operator: #ff7b72;
+  }
+
+  /* Apply styles to code blocks */
+  .prose pre {
+    background-color: var(--code-bg) !important;
+    border: 1px solid var(--border);
+  }
+
+  .prose code {
+    color: var(--code-text);
+  }
+
+  /* Highlight.js token styles */
+  .hljs {
+    color: var(--code-text);
+    background: var(--code-bg);
+  }
+
+  .hljs-comment,
+  .hljs-quote {
+    color: var(--code-comment);
+    font-style: italic;
+  }
+
+  .hljs-keyword,
+  .hljs-selector-tag,
+  .hljs-addition {
+    color: var(--code-keyword);
+  }
+
+  .hljs-string,
+  .hljs-attribute,
+  .hljs-template-tag,
+  .hljs-template-variable {
+    color: var(--code-string);
+  }
+
+  .hljs-function,
+  .hljs-title,
+  .hljs-class .hljs-title,
+  .hljs-title.class_ {
+    color: var(--code-function);
+  }
+
+  .hljs-variable,
+  .hljs-tag,
+  .hljs-name,
+  .hljs-attr {
+    color: var(--code-variable);
+  }
+
+  .hljs-number,
+  .hljs-literal,
+  .hljs-built_in {
+    color: var(--code-number);
+  }
+
+  .hljs-operator,
+  .hljs-punctuation {
+    color: var(--code-operator);
+  }
+
+  .hljs-meta,
+  .hljs-meta .hljs-keyword {
+    color: var(--code-keyword);
+  }
+
+  .hljs-doctag,
+  .hljs-symbol,
+  .hljs-bullet,
+  .hljs-link,
+  .hljs-emphasis,
+  .hljs-strong {
+    color: var(--code-function);
+  }
 }

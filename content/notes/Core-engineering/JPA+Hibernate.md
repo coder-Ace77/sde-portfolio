@@ -1,18 +1,21 @@
-# Jpa+Hibernate
-
 ---
+title: "JPA+Hibernate"
+description: ""
+date: "2026-02-05"
+---
+
+
 
 HIbernate is the default implementation of JPA.
 
-### Entity:
+### Entity: 
 Entities in JPA are nothing but POJOs representing data that can be persisted in the database. An entity represents a table stored in a database. Every instance of an entity represents a row in the table. To do this we use @Entity notation
 
 ```java
 @Entity
 public class Student {
-    // fields, getters and setters
+    // fields, getters and setters   
 }
-
 ```
 
 The entity name defaults to the name of the class.Because various JPA implementations will try subclassing our entity to provide their functionality, **entity classes must not be declared _final_.**
@@ -20,9 +23,8 @@ The entity name defaults to the name of the class.Because various JPA implementa
 ```java
 @Entity(name="student")
 public class Student{
-    // fields, getters and setters
+    // fields, getters and setters   
 }
-
 ```
 
 @Id annotation is used to define the primary key. There are four genearation options  **The value can be _AUTO, TABLE, SEQUENCE,_ or _IDENTITY:_**
@@ -33,10 +35,9 @@ public class Student {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
-    private String name;
+    private String name;   
     // getters and setters
 }
-
 ```
 
 @Table notation is used to define table name
@@ -49,10 +50,9 @@ public class Student {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
     @Column(name="STUDENT_NAME", length=50, nullable=false, unique=false)
-    private String name;
+    private String name;   
     // other fields, getters and setters
 }
-
 ```
 
 @Column can be used to define the details of column in the table.
@@ -64,12 +64,11 @@ public class Student {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
-
+    
     @Column(name="STUDENT_NAME", length=50, nullable=false, unique=false)
-    private String name;
+    private String name;   
     // other fields, getters and setters
 }
-
 ```
 
 @Transient annotation makes the field non persistent in db.
@@ -89,7 +88,6 @@ public class User {
     private Integer age = 25;
     private Boolean locked = false;
 }
-
 ```
 
 There is one drawback to this solution.When we take a look at the SQL table definition, we won’t see any default value in it:
@@ -113,7 +111,6 @@ public class User {
     @Column(columnDefinition = "boolean default false")
     private Boolean locked;
 }
-
 ```
 
 We can also use @ColumnDefault
@@ -134,7 +131,6 @@ public class UserEntity {
     @ColumnDefault("false")
     private Boolean locked;
 }
-
 ```
 
 Mapping the Entity to table
@@ -145,7 +141,6 @@ Mapping the Entity to table
 public class Article {
     // ...
 }
-
 ```
 
 @Size
@@ -159,7 +154,6 @@ public class User {
     private String middleName;
     // ...
 }
-
 ```
 
 _@Length_ is the Hibernate-specific version of _@Size._ We’ll enforce the range for _lastName_ using _@Length_:
@@ -172,7 +166,6 @@ public class User {
     private String lastName;
     // ...
 }
-
 ```
 
 _@Column_ to **indicate specific characteristics of the physical database column.**
@@ -187,7 +180,6 @@ public class User {
     // ...
 
 }
-
 ```
 
 The resulting column will be generated as a _VARCHAR(3),_ and trying to insert a longer string will result in an SQL error.
@@ -204,7 +196,6 @@ public class PersonName implements Serializable {
 
     // getters and setters
 }
-
 ```
 
 And is used  in Person
@@ -216,14 +207,13 @@ public class Person {
 
     //...
 }
-
 ```
 
 convertor
 ```java
 @Converter
-public class PersonNameConverter implements
-AttributeConverter<PersonName, String> {
+public class PersonNameConverter implements 
+  AttributeConverter<PersonName, String> {
 
     private static final String SEPARATOR = ", ";
 
@@ -235,13 +225,13 @@ AttributeConverter<PersonName, String> {
 
         StringBuilder sb = new StringBuilder();
         if (personName.getSurname() != null && !personName.getSurname()
-        .isEmpty()) {
+            .isEmpty()) {
             sb.append(personName.getSurname());
             sb.append(SEPARATOR);
         }
 
-        if (personName.getName() != null
-        && !personName.getName().isEmpty()) {
+        if (personName.getName() != null 
+          && !personName.getName().isEmpty()) {
             sb.append(personName.getName());
         }
 
@@ -260,28 +250,27 @@ AttributeConverter<PersonName, String> {
             return null;
         }
 
-        PersonName personName = new PersonName();
+        PersonName personName = new PersonName();        
         String firstPiece = !pieces[0].isEmpty() ? pieces[0] : null;
         if (dbPersonName.contains(SEPARATOR)) {
             personName.setSurname(firstPiece);
 
-            if (pieces.length >= 2 && pieces[1] != null
-            && !pieces[1].isEmpty()) {
+            if (pieces.length >= 2 && pieces[1] != null 
+              && !pieces[1].isEmpty()) {
                 personName.setName(pieces[1]);
             }
         } else {
-        personName.setName(firstPiece);
+            personName.setName(firstPiece);
+        }
+
+        return personName;
     }
-
-    return personName;
 }
-}
-
 ```
 
 ### Joining two tables:
 
-We can implement with foreign key in JPA
+We can implement with foreign key in JPA 
 There can be many types of mapping and in entity we usually handle the entire object for example there is an order and each order can have multiple products.
 So although we may store the data as mapping in form of table but in java we store it as concrete objects.
 
@@ -291,12 +280,12 @@ Now how to have a mapping.
 @Entity
 @Table(name = "users")
 public class User {
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Long id;
-    //...
+    //... 
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", referencedColumnName = "id")
@@ -304,7 +293,6 @@ public class User {
 
     // ... getters and setters
 }
-
 ```
 
 Note that **we place the _@OneToOne_ annotation** on the related entity field, _Address_.
@@ -329,7 +317,6 @@ public class Address {
 
     //... getters and setters
 }
-
 ```
 
 Using and modelling with shared primary key.
@@ -352,7 +339,6 @@ public class User {
 
     //... getters and setters
 }
-
 ```
 
 ```java
@@ -370,10 +356,9 @@ public class Address {
     @MapsId
     @JoinColumn(name = "user_id")
     private User user;
-
+   
     //... getters and setters
 }
-
 ```
 
 Modelling with Join table:
@@ -392,16 +377,15 @@ public class Employee {
     //...
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinTable(name = "emp_workstation",
-    joinColumns =
-    { @JoinColumn(name = "employee_id", referencedColumnName = "id") },
-    inverseJoinColumns =
-    { @JoinColumn(name = "workstation_id", referencedColumnName = "id") })
+    @JoinTable(name = "emp_workstation", 
+      joinColumns = 
+        { @JoinColumn(name = "employee_id", referencedColumnName = "id") },
+      inverseJoinColumns = 
+        { @JoinColumn(name = "workstation_id", referencedColumnName = "id") })
     private WorkStation workStation;
 
     //... getters and setters
 }
-
 ```
 
 ```java
@@ -421,5 +405,5 @@ public class WorkStation {
 
     //... getters and setters
 }
-
 ```
+

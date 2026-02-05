@@ -1,6 +1,10 @@
-# Docker Intermediate
-
 ---
+title: "Docker intermediate"
+description: ""
+date: "2026-02-05"
+---
+
+
 
 ### Docker volumes:
 
@@ -19,43 +23,37 @@ eg in compose:
 
 ```yaml
 volumes:
-db-data:
-
+  db-data:
+  
 services:
-db:
-image: postgres
-volumes:
-
-- db-data:/var/lib/postgresql/data  # this is mounting
-
+  db:
+    image: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data  # this is mounting 
 
 ```
 
 At the top level of the `docker-compose.yml` file, this declares a **named volume** called `db-data`.
 
-This does **not create it yet**, but tells Docker Compose:
-🗂️ “I want to use a persistent, named volume called `db-data`.” Docker will manage this volume and we might see something like
+This does **not create it yet**, but tells Docker Compose:  
+🗂️ “I want to use a persistent, named volume called `db-data`.” Docker will manage this volume and we might see something like 
 
 on volume look up
 
 ```bash
 docker volume ls
-
 ```
 
 ```wasm
 local               yourprojectname_db-data
-
 ```
 
 ```yaml
 services:
-db:
-image: postgres
-volumes:
-
-- db-data:/var/lib/postgresql/data
-
+  db:
+    image: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
 ```
 
 - **`db-data` (host)**: A Docker-managed volume that lives **on your host machine**, not inside the container.
@@ -71,12 +69,10 @@ For example if u write something like this inside services then:
 
 ```yaml
 volumes:
-
-- /app/data
-
+  - /app/data
 ```
 
-This mounts a volume at `/app/data` inside docker container, and Docker assigns a random name.
+This mounts a volume at `/app/data` inside docker container, and Docker assigns a random name. 
 
 ### 3. **Host Volumes (Bind Mounts)**
 
@@ -88,9 +84,7 @@ So first part defines the path where you want to mount on host and second define
 
 ```yaml
 volumes:
-
-- ./config:/app/config
-
+  - ./config:/app/config
 ```
 
 Observe that how docker can figure out which was host path and which was name of docker volume.
@@ -121,7 +115,6 @@ This mode is useful when you need **maximum network performance**, or when a con
 
 ```bash
 docker run --network host nginx
-
 ```
 
 ### 3. Docker compose
@@ -133,29 +126,25 @@ However, Docker Compose lets you define **custom networks** at the top level of 
 ```yaml
 version: "3.9"
 services:
-web:
-image: nginx
-networks:
-
-- frontend
-app:
-image: my-app
-networks:
-
-- frontend
-- backend
-db:
-image: postgres
-networks:
-
-- backend
+  web:
+    image: nginx
+    networks:
+      - frontend
+  app:
+    image: my-app
+    networks:
+      - frontend
+      - backend
+  db:
+    image: postgres
+    networks:
+      - backend
 
 networks:
-frontend:
-driver: bridge
-backend:
-driver: bridge
-
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge
 ```
 
 There is a concept of external networks in docker compose
@@ -164,17 +153,16 @@ You can also attach services to existing Docker networks not created by Compose 
 
 ```yaml
 networks:
-external_net:
-external: true
+  external_net:
+    external: true
 
 services:
-app:
-image: my-app
-networks:
-
-- external_net
-
+  app:
+    image: my-app
+    networks:
+      - external_net
 ```
+
 
 ### 4.Docker logs
 
@@ -187,7 +175,6 @@ When a container runs, it may print logs, messages, or errors to these streams �
 
 ```bash
 docker logs <container_id_or_name>
-
 ```
 
 However we also have some more options:
@@ -203,7 +190,6 @@ However we also have some more options:
 
 ```bash
 docker logs -f --tail 50 my_container
-
 ```
 
 #### Logs in docker compose:
@@ -224,7 +210,6 @@ docker compose logs -f db  ## following logs of a db
 docker compose logs web > web.log  # redirecting logs to files
 docker compose logs db > db.log
 docker compose logs -f web > web.log
-
 ```
 
 #### Viewing Logs via `docker logs` vs `docker compose logs`
@@ -232,3 +217,4 @@ docker compose logs -f web > web.log
 - `docker logs <container_id>` only works **container by container**.
 - `docker compose logs` aggregates logs from all containers defined in your Compose project.
 - Compose uses container names like `projectname_service_1` so logs are prefixed accordingly.
+

@@ -1,19 +1,21 @@
-# Basics Of Browsers
-
+---
+title: "Basics of browsers"
+description: "Main components and architecture of web browsers"
+date: "2026-02-05"
 ---
 
 Main components of browser are
 
 1. HTML parser: Reads HTML text and converts it into a **DOM Tree** (Document Object Model).
 
+
 2. DOM: A **tree-like structure** representing the contents of a web page.- Every element (like `<div>`, `<p>`, etc.) is a node in this tree.The `document` object in JavaScript gives you access to this tree.
 
 ```js
 document.getElementById('title');
-
 ```
 
-3. **CSSOM (CSS Object Model)**Similar to the DOM, but for CSS. It’s how the browser interprets and applies CSS rules to elements.Combines with the DOM to compute the final styles on each element.
+3. **CSSOM (CSS Object Model)**Similar to the DOM, but for CSS. It’s how the browser interprets and applies CSS rules to elements.Combines with the DOM to compute the final styles on each element. 
 
 4. Render Engine / Layout Engine: Takes the DOM and CSSOM and **lays out elements on the screen**. Calculates where every element goes and how it looks. This includes things like color, font size, spacing, etc.
 
@@ -23,13 +25,12 @@ document.getElementById('title');
 
 ```js
 console.log(window.document === document); // true
-
 ```
 
 7. **Event Loop & Web APIs**
-
 - JavaScript in browsers is **single-threaded**, but async operations (like `setTimeout` or `fetch`) are handled by **Web APIs**.
 - The **event loop** processes callbacks from these APIs once the main thread is idle.
+
 
 ---
 
@@ -87,9 +88,8 @@ The **Fetch API** is a modern interface to make network requests, replacing olde
 
 ```js
 fetch('https://api.example.com/data')
-.then(response => response.json())
-.then(data => console.log(data));
-
+  .then(response => response.json())
+  .then(data => console.log(data));
 ```
 
 When you use `fetch`:
@@ -115,19 +115,19 @@ React is **not part of the browser**. It runs **within** the browser’s JavaScr
 - React doesn't directly touch the **real DOM** every time.
 - It creates a **Virtual DOM**, which is just a lightweight JavaScript object representation of what the DOM should look like.
 - When state or props change, React:
-- Updates the Virtual DOM.
-- Diffs the new Virtual DOM with the previous one.
-- Calculates the **minimum set of changes**.
-- Efficiently applies those changes to the **real DOM** using `document.createElement`, `appendChild`, etc.
+    - Updates the Virtual DOM.
+    - Diffs the new Virtual DOM with the previous one.
+    - Calculates the **minimum set of changes**.
+    - Efficiently applies those changes to the **real DOM** using `document.createElement`, `appendChild`, etc.
+
 
 ### React callbacks handling:
 
 - React wraps the browser’s native event system with its own **Synthetic Event system** (a cross-browser wrapper).
-
+    
 - When you write:
 ```js
 <button onClick={handleClick}>Click Me</button>
-
 ```
 
 React is:
@@ -140,10 +140,11 @@ React is:
 
 - React renders the UI by calling component functions (or classes).
 - Each render:
-- Produces a new Virtual DOM tree.
-- Gets diffed.
-- Updates the real DOM via the browser.
+    - Produces a new Virtual DOM tree.
+    - Gets diffed.
+    - Updates the real DOM via the browser.
 - React batches updates and minimizes layout thrashing, just like browsers optimize paint/layout.
+
 
 #### JSDOM:
 
@@ -180,16 +181,14 @@ const document = dom.window.document;
 const el = document.createElement('p');
 el.textContent = 'Hello World';
 document.getElementById('app').appendChild(el);
-
 ```
 
 JSDOM can execute inline `<script>` tags if configured with `runScripts: "dangerously"`. This lets you simulate DOM manipulation from within a loaded HTML page.
 
 ```js
 new JSDOM(`<script>document.body.innerHTML = "<h1>Hi</h1>";</script>`, {
-    runScripts: "dangerously"
+  runScripts: "dangerously"
 });
-
 ```
 
 You can create and dispatch events like `click`, `input`, etc. — useful for testing interactions in libraries like React or jQuery.
@@ -198,7 +197,6 @@ You can create and dispatch events like `click`, `input`, etc. — useful for te
 const button = document.createElement('button');
 button.addEventListener('click', () => console.log('Clicked!'));
 button.click(); // logs: Clicked!
-
 ```
 
 JSDOM does no actual rendering. No CSSDom and has limited web apis.
@@ -211,11 +209,10 @@ import { render, fireEvent } from '@testing-library/react';
 import MyButton from './MyButton';
 
 test('clicking the button triggers action', () => {
-    const { getByText } = render(<MyButton />);
-    fireEvent.click(getByText('Click me'));
-    expect(...).toBe(...);
+  const { getByText } = render(<MyButton />);
+  fireEvent.click(getByText('Click me'));
+  expect(...).toBe(...);
 });
-
 ```
 
 2. In some cases, you need to **render HTML on the server** before sending it to the browser (e.g., for SEO). JSDOM is sometimes used to **simulate a DOM** so components that rely on `window` or `document` don't crash during SSR.
@@ -238,7 +235,6 @@ A basic input element in dom holds info like
 
 ```js
 <input type="text" value="hello" placeholder="Your name" />
-
 ```
 
 - When you listen to events like `onChange` or `onClick`, React passes a **synthetic event**.
@@ -247,10 +243,9 @@ A basic input element in dom holds info like
 
 ```js
 function handleChange(event) {
-    console.log(event.target); // The actual <input> element
-    console.log(event.target.value); // The current value inside the input
+  console.log(event.target); // The actual <input> element
+  console.log(event.target.value); // The current value inside the input
 }
-
 ```
 
 | Property               | Description                                | Example                |
@@ -266,32 +261,29 @@ eg with fireEvent api:
 
 ```js
 fireEvent.change(inputElement, { target: { value: 'new value' } });
-
 ```
 
 ```js
 <button onClick={(e) => {
-    console.log(e.target.type);  // "submit"
-    console.log(e.target.id);    // "submit-btn"
+  console.log(e.target.type);  // "submit"
+  console.log(e.target.id);    // "submit-btn"
 }}>
-Submit
+  Submit
 </button>
-
 ```
 
 Full event object for input change
 
 ```js
 {
-    target: {
-        value: 'some text',       // current input value
-        name: 'email',            // name attribute if set
-        type: 'text',             // type of input
-        checked: undefined,       // undefined for text inputs
-        id: 'email-input',        // id attribute if set
-        // plus many other DOM element properties/methods...
-    },
-    // other event properties (stopPropagation, preventDefault, etc.)
+  target: {
+    value: 'some text',       // current input value
+    name: 'email',            // name attribute if set
+    type: 'text',             // type of input
+    checked: undefined,       // undefined for text inputs
+    id: 'email-input',        // id attribute if set
+    // plus many other DOM element properties/methods...
+  },
+  // other event properties (stopPropagation, preventDefault, etc.)
 }
-
 ```

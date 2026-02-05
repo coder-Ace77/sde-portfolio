@@ -1,6 +1,10 @@
-# Docker Images
-
 ---
+title: "Docker images"
+description: ""
+date: "2026-02-05"
+---
+
+
 
 A **Docker image** is a lightweight, standalone, and executable package that includes everything needed to run a piece of software
 
@@ -32,16 +36,16 @@ A Dockerfile is a **plain text file** containing a series of **instructions** an
 
 ### Basic Syntax Rules:
 
-1. **One instruction per line**
-Each line generally contains one Dockerfile instruction (like `FROM`, `RUN`, `COPY`, etc.).
-2. **Instructions are case-insensitive**
-By convention, they are uppercase (e.g., `FROM`, `RUN`), but lowercase also works.
-3. **Arguments follow instructions**
-After the instruction, you provide the necessary arguments separated by spaces.
-4. **Comments start with `#`**
-Anything following `#` on a line is ignored (used for comments).
-5. **Line continuation with backslash `\`**
-For long commands (especially with `RUN`), use `\` at the end of a line to continue on the next line.
+1. **One instruction per line**  
+    Each line generally contains one Dockerfile instruction (like `FROM`, `RUN`, `COPY`, etc.).
+2. **Instructions are case-insensitive**  
+    By convention, they are uppercase (e.g., `FROM`, `RUN`), but lowercase also works.
+3. **Arguments follow instructions**  
+    After the instruction, you provide the necessary arguments separated by spaces.
+4. **Comments start with `#`**  
+    Anything following `#` on a line is ignored (used for comments).
+5. **Line continuation with backslash `\`**  
+    For long commands (especially with `RUN`), use `\` at the end of a line to continue on the next line.
 
 ### Base Images
 
@@ -60,12 +64,11 @@ There are two types of base images:
 
 ```Dockerfile
 FROM scratch
-
 ```
 
 This is called a **scratch image**, which is literally an empty image – no OS, no libraries, nothing.
 
-Note that this scratch image is not usually very useful however it provides fine tuned controlled over images.
+Note that this scratch image is not usually very useful however it provides fine tuned controlled over images. 
 
 ### Docker image layers:
 
@@ -89,7 +92,6 @@ EXPOSE 80
 
 # Layer 5: default command to run when container starts
 CMD ["./start.sh"]
-
 ```
 
 ##### Docker layers internal working:
@@ -111,7 +113,6 @@ When you run `docker build`, Docker needs to know **what files** it has access t
 
 ```bash
 docker build -t my-app .
-
 ```
 
 - Sending a large build context slows down builds and uses more resources.
@@ -145,14 +146,12 @@ Both **`ENTRYPOINT`** and **`CMD`** define **what gets executed when a Docker co
 ```Dockerfile
 FROM ubuntu
 CMD ["echo", "Hello from CMD"]
-
 ```
 
 ```bash
 docker build -t cmd-example .
 docker run cmd-example           # Output: Hello from CMD
 docker run cmd-example ls -l     # CMD is overridden; Output: result of `ls -l`
-
 ```
 
 - **`ENTRYPOINT`** is used to **define the main executable** that will always run.
@@ -162,13 +161,11 @@ docker run cmd-example ls -l     # CMD is overridden; Output: result of `ls -l`
 ```Dockerfile
 FROM ubuntu
 ENTRYPOINT ["echo"]
-
 ```
 
 ```bash
 docker build -t entrypoint-example .
 docker run entrypoint-example Hello World   # Output: Hello World
-
 ```
 
 It is important to understand that both can be combined as well.
@@ -180,14 +177,12 @@ It is important to understand that both can be combined as well.
 FROM ubuntu
 ENTRYPOINT ["echo"]
 CMD ["Hello from CMD"]
-
 ```
 
 ```bash
 docker build -t combo-example .
 docker run combo-example               # Output: Hello from CMD
 docker run combo-example "Hi there!"   # Output: Hi there!
-
 ```
 
 CMD itself comes in two flavours:
@@ -195,7 +190,6 @@ CMD itself comes in two flavours:
 ```Dockerfile
 CMD ["executable", "param1", "param2"]        # exec form (preferred)
 CMD command param1 param2                      # shell form
-
 ```
 
 #### What is `ENV` in Dockerfiles?
@@ -220,7 +214,6 @@ EXPOSE $APP_PORT
 
 CMD ["./start-server.sh"]
 
-
 ```
 
 ##### Using `ENV` vs `ARG`
@@ -232,7 +225,6 @@ One can override the env when running build
 
 ```bash
 docker run -e APP_PORT=9090 my-image
-
 ```
 
 #### Work directory:

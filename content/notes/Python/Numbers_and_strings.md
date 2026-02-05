@@ -1,6 +1,10 @@
-# Numbers And Strings
-
 ---
+title: "Numbers and strings"
+description: ""
+date: "2026-02-05"
+---
+
+
 
 |Category|Function|Description|Example|
 |---|---|---|---|

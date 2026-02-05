@@ -90,13 +90,60 @@ const TreeItem = ({ node, level = 0 }: { node: TreeNode; level?: number }) => {
 };
 
 export function NotesSidebar({ tree }: NotesSidebarProps) {
+    const [isOpen, setIsOpen] = useState(false);
+
     return (
-        <aside className="w-full md:w-64 lg:w-72 shrink-0 md:border-r border-border md:h-[calc(100vh-4rem)] md:sticky md:top-16 overflow-y-auto py-6 pr-4">
-            <div className="space-y-1">
-                {tree.map((node) => (
-                    <TreeItem key={node.path} node={node} />
-                ))}
-            </div>
-        </aside>
+        <>
+            {/* Mobile Toggle Button - Fixed at top left */}
+            <button
+                onClick={() => setIsOpen(!isOpen)}
+                className="md:hidden fixed top-20 left-4 z-40 p-3 bg-card border shadow-lg rounded-lg hover:bg-accent transition-colors"
+                aria-label="Toggle notes navigation"
+            >
+                {isOpen ? <ChevronRight className="rotate-180" size={20} /> : <Folder size={20} />}
+            </button>
+
+            {/* Desktop Sidebar - Always visible on md+ screens */}
+            <aside className="hidden md:block md:w-64 lg:w-72 shrink-0 md:border-r border-border md:h-[calc(100vh-4rem)] md:sticky md:top-16 overflow-y-auto py-6 pr-4">
+                <div className="space-y-1">
+                    {tree.map((node) => (
+                        <TreeItem key={node.path} node={node} />
+                    ))}
+                </div>
+            </aside>
+
+            {/* Mobile Sidebar Drawer */}
+            <AnimatePresence>
+                {isOpen && (
+                    <>
+                        {/* Backdrop */}
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="md:hidden fixed inset-0 bg-background/80 backdrop-blur-sm z-30"
+                            onClick={() => setIsOpen(false)}
+                        />
+
+                        {/* Drawer */}
+                        <motion.aside
+                            initial={{ x: "-100%" }}
+                            animate={{ x: 0 }}
+                            exit={{ x: "-100%" }}
+                            transition={{ type: "spring", damping: 30, stiffness: 300 }}
+                            className="md:hidden fixed top-0 left-0 h-full w-80 max-w-[85vw] bg-card border-r shadow-2xl z-40 overflow-y-auto"
+                        >
+                            <div className="py-6 px-4 pt-24">
+                                <div className="space-y-1">
+                                    {tree.map((node) => (
+                                        <TreeItem key={node.path} node={node} />
+                                    ))}
+                                </div>
+                            </div>
+                        </motion.aside>
+                    </>
+                )}
+            </AnimatePresence>
+        </>
     );
 }

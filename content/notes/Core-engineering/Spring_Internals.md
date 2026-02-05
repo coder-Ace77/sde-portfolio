@@ -1,6 +1,10 @@
-# Spring Internals
-
 ---
+title: "Spring Internals"
+description: ""
+date: "2026-02-05"
+---
+
+
 
 In **Spring Boot**, the **application context** (or **Spring context**) is the central container that manages the lifecycle and configuration of all your application’s beans and components.
 
@@ -21,3 +25,4 @@ When Spring Boot starts, it:
 3. Registers them as **beans**
 4. Injects dependencies wherever needed
 5. Starts the embedded server (if it's a web app)
+

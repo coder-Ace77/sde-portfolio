@@ -1,6 +1,10 @@
-# Kafka
-
 ---
+title: "Kafka"
+description: ""
+date: "2026-02-05"
+---
+
+
 
 Data engineering is the branch how to collect the data, organize the data and store data at scale.
 Data collection can be from various sources.
@@ -9,10 +13,10 @@ Data collection can be from various sources.
 
 1. Ingredients: (data)
 2. Organization(data organization)
-3. Data processing - ETL(extract - transform - load )
+3. Data processing - ETL(extract - transform - load ) 
 4. Data systems
 5. Data analysis
-6.
+6. 
 
 ### 1. Ingredients: Data
 
@@ -83,18 +87,20 @@ The connection between topics and brokers is forged through the partitions. When
 For example, if you have a Kafka cluster with three brokers and you create a topic with six partitions, Kafka might distribute them like this:
 
 - **Broker 1:** Leader for Partition 0, Replica for Partition 1
-
+    
 - **Broker 2:** Leader for Partition 1, Replica for Partition 2
-
+    
 - **Broker 3:** Leader for Partition 2, Replica for Partition 0
+    
 
 This distribution ensures:
 
 1. **Load Balancing:** The workload of handling reads and writes is spread across all brokers.
-
+    
 2. **Scalability:** You can increase the throughput of your system by adding more partitions and more brokers.
-
+    
 3. **Fault Tolerance:** If Broker 1 goes down, the data in Partition 0 is not lost because a replica exists on Broker 3, and a new leader will be elected to take over.
+    
 
 In essence, brokers are the physical servers that host the partitions of topics, providing the essential infrastructure for data storage, replication, and serving clients. The topics, broken down into partitions, are the logical constructs that enable this distributed system to function efficiently and reliably.
 ### Producers
@@ -114,25 +120,27 @@ Producers are responsible for the "publish" part of the publish-subscribe model.
 **Consumers** are client applications that read (or "consume") data from Kafka topics. However, in Kafka, consumers almost always operate within a **consumer group**. This is the key to Kafka's scalable and fault-tolerant consumption model.
 
 - **Consumer:** A consumer is a single process that subscribes to a topic and reads records from the partitions it is assigned. It keeps track of its position in the partition using an **offset**, which is a unique ID for each record within a partition.
-
+    
 - **Consumer Group:** A consumer group is a collection of one or more consumers that work together to consume a topic's partitions. All consumers in a group share a common `group.id`.
+    
 
 Here’s how they work together:
 
 1. **Load Balancing:** When a consumer group subscribes to a topic, Kafka automatically distributes the topic's partitions among the consumers in that group. For example, if a topic has 6 partitions and a consumer group has 3 consumers, each consumer will be assigned 2 partitions. This allows for parallel processing of the data, significantly increasing the consumption throughput.
-
+    
 2. **State Management:** Each consumer in the group is responsible for a subset of the topic's partitions. The consumer group as a whole maintains the offset for each partition it is consuming. This means that if a consumer in the group fails, another consumer in the same group will be assigned its partitions and can resume consumption from the last committed offset, ensuring no data is lost.
-
+    
 3. **Scalability:** You can scale consumption by adding more consumers to a consumer group. As long as the number of consumers does not exceed the number of partitions, Kafka will automatically rebalance the partitions among the new, larger group. If the number of consumers exceeds the number of partitions, the extra consumers will be idle.
+    
 
 ### An Analogy
 
 Think of a library with multiple sections (the **partitions** of a **topic**).
 
 - A **producer** is like an author who writes new books and places them in a specific section of the library.
-
+    
 - A single **consumer** is like a person reading books from one of the library sections.
-
+    
 - A **consumer group** is like a book club. The club decides to read every book in the library. To do this efficiently, the club members (the **consumers**) divide up the library sections among themselves so they can read in parallel. If one member gets sick, another member of the club can take over their sections and continue from where they left off.
 
 ## Zookeeper:
@@ -146,13 +154,13 @@ However, it's important to note that **modern versions of Kafka are moving away 
 Before KRaft, Kafka brokers used ZooKeeper to perform several critical functions:4
 
 - **Broker Registration:** When a Kafka broker starts, it registers itself with ZooKeeper.5 This allows all other brokers in the cluster to know which brokers are currently active and available.6 ZooKeeper maintains a list of all live brokers, acting as a registry for the cluster.7
-
+    
 - **Controller Election:** In a Kafka cluster, one broker is designated as the **controller**.8 This is a special role responsible for performing administrative tasks, such as assigning partitions to brokers and managing leader-follower relationships for all partitions.9 ZooKeeper facilitates the election of this controller and ensures there is always one active controller at a time.10
-
+    
 - **Metadata Management:** ZooKeeper stored all of the important metadata for the Kafka cluster.11 This included information about which topics exist, the number of partitions for each topic, and the location of the replicas for those partitions.12
-
+    
 - **Leader Election for Partitions:** If a broker that is the leader for a partition fails, ZooKeeper detects this failure and helps elect a new leader from the available replicas of that partition.13 This is crucial for maintaining the availability and fault tolerance of the data.14
-
+    
 - **Configuration and Synchronization:** ZooKeeper acted as a single source of truth for all cluster-wide configuration, ensuring that every broker had a consistent view of the cluster's state.15 It also managed distributed synchronization tasks to prevent conflicting actions.16
 
 Running on system:
@@ -161,7 +169,6 @@ Run all commands from kafka folder only
 
 ```
 .\bin\windows\zookeeper-server-start.bat .\config\zookeeper.properties
-
 ```
 
 To run kafka first set envs:
@@ -169,7 +176,6 @@ To run kafka first set envs:
 ```
 $env:KAFKA_HEAP_OPTS="-Xmx512M -Xms512M"
 .\bin\windows\kafka-server-start.bat .\config\server.properties
-
 ```
 
 Creating topic:
@@ -177,20 +183,18 @@ Creating topic:
 --topic -> name of topic
 
 ```
-.\bin\windows\kafka-topics.bat --create --topic test-topic  --bootstrap-server localhost:9092
-
+ .\bin\windows\kafka-topics.bat --create --topic test-topic  --bootstrap-server localhost:9092
 ```
 
 Producer prompt:
 
 ```
-.\bin\windows\kafka-console-producer.bat --topic test-topic --bootstrap-server localhost:9092
-
+ .\bin\windows\kafka-console-producer.bat --topic test-topic --bootstrap-server localhost:9092
 ```
 
 Consumer propt:
 
 ```
-.\bin\windows\kafka-console-consumer.bat --topic test-topic --bootstrap-server localhost:9092
-
+ .\bin\windows\kafka-console-consumer.bat --topic test-topic --bootstrap-server localhost:9092
 ```
+

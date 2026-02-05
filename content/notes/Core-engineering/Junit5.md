@@ -1,25 +1,28 @@
-# Junit5
-
+---
+title: "Junit5"
+description: ""
+date: "2026-02-05"
 ---
 
-1. **Junit**: Junit5 is the underlying platform to do testing.
-2. Jupiter: Programming and extension model.
+
+
+1. **Junit**: Junit5 is the underlying platform to do testing. 
+2. Jupiter: Programming and extension model. 
 
 ```scss
 Launcher.execute()
-└── JupiterTestEngine.execute()
-└── EngineExecutionContext
-└── executeRecursively()
-├── ClassTestDescriptor.execute()
-│     └── invokeBeforeAll()
-│     └── for each method:
-│           └── MethodTestDescriptor.execute()
-│                 └── invokeBeforeEach()
-│                 └── invokeTestMethod()
-│                 └── invokeAfterEach()
-│
-└── invokeAfterAll()
-
+  └── JupiterTestEngine.execute()
+        └── EngineExecutionContext
+              └── executeRecursively()
+                    ├── ClassTestDescriptor.execute()
+                    │     └── invokeBeforeAll()
+                    │     └── for each method:
+                    │           └── MethodTestDescriptor.execute()
+                    │                 └── invokeBeforeEach()
+                    │                 └── invokeTestMethod()
+                    │                 └── invokeAfterEach()
+                    │
+                    └── invokeAfterAll()
 ```
 
 Jupiter annotations:
@@ -34,7 +37,6 @@ void testAddition() {
     assertEquals(4, 2 + 2);
 }
 
-
 ```
 
 4. @Disabled
@@ -44,7 +46,6 @@ void testAddition() {
 void testFeatureX() {
     // This won't run
 }
-
 ```
 
 5. @Nested - Groups the class inside a class for better structure.
@@ -91,7 +92,6 @@ class CalculatorTest {
     }
 }
 
-
 ```
 
 - JUnit first runs `CalculatorTest.init()` before each test (even nested ones).
@@ -105,12 +105,11 @@ class WhenInputIsValid {
         // test logic
     }
 }
-
 ```
 
 6. @ParameterisedTests
 
-`@ParameterizedTest` lets you run the **same test method** multiple times with **different inputs**.
+`@ParameterizedTest` lets you run the **same test method** multiple times with **different inputs**. 
 Basically we can run the code with different schenarios in one file.
 
 JUnit calls your test method **repeatedly**, once for each input. The inputs come from one of the many _data sources_ provided by JUnit:
@@ -139,10 +138,9 @@ void testIsPositive(int number) {
     assertTrue(number > 0);
 }
 
-
 ```
 
-`@CsvSource`
+ `@CsvSource`
 
 Provides arguments as comma-separated strings.
 
@@ -158,7 +156,6 @@ void testAddition(int a, int b, int expected) {
     assertEquals(expected, new Calculator().add(a, b));
 }
 
-
 ```
 
 @MethodSource
@@ -169,9 +166,9 @@ Uses a static method in the class (or elsewhere) to supply a **stream of argumen
 
 static Stream<Arguments> provideNumbers() {
     return Stream.of(
-    Arguments.of(2, 3, 5),
-    Arguments.of(4, 1, 5),
-    Arguments.of(6, -1, 5)
+        Arguments.of(2, 3, 5),
+        Arguments.of(4, 1, 5),
+        Arguments.of(6, -1, 5)
     );
 }
 
@@ -180,7 +177,6 @@ static Stream<Arguments> provideNumbers() {
 void testAdditionFromMethod(int a, int b, int expected) {
     assertEquals(expected, new Calculator().add(a, b));
 }
-
 
 ```
 
@@ -196,7 +192,6 @@ void testAdditionFromMethod(int a, int b, int expected) {
 void testWithMultipleValues(int value) {
     assertTrue(value > 0);
 }
-
 ```
 
 ### Getting tests from files:
@@ -208,7 +203,6 @@ void testWithMultipleValues(int value) {
 void testWithCsvFile(int a, int b, int expected) {
     assertEquals(expected, a + b);
 }
-
 
 ```
 
@@ -242,7 +236,6 @@ class MyTest {
     @Test
     void test2() { }
 }
-
 ```
 
 - JUnit **creates a new instance** of `MyTest` **for each test method**.
@@ -250,3 +243,4 @@ class MyTest {
 - Any **state (fields)** initialized in one test method **does not affect** another.
 
 In default -> beforeall and afterAll are static
+

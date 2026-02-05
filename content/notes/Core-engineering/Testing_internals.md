@@ -1,14 +1,19 @@
-# Testing Internals
-
 ---
+title: "Testing internals"
+description: ""
+date: "2026-02-05"
+---
+
+
+
 
 A testing library contains 5 important components:-
 
 1. Discovery
 2. Execution
 3. Assertions
-4. Reporting
-5. Mocking
+4. Reporting 
+5. Mocking 
 
 ### Test discovery:
 
@@ -36,28 +41,27 @@ Execution often includes **hooks** like:
 
 Some test runners (like Jest ) support **parallel execution**. This requires creating separate threads or processes to isolate tests, ensuring that shared state or global variables do not interfere. This is usually achieved using the language’s multiprocessing libraries and inter-process communication mechanisms.
 
-- The core of the execution is calling the method marked with `@Test`.
+- The core of the execution is calling the method marked with `@Test`. 
 - JUnit instantiates the test class (unless configured differently).
 - The method is invoked.
 - Any **assertions** (`Assertions.assertEquals`, etc.) or **exceptions** during the method define the result:
-- No exception + assertions pass → ✅ success.
-- Assertion fails or exception thrown → ❌ failure or error.
+	- No exception + assertions pass → ✅ success.
+    - Assertion fails or exception thrown → ❌ failure or error.
 
 ```scss
 Launcher.execute()
-└── JupiterTestEngine.execute()
-└── EngineExecutionContext
-└── executeRecursively()
-├── ClassTestDescriptor.execute()
-│     └── invokeBeforeAll()
-│     └── for each method:
-│           └── MethodTestDescriptor.execute()
-│                 └── invokeBeforeEach()
-│                 └── invokeTestMethod()
-│                 └── invokeAfterEach()
-│
-└── invokeAfterAll()
-
+  └── JupiterTestEngine.execute()
+        └── EngineExecutionContext
+              └── executeRecursively()
+                    ├── ClassTestDescriptor.execute()
+                    │     └── invokeBeforeAll()
+                    │     └── for each method:
+                    │           └── MethodTestDescriptor.execute()
+                    │                 └── invokeBeforeEach()
+                    │                 └── invokeTestMethod()
+                    │                 └── invokeAfterEach()
+                    │
+                    └── invokeAfterAll()
 
 ```
 
@@ -92,11 +96,12 @@ In addition to reflection, JUnit 5 introduces an **extension model** that can in
 
 In summary, JUnit hooks into the call stack of a running test method by using Java reflection to invoke the method dynamically, surrounding that call with setup and teardown hooks, and managing exceptions to monitor test outcomes. This approach gives JUnit full control over test execution while keeping the test code clean and declarative.
 
+
 > [!NOTE] Java reflection API
 > The **Java Reflection API** is a powerful feature of the Java programming language that allows programs to inspect and manipulate the runtime behavior of applications. Through reflection, Java code can analyze itself or other classes, methods, fields, and constructors dynamically at runtime, even if those elements were not known at compile time. This capability is crucial for frameworks, libraries, and tools—like JUnit—that need to operate flexibly without hardcoding specific class or method names.
-At its core, the Reflection API provides a set of classes and interfaces in the `java.lang.reflect` package, such as `Class`, `Method`, `Field`, and `Constructor`. These allow you to obtain metadata about classes (e.g., what methods they have, their parameter types, annotations), create new instances of objects dynamically, invoke methods, and access or modify fields — all during runtime. For example, you can load a class by name, examine its declared methods, and invoke one of those methods on an instance without having direct compile-time references to that class or method.
-Reflection also allows reading and modifying annotations, which is essential for modern Java frameworks that rely heavily on annotations to configure behavior, like dependency injection, transaction management, or test execution. However, using reflection comes with trade-offs: it can bypass normal compile-time safety checks, can impact performance due to dynamic type resolution and method dispatch, and may violate encapsulation principles by accessing private members.
-In testing frameworks like JUnit, reflection enables the discovery of test methods annotated with `@Test` and the invocation of those methods on freshly created instances of test classes. This dynamic invocation allows JUnit to control the execution lifecycle of tests without requiring any special boilerplate in the test code. Essentially, reflection makes Java code adaptable and extensible, providing the foundation for many sophisticated tools and frameworks in the Java ecosystem.
+   At its core, the Reflection API provides a set of classes and interfaces in the `java.lang.reflect` package, such as `Class`, `Method`, `Field`, and `Constructor`. These allow you to obtain metadata about classes (e.g., what methods they have, their parameter types, annotations), create new instances of objects dynamically, invoke methods, and access or modify fields — all during runtime. For example, you can load a class by name, examine its declared methods, and invoke one of those methods on an instance without having direct compile-time references to that class or method.
+   Reflection also allows reading and modifying annotations, which is essential for modern Java frameworks that rely heavily on annotations to configure behavior, like dependency injection, transaction management, or test execution. However, using reflection comes with trade-offs: it can bypass normal compile-time safety checks, can impact performance due to dynamic type resolution and method dispatch, and may violate encapsulation principles by accessing private members.
+   In testing frameworks like JUnit, reflection enables the discovery of test methods annotated with `@Test` and the invocation of those methods on freshly created instances of test classes. This dynamic invocation allows JUnit to control the execution lifecycle of tests without requiring any special boilerplate in the test code. Essentially, reflection makes Java code adaptable and extensible, providing the foundation for many sophisticated tools and frameworks in the Java ecosystem.
 
 ### Assertion Mechanisms: Detecting Failures
 
@@ -104,7 +109,7 @@ Assertions are the crux of testing — they validate expected behavior. A failed
 
 In **JUnit**, assertions are method calls like `assertEquals(expected, actual)`. These methods throw exceptions (e.g., `AssertionError`) when the assertion fails. The testing engine catches these and records them in the test result log.
 
-### Result reporting:
+### Result reporting: 
 
 After execution, testing libraries must collect and report the results. This includes which tests passed, which failed, how long they took, and any associated error messages or stack traces.
 
@@ -118,35 +123,35 @@ Most frameworks maintain a **test result object**, usually a tree structure refl
 
 This result is then formatted and output to the terminal, a file (e.g., JUnit XML), or a CI dashboard. Pytest, for instance, uses `TerminalReporter` to output colorful summaries. Many libraries also support plugins to export results in machine-readable formats like **JSON**, **XML**, or **HTML** for integration with other tools.
 
-Failures are typically displayed with stack traces and contextual information. Tools like Jest and Mocha include diff outputs for failed assertions (e.g., expected vs actual), highlighting differences.
+Failures are typically displayed with stack traces and contextual information. Tools like Jest and Mocha include diff outputs for failed assertions (e.g., expected vs actual), highlighting differences. 
 
-Junit Testing:
+Junit Testing: 
 
-1. We should test one scenario at a time.
+1. We should test one scenario at a time. 
 2. Junit test must be annotated with @Test.
 3. We use asserts to check conditions.
 
 ```java
-class CaluclatorTest{
-    @Test
-    void twoPlusTwoEqualsFour(){
-
-        Caluclator caluclator = new Caluclator();
-        assertEquals(4, caluclator.add(2,2));
-        assertNotEquals(3,caluclator.add(2,3));
-        assertNull(null);
-        assertNotNull(caluclator);
+class CaluclatorTest{   
+    @Test  
+    void twoPlusTwoEqualsFour(){  
+    
+        Caluclator caluclator = new Caluclator();  
+        assertEquals(4, caluclator.add(2,2));  
+        assertNotEquals(3,caluclator.add(2,3));  
+        assertNull(null);  
+        assertNotNull(caluclator);  
         assertTrue(calculator.add(2,2)==4);
-    }
+    }  
 }
-
 ```
 
-All the above assert methods will throw an error if assert fails however if condition passes the error is not thrown and test passes.
+All the above assert methods will throw an error if assert fails however if condition passes the error is not thrown and test passes. 
 
 Now lets go over the assertThrows()
 
 At a high level, `assertThrows()` is used in JUnit to **verify that a specific block of code throws an expected exception**. It allows you to ensure that error handling behaves correctly — for example, if a method should throw `IllegalArgumentException` when given invalid input, `assertThrows()` confirms this.
+
 
 ### **JUnit Invokes the Executable Block**
 
@@ -158,33 +163,31 @@ import static org.junit.jupiter.api.Assertions.*;
 class CalculatorTest {
     @Test
     void twoPlusTwoThrowsRuntimeException() {
-        Calculator calculator = new Calculator();
+        Calculator calculator = new Calculator();       
         assertThrows(RuntimeException.class, () -> calculator.add('1', '2'));
     }
 }
-
 ```
+
 
 Behind the schenes:
 
 ```java
 try {
-    executable.execute();
+    executable.execute(); 
 } catch (Throwable actualException) {
-if (expectedType.isInstance(actualException)) {
-    return (T) actualException;
-} else {
-throw new AssertionFailedError("Unexpected exception type", actualException);
-}
+    if (expectedType.isInstance(actualException)) {
+        return (T) actualException; 
+    } else {
+        throw new AssertionFailedError("Unexpected exception type", actualException);
+    }
 }
 throw new AssertionFailedError("Expected exception was not thrown");
-
 ```
 
 ### Code coverage:
 
 There are multiple code coverage metrics, and the most popular are:
-
 - **Line coverage**: which lines of code have been covered by automated tests?
 - **Branch coverage**: which execution paths have been covered by automated tests? For example, a line of code like if a && b can have full line coverage, but only partial branch coverage.
 
@@ -204,6 +207,6 @@ Notes: In junit it work flow is really simple ->
 
 Just by writing the name of function or creating object of that class that passes or fails need not mean that this test is covered. Essentially these lines must run while running those test cases.
 
-Junit after discovering all the tests will run the methods effectively and test is said to pass if and only if method does not creates error. So without any assertion the test is said to have passed.
+Junit after discovering all the tests will run the methods effectively and test is said to pass if and only if method does not creates error. So without any assertion the test is said to have passed. 
 
-Infact assert methods explicitly throw an error when this kind of methods are called. Since error is thrown the test fails and this becomes the way by which java shows where test failed as we get to know the exact stack trace.
+Infact assert methods explicitly throw an error when this kind of methods are called. Since error is thrown the test fails and this becomes the way by which java shows where test failed as we get to know the exact stack trace. 

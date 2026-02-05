@@ -1,12 +1,16 @@
-# Spring Basics
-
 ---
+title: "Spring basics"
+description: ""
+date: "2026-02-05"
+---
+
+
 
 ### Bean:
 
 _In Spring, the objects that form the backbone of your application and that are managed by the Spring IoC container are called beans. A bean is an object that is instantiated, assembled, and otherwise managed by a Spring IoC container._
 
-Inversion of control means a process in which an object defines its dependencies without actually creating them.
+Inversion of control means a process in which an object defines its dependencies without actually creating them. 
 
 For example we have address class
 
@@ -21,7 +25,6 @@ public class Address {
     }
     // getters and setters
 }
-
 ```
 
 and company class is using it->
@@ -35,10 +38,9 @@ public class Company {
     }
     // getter, setter and other properties
 }
-
 ```
 
-And address needs street object which means there are many dependencies to match.
+And address needs street object which means there are many dependencies to match. 
 
 To create the obejcts normally we have to do this
 
@@ -46,7 +48,6 @@ To create the obejcts normally we have to do this
 Address address = new Address("High Street", 1000);
 // creating address first and then using it in company object
 Company company = new Company(address);
-
 ```
 
 Imagine an application with dozens or even hundreds of classes. Sometimes we want to share a single instance of a class across the whole application, other times we need a separate object for each use case, and so on.
@@ -87,7 +88,6 @@ class Car {
         engine.start();
     }
 }
-
 ```
 
 With inversion:
@@ -108,7 +108,6 @@ class Car {
         engine.start();
     }
 }
-
 ```
 
 Setter injection:
@@ -131,17 +130,15 @@ class Car {
             engine.start();
             tire.inflate();
         } else {
-        System.out.println("Engine or Tire not injected!");
+            System.out.println("Engine or Tire not injected!");
+        }
     }
 }
-}
-
 ```
 
 @SpringApplicationContext: Spring _ApplicationContext_ is where Spring holds instances of objects that it has identified to be managed and distributed automatically. These are called beans. **Spring collects bean instances from our application and uses them at the appropriate time.**
 
-The **ApplicationContext** serves as the container in which Spring beans are defined, initialized, and managed. It is responsible for:
-
+	The **ApplicationContext** serves as the container in which Spring beans are defined, initialized, and managed. It is responsible for:
 - **Loading and configuring beans** defined in Spring configuration files (XML, annotations, or Java Config).
 - **Providing beans** to be injected into other components via DI.
 - **Managing the lifecycle** of beans, including instantiation, initialization, and destruction.
@@ -151,18 +148,17 @@ The **ApplicationContext** serves as the container in which Spring beans are def
 1. @Component: is an annotation that allows Spring to detect our custom beans automatically.
 
 In other words, without having to write any explicit code, Spring will:
-
 - Scan our application for classes annotated with _@Component_
 - Instantiate them and inject any specified dependencies into them
 - Inject them wherever needed
 
-@Component is used on classes on which we want to put the dependencies. In earlier example it should be done on Car class as we need to inject dependencies on it.
+@Component is used on classes on which we want to put the dependencies. In earlier example it should be done on Car class as we need to inject dependencies on it. 
 
 Observe that Only the class definition was provided the actual handling will be done by spring. But what if we want to have the custom handling. For that we have `@Configuration`.
 
 2. @Configuration: The @Configuration annotation is used to define a configuration class in Spring. A configuration class is responsible for **defining and managing Spring Beans** and is equivalent to an XML-based configuration file.
 
-Used for defining **custom bean creation logic**, where you explicitly create beans using `@Bean` methods inside a configuration class.
+ Used for defining **custom bean creation logic**, where you explicitly create beans using `@Bean` methods inside a configuration class.
 
 ```java
 @Configuration
@@ -178,12 +174,11 @@ public class AppConfig {
         return new Engine(); // Creating the Engine bean
     }
 }
-
 ```
 
-In Spring, beans are **singleton** by default, which means **only one instance** of a bean will be created per **Spring container** and shared across the application.
+In Spring, beans are **singleton** by default, which means **only one instance** of a bean will be created per **Spring container** and shared across the application. 
 
-`@Configuration` is essentially a specialization of `@Component`.
+`@Configuration` is essentially a specialization of `@Component`. 
 One important feature of `@Configuration` is that Spring **proxies** `@Configuration` classes using **CGLIB (Code Generation Library)**. This proxy mechanism ensures that **bean methods** (like those annotated with `@Bean`) are executed **only once**, even if they are called multiple times.
 
 ```java
@@ -198,7 +193,6 @@ public class AppConfig {
         return new Engine("V8");
     }
 }
-
 ```
 
 Even if you call `car()` multiple times, Spring ensures that it will return **the same instance** of `Car`, ensuring **singleton behavior**.
@@ -233,14 +227,13 @@ public class AppConfig {
         if ("production".equals(environmentType)) {
             return new ProductionPaymentGateway();  // Return the real payment gateway in production
         } else {
-        return new DevelopmentPaymentGateway();  // Return the mock payment gateway in other environments
+            return new DevelopmentPaymentGateway();  // Return the mock payment gateway in other environments
+        }
     }
 }
-}
-
 ```
 
-Tip: We can get the application config here as
+Tip: We can get the application config here as 
 
 ```java
 // Initialize Spring context with configuration class
@@ -251,11 +244,11 @@ PaymentGateway gateway = context.getBean(PaymentGateway.class);
 
 // Use the PaymentGateway
 gateway.processPayment(100.0);
-
 ```
 
-**@Bean** - **Purpose**: Declares a method that returns a bean to be managed by the Spring container.
-**@Scope**  **Purpose**: Specifies the scope of a Spring bean (e.g., singleton, prototype).
+ **@Bean** - **Purpose**: Declares a method that returns a bean to be managed by the Spring container.
+ **@Scope**  **Purpose**: Specifies the scope of a Spring bean (e.g., singleton, prototype).
+
 
 ```java
 @Scope("prototype")
@@ -263,7 +256,6 @@ gateway.processPayment(100.0);
 public class MyComponent {
     // this bean will be created anew each time it's requested
 }
-
 ```
 
 #### Spring strereotype annotations:
@@ -281,34 +273,31 @@ _@SpringBootApplication_ is a composed annotation that includes _@ComponentSca
 ### Important spring boot annotations:
 
 1. @SpringBootApplications: It is a composition of three different annotations:
-1. Configuration: Marks the class as a source of **Spring bean definitions**.
-2. **`@EnableAutoConfiguration`** Tells Spring Boot to automatically **configure beans** for you based on the **classpath** and existing **bean definitions**. If `spring-boot-starter-web` is in the classpath, it configures a Tomcat server + Spring MVC automatically. If `spring-boot-starter-data-jpa` is there, it sets up an EntityManagerFactory, DataSource, and TransactionManager
-3. Tells Spring to scan the current package (and subpackages) for classes annotated with:
-
-- `@Component`
-- `@Service`
-- `@Repository`
-- `@Controller` / `@RestController`
-- This way, Spring automatically detects and registers your beans without extra configuration.
+	1. Configuration: Marks the class as a source of **Spring bean definitions**.
+	2. **`@EnableAutoConfiguration`** Tells Spring Boot to automatically **configure beans** for you based on the **classpath** and existing **bean definitions**. If `spring-boot-starter-web` is in the classpath, it configures a Tomcat server + Spring MVC automatically. If `spring-boot-starter-data-jpa` is there, it sets up an EntityManagerFactory, DataSource, and TransactionManager
+	3. Tells Spring to scan the current package (and subpackages) for classes annotated with:
+	    - `@Component`
+	    - `@Service`
+	    - `@Repository`
+	    - `@Controller` / `@RestController`
+		- This way, Spring automatically detects and registers your beans without extra configuration.
 
 2. @RestController: This annotation is used to indicate that a class is a RESTful controller. It combines `@Controller` and `@ResponseBody`.
-1. `@Controller`
+	1. `@Controller`
+		- Marks a class as a **Spring MVC controller**.
+		- Spring will detect it during **component scanning** (`@ComponentScan`) and register it as a bean.
+		- A controller usually handles web requests via methods annotated with `@RequestMapping` (or shorthand annotations like `@GetMapping`, `@PostMapping`, etc.).
+		 Note that it will return a view not a json kind of object. 
+	2.  `@ResponseBody`
+		- Tells Spring that the return value of the method should be written **directly into the HTTP response body**.
+		- No view resolution is done — the raw return value is sent back (usually as JSON or plain text).
+		- Response body can be applied on method as well as class itself.
 
-- Marks a class as a **Spring MVC controller**.
-- Spring will detect it during **component scanning** (`@ComponentScan`) and register it as a bean.
-- A controller usually handles web requests via methods annotated with `@RequestMapping` (or shorthand annotations like `@GetMapping`, `@PostMapping`, etc.).
-Note that it will return a view not a json kind of object.
-2.  `@ResponseBody`
-
-- Tells Spring that the return value of the method should be written **directly into the HTTP response body**.
-- No view resolution is done — the raw return value is sent back (usually as JSON or plain text).
-- Response body can be applied on method as well as class itself.
-
-3. **@RequestMapping:** This annotation is used to map web requests to specific handler methods. It can be applied at the class or method level. We also have some more mappings like
-@GetMapping , @PostMapping which can also be used to do the same.
+3. **@RequestMapping:** This annotation is used to map web requests to specific handler methods. It can be applied at the class or method level. We also have some more mappings like 
+		@GetMapping , @PostMapping which can also be used to do the same.
 4. ** @Autowired:** This annotation is used to automatically wire dependencies in Spring beans. It can be applied to fields, constructors, or methods.
-If applied at a field it will mean the setter injection However we can also employ this at the constructor level as well.
-constructor injection.
+		If applied at a field it will mean the setter injection However we can also employ this at the constructor level as well.
+	constructor injection.
 ```java
 @Service
 public class OrderService {
@@ -318,7 +307,6 @@ public class OrderService {
         this.paymentService = paymentService;
     }
 }
-
 ```
 
 With lombok we also write required args constructor that simply created the constructor for us.
@@ -337,7 +325,6 @@ public class MyController {
         // Retrieve user with the given ID
     }
 }
-
 ```
 
 ```java
@@ -349,7 +336,6 @@ public class MyController {
         // Retrieve users with the given status
     }
 }
-
 ```
 
 @RequestBody
@@ -363,7 +349,8 @@ public class MyController {
         // Create a new user
     }
 }
-
 ```
 
+
 Refernce : [List of All Spring Boot Annotations, Uses with examples - Tutorial World](https://tutorialworld.in/spring-boot/spring-boot-annotations/)
+

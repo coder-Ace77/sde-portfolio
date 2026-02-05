@@ -1,6 +1,10 @@
-# Spring Core
-
 ---
+title: "Spring core"
+description: ""
+date: "2026-02-05"
+---
+
+
 
 Inversion of Control is a **design principle** where the control of creating and managing objects is shifted from the **application code** to an external framework or container.
 
@@ -10,7 +14,6 @@ Normally, in traditional programming:
 - You write `new` everywhere, wiring up dependencies yourself.
 
 With IoC:
-
 - The **framework/container** takes over that control.
 - Your code just declares what it needs, and the framework provides it.
 
@@ -26,7 +29,6 @@ class Service {
         repo.save();
     }
 }
-
 ```
 
 Now Spring’s IoC **container** decides _which_ implementation of `Repository` to provide, without you writing `new Repository()`
@@ -41,7 +43,6 @@ public class Service {
         this.repo = repo;
     }
 }
-
 ```
 
 Dependency injection (DI) is a specialized form of IoC, whereby objects define their dependencies (that is, the other objects they work with) only through constructor arguments, arguments to a factory method, or properties that are set on the object instance after it is constructed or returned from a factory method.
@@ -55,12 +56,12 @@ A bean is an object that is instantiated, assembled, and managed by a Spring IoC
 ### Container overview:
 
 The `org.springframework.context.ApplicationContext` interface represents the Spring IoC container and is responsible for instantiating, configuring, and assembling the beans.
-The container gets its instructions on the components to instantiate, configure, and assemble by reading configuration metadata.
+The container gets its instructions on the components to instantiate, configure, and assemble by reading configuration metadata. 
 The configuration metadata can be represented as annotated component classes, configuration classes with factory methods, or external XML files or Groovy scripts.
 
 In a Spring Boot scenario, the application context is implicitly bootstrapped for you based on common setup conventions.
 
-A **POJO (Plain Old Java Object)** by itself is just a class.
+A **POJO (Plain Old Java Object)** by itself is just a class.  
 For Spring to manage it (create objects, inject dependencies, configure lifecycle), you need to provide **metadata**.
 
 ### Configuration metadata:
@@ -74,19 +75,18 @@ XML-based configuration metadata configures these beans as `<bean/>` elements in
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xsi:schemaLocation="http://www.springframework.org/schema/beans
-https://www.springframework.org/schema/beans/spring-beans.xsd">
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		https://www.springframework.org/schema/beans/spring-beans.xsd">
 
-<bean id="..." class="...">
-<!-- collaborators and configuration for this bean go here -->
-</bean>
-<bean id="..." class="...">
-<!-- collaborators and configuration for this bean go here -->
-</bean>
-<!-- more bean definitions go here -->
+	<bean id="..." class="...">  
+		<!-- collaborators and configuration for this bean go here -->
+	</bean>
+	<bean id="..." class="...">
+		<!-- collaborators and configuration for this bean go here -->
+	</bean>
+	<!-- more bean definitions go here -->
 </beans>
-
 ```
 
 The `id` attribute is a string that identifies the individual bean definition.
@@ -104,12 +104,11 @@ public class UserService {
         return "Spring User";
     }
 }
-
 ```
 
-Configuration:
+Configuration: 
 
-Instead of relying on scanning, you explicitly tell Spring:
+Instead of relying on scanning, you explicitly tell Spring:  
 “Create this bean by calling this factory method.” These beans don’t require `@ComponentScan` they are **always registered** because they’re explicitly declared.
 
 Essentially we are using factory methods to explicitly define the beans.
@@ -121,13 +120,12 @@ class AppConfig{
     public UserService userService() {
         return new UserService(); // explicitly created
     }
-
+    
     @Bean
     public UserController userController() {
         return new UserController(userService()); // manual wiring
     }
 }
-
 ```
 
 ### Bean overview:
@@ -137,11 +135,11 @@ A Spring IoC container manages one or more beans. These beans are created with t
 Within the container itself, these bean definitions are represented as `BeanDefinition` objects, which contain (among other information) the following metadata:
 
 - A package-qualified class name: typically, the actual implementation class of the bean being defined.
-
+    
 - Bean behavioral configuration elements, which state how the bean should behave in the container (scope, lifecycle callbacks, and so forth).
-
+    
 - References to other beans that are needed for the bean to do its work. These references are also called collaborators or dependencies.
-
+    
 - Other configuration settings to set in the newly created object — for example, the size limit of the pool or the number of connections to use in a bean that manages a connection pool.
 
 ### Dependency injection:
@@ -149,3 +147,5 @@ Within the container itself, these bean definitions are represented as `BeanDefi
 Dependency injection (DI) is a process whereby objects define their dependencies (that is, the other objects with which they work) only through constructor arguments, arguments to a factory method, or properties that are set on the object instance after it is constructed or returned from a factory method. The container then injects those dependencies when it creates the bean. This process is fundamentally the inverse (hence the name, Inversion of Control) of the bean itself controlling the instantiation or location of its dependencies on its own by using direct construction of classes or the Service Locator pattern.
 
 ### Constructor based dependency injection:
+
+

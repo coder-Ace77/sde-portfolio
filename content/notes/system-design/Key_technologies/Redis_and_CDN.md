@@ -1,11 +1,18 @@
-# Redis And Cdn
+---
+title: "Redis and CDN"
+description: "Note on Redis and CDN"
+date: "2026-02-05"
+tags: []
+---
+
+
 
 Distributed cache provide us a great way to reduce latency. Be it for some computation which takes lot of computation or may be storing some data for faster access. Be it any sue case cache is not 100% guaranteed to give us better result due to cache hit/cache miss.
 
-Uses:
+Uses: 
 1. Reduce load on db especailly if lot of read calls.
-2. reduce number of db queries.
-3. Store some data in districuted cache if needed for frequent access.
+2. reduce number of db queries. 
+3. Store some data in districuted cache if needed for frequent access. 
 
 Caches have limited storage. eviction policy tells us which items will be removed when cache is full.
 
@@ -23,9 +30,9 @@ Caches have limited storage. eviction policy tells us which items will be remove
 
 Redis is a key-value store that supports many different data structures, including strings, hashes, lists, sets, sorted sets, bitmaps, and hyperloglogs. Memcached is a simple key-value store that supports strings and binary objects.
 
-## Redis
+## Redis 
 
-Redis(Remote Dictionary server) is in memory data store that can act as -
+Redis(Remote Dictionary server) is in memory data store that can act as - 
 
 - Database
 - Cache
@@ -38,17 +45,17 @@ Because memory access is much faster than disk access, Redis achieves **millions
 
 Everything in redis is a key-value pair and works only on one thread. This means every operation in redis is an atomic operation.
 
-So all the commands which redis supports resemble of a Hash Table at high level.
+So all the commands which redis supports resemble of a Hash Table at high level. 
 
-Eg:
+Eg: 
 SET key value
 GET key
 INC key -- increases the value of key.
 
-Redis maintains durability by two ways -
+Redis maintains durability by two ways - 
 
 - Either it will operate on data snapshot level where it will save data periodically
-- Secondly it may store data written to it in forms of append only logs.
+- Secondly it may store data written to it in forms of append only logs. 
 
 ### Event loop
 
@@ -66,7 +73,6 @@ typedef struct redisObject {
     void *ptr;  // pointer to actual data
     ...
 } robj;
-
 ```
 
 type defines the data structure of store STRING, LIST, HASH, SET, etc.
@@ -75,22 +81,23 @@ encoding defines how the value is represented internally (e.g. ziplist, hashtabl
 Redis usese own memory management and maintains a refernce count on each object. When count becomes 0 memory becomes freed.
 
 You can configure Redis with `maxmemory` to define an upper memory limit — when full, Redis uses **Eviction Policies** like:
-
 - `volatile-lru` (Least Recently Used)
 - `allkeys-lfu` (Least Frequently Used)
 - `random`, etc.
 
 ### Redis Cluster
 
-Redis can run in cluster mode where we will have a main node and some secondry nodes. Write will only happen to  `Main`node and main node will write this to a append only file. Now all the secondry nodes read from these files only.
-So read can be scaled almost to `infinite` but write trhough put will be very bad for the single node.
+Redis can run in cluster mode where we will have a main node and some secondry nodes. Write will only happen to  `Main`node and main node will write this to a append only file. Now all the secondry nodes read from these files only. 
+So read can be scaled almost to `infinite` but write trhough put will be very bad for the single node. 
 
-To solve that we maintain multiple redis `main-secondry` subpairs. So what happens is that we divide the keys into multiple slot where each key belongs to exactly one slot. Basically each key is taken modulo by number of subclusters and then that data is put into that `sub-cluster`. Also `each redis` subnodes talk through the gossip protocol. So if the client do not know which redis cluster to go to redis node will tell you where to go. However for optimal performance it is better if client is aware of which node to go to.
+To solve that we maintain multiple redis `main-secondry` subpairs. So what happens is that we divide the keys into multiple slot where each key belongs to exactly one slot. Basically each key is taken modulo by number of subclusters and then that data is put into that `sub-cluster`. Also `each redis` subnodes talk through the gossip protocol. So if the client do not know which redis cluster to go to redis node will tell you where to go. However for optimal performance it is better if client is aware of which node to go to. 
 
-![Alt](/img/Pasted_image_20251027141700.png)
+![Pasted image 20251027141700.png](/notes-images/Pasted%20image%2020251027141700.png)
+
 
 > [!NOTE] Note
 > Redis clusters the sharded keys across different masters/main by hash slots. This is called clustering. Now each master can have multiple replicas which is used for scaling reads and high availability.
+
 
 ### Redis use
 
@@ -115,11 +122,10 @@ Effectively, the way you organize the keys will be the way you organize your dat
 Redis' wire protocol is a custom query language comprised of simple strings which are used for all functionality of Redis.
 
 ```
-SET foo 1
+SET foo 1  
 GET foo     # Returns 1
 INCR foo    # Returns 2
 XADD mystream * name Sara surname OConnor # Adds an item to a stream
-
 ```
 
 Redis is really, really fast. Redis can handle O(100k) writes per second and read latency is often in the microsecond range. This scale makes some anti-patterns for other database systems actually feasible with Redis. As an example, firing off 100 SQL requests to generate a list of items with a SQL database is a terrible idea, you're better off writing a SQL query which returns all the data you need in one request. On the other hand, the overhead for doing the same with Redis is rather low - while it'd be great to avoid it if you can, it's doable.
@@ -136,12 +142,12 @@ A **hot key** is a key that receives **disproportionately high traffic** (reads 
 In a Redis cluster:
 
 - Each key maps to exactly one node (based on its hash slot).
-- If a few keys are accessed **thousands or millions of times more** than others,
-the node(s) holding those keys get overloaded — CPU, memory bandwidth, and network saturation — even though other nodes remain underutilized.
+- If a few keys are accessed **thousands or millions of times more** than others,  
+    the node(s) holding those keys get overloaded — CPU, memory bandwidth, and network saturation — even though other nodes remain underutilized.
 
 A simple strategy is to break single key into multiple sharded keys and the way it is done is by appending it with some extra number. And now the hash of each key will make it so that all the duplicated keys are mapped to different nodes.
 
-Second thing is that in cache the data should not be there for infinite time rather it should be updated from db time to time so that is reading correct value. The way it is done is through expiration policies.
+Second thing is that in cache the data should not be there for infinite time rather it should be updated from db time to time so that is reading correct value. The way it is done is through expiration policies. 
 We attach EXPIRE commands to the sets and gets. In this expire setup the data will become stale even if memory is not full.
 
 In LRU setup the data is put into the REDIS it is not full. Once its full we will remove the least recently used key and make the way for new key.
@@ -152,15 +158,15 @@ In this case our task is to guard the down services from getting too many reques
 
 ## Redis as the stream
 
-**Redis Streams** data type provides an append-only log structure that allows producers to continuously push events, while consumers read them in order, track their progress, and process them reliably. Each stream entry has an automatically generated, time-ordered ID and can store multiple key-value fields, making it ideal for handling structured event data such as logs, telemetry, or user activity.
-
-Redis Streams supports **consumer groups**, enabling multiple workers to share the workload without losing message order or duplicating processing.
-
-Combined with Redis’s in-memory performance and persistence options, Streams deliver a high-throughput, low-latency mechanism for event collection, buffering, and distribution — serving as a lightweight alternative to traditional message brokers like Kafka or RabbitMQ in scenarios that require simplicity, speed, and horizontal scalability.
+ **Redis Streams** data type provides an append-only log structure that allows producers to continuously push events, while consumers read them in order, track their progress, and process them reliably. Each stream entry has an automatically generated, time-ordered ID and can store multiple key-value fields, making it ideal for handling structured event data such as logs, telemetry, or user activity.
+ 
+  Redis Streams supports **consumer groups**, enabling multiple workers to share the workload without losing message order or duplicating processing. 
+  
+  Combined with Redis’s in-memory performance and persistence options, Streams deliver a high-throughput, low-latency mechanism for event collection, buffering, and distribution — serving as a lightweight alternative to traditional message brokers like Kafka or RabbitMQ in scenarios that require simplicity, speed, and horizontal scalability.
 
 ## Redis as distributed lock
 
-Another common use of Redis in system design settings is as a distributed lock. Occasionally we have data in our system and we need to maintain consistency during updates. Eg Ticket master or the Uber design system.
+Another common use of Redis in system design settings is as a distributed lock. Occasionally we have data in our system and we need to maintain consistency during updates. Eg Ticket master or the Uber design system. 
 
 A very simple distributed lock with a timeout might use the atomic increment (INCR) with a TTL.
 
@@ -168,11 +174,11 @@ This is basically a shared counter. When we want to try to acquire the lock, we 
 
 ### Redis as Leaderboards
 
-Redis' sorted sets maintain ordered data which can be queried in log time which make them appropriate for leaderboard applications. The high write throughput and low read latency make this especially useful for scaled applications where something like a SQL DB will start to struggle.
+Redis' sorted sets maintain ordered data which can be queried in log time which make them appropriate for leaderboard applications. The high write throughput and low read latency make this especially useful for scaled applications where something like a SQL DB will start to struggle. 
 
 This is usefull in schenarios where we have to maintain some leader board for example leetcode contests.
 
-Finally note that redis can not perform aggragates across the nodes. Which means if you want to do the aggregation one needs to first get all the data and then use it.
+Finally note that redis can not perform aggragates across the nodes. Which means if you want to do the aggregation one needs to first get all the data and then use it. 
 ## CDN:
 
 A content delivery network (CDN) is a type of cache that uses distributed servers to deliver content to users based on their geographic location. CDNs are often used to deliver static content like images, videos, and HTML files, but they can also be used to deliver dynamic content like API responses.
@@ -183,3 +189,7 @@ CDN can also  be used for non static assests like blogs data or API response tha
 Like other caches, CDNs have eviction policies that determine when cached content is removed. For example, you can set a time-to-live (TTL) for cached content, or you can use a cache invalidation mechanism to remove content from the cache when it changes
 
 Common CDN are - Cloudflare , Akamai
+
+
+
+

@@ -1,22 +1,29 @@
-# Alb And Asg
+---
+title: "ALB and ASG"
+description: ""
+date: "2026-02-05"
+---
 
-Scalability means application can handle greater loads by adapting.
+
+
+Scalability means application can handle greater loads by adapting. 
 There are two kinds of scalability in cloud
 
 - Vertical scalability (Increase the size of instance)
 - Horizontal scalability (More instances) - Implies distibuted system.
 
-**High availability** means running application in atleast two different in atleast 2 different zones. The goal is to survive the data center loss.
+**High availability** means running application in atleast two different in atleast 2 different zones. The goal is to survive the data center loss. 
 
-Elasticity means weather you are able ton quickly increase or descrease the load or not.
+Elasticity means weather you are able ton quickly increase or descrease the load or not. 
 
-Durability means how much data is lost for example if say have durability of x% then out of 100 objects 100-x will be lost each year.
+Durability means how much data is lost for example if say have durability of x% then out of 100 objects 100-x will be lost each year. 
 
-Availability means how readily service is available.
+Availability means how readily service is available. 
+
 
 ## ELB Elastic load balancer
 
-Load balancer are the servers that forward internet traffic to multiple ec2 instances downstream. IT can be used to spread the load on multiple servers. They can provide the ssl certificate for webiste through load balancers. They provide high availablity - across multiple az.
+Load balancer are the servers that forward internet traffic to multiple ec2 instances downstream. IT can be used to spread the load on multiple servers. They can provide the ssl certificate for webiste through load balancers. They provide high availablity - across multiple az. 
 
 ELB is managed load balancer. There are 4 kinds of load balancers in aws
 
@@ -27,42 +34,39 @@ ELB is managed load balancer. There are 4 kinds of load balancers in aws
 
 All load balancers are part of **Elastic Load Balancing (ELB)**.
 
-## **Application Load Balancer (ALB)**
+#### **Application Load Balancer (ALB)**
 
-### **Layer 7 (HTTP/HTTPS) load balancer**
+**Layer 7 (HTTP/HTTPS) load balancer**
 
 Key features:
-
 - Content-based routing (URL, Host, Path, Query)
 - Supports **WebSocket**
 - Supports **HTTP/2**
 - Ideal for microservices & container apps (ECS/EKS)
 - Works with target groups
 
-### **Network Load Balancer (NLB)**
+#### **Network Load Balancer (NLB)**
 
-#### **Layer 4 (TCP/UDP/TLS) load balancer**
+**Layer 4 (TCP/UDP/TLS) load balancer**
 
 Key features:
-
 - Extremely high performance (millions of requests/sec)
 - Ultra-low latency
 - Static IP & Elastic IP support
 - TLS offloading
 
-### **Gateway Load Balancer (GWLB)**
+#### **Gateway Load Balancer (GWLB)**
 
-#### **Layer 3 (IP) load balancer + transparent proxy**
+**Layer 3 (IP) load balancer + transparent proxy**
 
-Key features:
-
+ Key features:
 - Used for **security appliances**
 - Sends traffic to 3rd-party firewalls or IDS/IPS
 - Uses **GENEVE** protocol for encapsulation
 
-To connect and route the traffic from Internet to down services we need to create the group to which  this load balancer will route the traffic to.
+To connect and route the traffic from Internet to down services we need to create the group to which  this load balancer will route the traffic to. 
 
-Auto scaling group is created to scale out (add ec2)/scale in (remove ec2) to match the load while insuring we have minimum and maximum number of matched instances.
+Auto scaling group is created to scale out (add ec2)/scale in (remove ec2) to match the load while insuring we have minimum and maximum number of matched instances. 
 
 An **Auto Scaling Group (ASG)** in AWS is a service that automatically manages the number of EC2 instances in your application to maintain performance, availability, and cost-efficiency. Instead of manually launching or stopping servers, an ASG continuously monitors your environment and adjusts the capacity based on real-time demand. This ensures that your application always has the right amount of compute power—no more, no less.
 
@@ -76,11 +80,11 @@ Auto Scaling Groups are commonly used with **Load Balancers**. When used with an
 
 Overall, Auto Scaling Groups help applications handle unpredictable workloads while minimizing operational effort and cost. They combine monitoring, automation, health management, and elasticity into one powerful system that keeps your application resilient and responsive under all conditions.
 
-To have the autoscaling group we need to have an launch template which is set of config used to create ec2.
+To have the autoscaling group we need to have an launch template which is set of config used to create ec2. 
 
 A **target** is simply a **destination** that receives traffic from an AWS load balancer.
 
-## Scaling -
+## Scaling - 
 
 Scaling strategies in AWS determine **how and when** your application infrastructure should increase or decrease its capacity. These strategies ensure that your system can handle fluctuations in traffic while optimizing performance and cost. Instead of manually adjusting the number of servers, AWS offers automated and intelligent scaling methods integrated with Auto Scaling Groups, ECS, Lambda, and many other services.
 
@@ -93,3 +97,5 @@ Another advanced approach is **Predictive Scaling**, where AWS uses machine lear
 AWS also supports **Target Tracking Scaling**, which is the easiest and most recommended strategy for most workloads. With target tracking, you simply define a metric target—like keeping CPU utilization at 50%—and AWS automatically increases or decreases capacity to maintain that level. It behaves similarly to how a thermostat maintains room temperature. This strategy simplifies scaling configurations while maintaining consistent performance.
 
 Lastly, **Step Scaling** provides more granular control. Here, scaling actions depend on the severity of metric breaches. For example, if CPU goes above 60%, add 1 instance; if it exceeds 80%, add 3 instances. Step scaling allows a more tailored response compared to simple threshold-based scaling and is useful for workloads with varying levels of demand intensity.
+
+
