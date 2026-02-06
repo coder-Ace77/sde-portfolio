@@ -1,22 +1,27 @@
 "use client"
 import { useState, useEffect } from 'react';
-import { Minus, Plus, Maximize2, Minimize2, Type, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Minus, Plus, Maximize2, Minimize2, Type, ChevronLeft, ChevronRight, Waves, Play, Pause } from 'lucide-react';
 
 export function NoteControls() {
     const [fontSize, setFontSize] = useState(20);
     const [widthMode, setWidthMode] = useState<'compact' | 'standard' | 'wide' | 'full'>("standard");
+    const [isAnimPaused, setIsAnimPaused] = useState(false);
     const [isLoaded, setIsLoaded] = useState(false);
 
     // Load preferences from localStorage on mount
     useEffect(() => {
         const savedFontSize = localStorage.getItem('note-font-size');
         const savedWidthMode = localStorage.getItem('note-width-mode');
+        const savedAnimState = localStorage.getItem('bg-animation-paused');
 
         if (savedFontSize) {
             setFontSize(parseInt(savedFontSize, 10));
         }
         if (savedWidthMode) {
             setWidthMode(savedWidthMode as 'compact' | 'standard' | 'wide' | 'full');
+        }
+        if (savedAnimState) {
+            setIsAnimPaused(savedAnimState === 'true');
         }
 
         setIsLoaded(true);
@@ -57,6 +62,16 @@ export function NoteControls() {
         }
     };
 
+    const toggleAnim = () => {
+        const newState = !isAnimPaused;
+        setIsAnimPaused(newState);
+        localStorage.setItem('bg-animation-paused', String(newState));
+
+        // Dispatch event for AnimatedBackground to pick up
+        const event = new CustomEvent('bg-animation-toggle', { detail: { isPaused: newState } });
+        window.dispatchEvent(event);
+    };
+
     return (
         <div className="fixed bottom-8 right-8 z-50 flex flex-col gap-2 p-3 bg-card border shadow-lg rounded-xl transition-opacity opacity-90 hover:opacity-100">
             {/* Font Size Control */}
@@ -93,6 +108,21 @@ export function NoteControls() {
                         aria-label="Increase width"
                     >
                         <ChevronRight size={14} />
+                    </button>
+                </div>
+            </div>
+
+            {/* Animation Control */}
+            <div className="flex items-center justify-between gap-4">
+                <Waves size={16} className="text-muted-foreground" />
+                <div className="flex bg-secondary rounded-lg w-full">
+                    <button
+                        onClick={toggleAnim}
+                        className="flex-1 p-2 hover:bg-background rounded-lg transition-colors flex items-center justify-center gap-2"
+                        aria-label={isAnimPaused ? "Play animation" : "Pause animation"}
+                    >
+                        {isAnimPaused ? <Play size={14} /> : <Pause size={14} />}
+                        <span className="text-xs font-mono">{isAnimPaused ? "Paused" : "Active"}</span>
                     </button>
                 </div>
             </div>

@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
+import { cleanTitle } from "@/lib/utils";
 
 const contentDirectory = path.join(process.cwd(), "content");
 
@@ -120,7 +121,7 @@ function buildTree(currentDir: string, relativePath: string): TreeNode[] {
             // Only include folders that have children (content)
             if (children.length > 0) {
                 nodes.push({
-                    name: item,
+                    name: cleanTitle(item), // Clean folder name
                     type: "folder",
                     path: itemRelativePath,
                     children: children
@@ -130,12 +131,14 @@ function buildTree(currentDir: string, relativePath: string): TreeNode[] {
             const fileContents = fs.readFileSync(fullPath, "utf8");
             const { data } = matter(fileContents);
 
+            const rawTitle = data.title || item.replace(".md", "");
+
             nodes.push({
-                name: item.replace(".md", ""),
+                name: cleanTitle(item.replace(".md", "")), // Clean filename for display
                 type: "file",
                 path: itemRelativePath.replace(".md", ""),
                 meta: {
-                    title: data.title || item.replace(".md", "")
+                    title: cleanTitle(rawTitle) // Clean title from frontmatter or filename
                 }
             });
         }

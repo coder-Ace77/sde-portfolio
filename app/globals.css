@@ -103,6 +103,10 @@
     @apply border-border;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -113,8 +117,8 @@
     --tw-prose-bold: var(--foreground);
     --tw-prose-links: var(--brand);
     --tw-prose-quotes: var(--foreground);
-    line-height: 1.8;
-    letter-spacing: 0.01em;
+    line-height: 1.9;
+    letter-spacing: 0.015em;
     font-size: 20px;
   }
 
@@ -124,9 +128,30 @@
     --tw-prose-bold: var(--foreground);
     --tw-prose-links: var(--brand);
     --tw-prose-quotes: var(--foreground);
-    line-height: 1.8;
-    letter-spacing: 0.01em;
+    line-height: 1.9;
+    letter-spacing: 0.015em;
   }
+
+  /* Links without animated underline */
+  .prose a {
+    color: #10b981;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s ease;
+  }
+
+  .dark .prose a {
+    color: #34d399;
+  }
+
+  .prose a:hover {
+    color: #059669;
+  }
+
+  .dark .prose a:hover {
+    color: #10b981;
+  }
+
 
   /* Better paragraph spacing */
   .prose p {
@@ -134,16 +159,303 @@
     margin-bottom: 1.25em;
   }
 
-  /* Better list spacing */
+  /* Improved heading spacing and styles */
+  .prose h1 {
+    margin-top: 0;
+    margin-bottom: 1em;
+    scroll-margin-top: 6rem;
+  }
+
+  .dark .prose h1 {
+    background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .prose h2 {
+    margin-top: 2em;
+    margin-bottom: 0.75em;
+    scroll-margin-top: 6rem;
+    padding: 0.75em 1em;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%);
+    border-left: 4px solid #10b981;
+    border-radius: 0.5rem;
+    position: relative;
+    color: #1e293b;
+    /* Dark gray for light mode */
+  }
+
+  .dark .prose h2 {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(59, 130, 246, 0.08) 100%);
+    color: #f1f5f9;
+    /* Light gray for dark mode */
+  }
+
+  .prose h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #10b981, #3b82f6, transparent);
+  }
+
+  .prose h3 {
+    margin-top: 1.75em;
+    margin-bottom: 0.75em;
+    scroll-margin-top: 6rem;
+    padding-left: 0.75em;
+    border-left: 3px solid #3b82f6;
+    background: linear-gradient(90deg, rgba(59, 130, 246, 0.08), transparent);
+    padding-top: 0.25em;
+    padding-bottom: 0.25em;
+    border-radius: 0.25rem;
+    color: #1e293b;
+    /* Dark gray for light mode */
+  }
+
+  .dark .prose h3 {
+    background: linear-gradient(90deg, rgba(59, 130, 246, 0.12), transparent);
+    color: #f1f5f9;
+    /* Light gray for dark mode */
+  }
+
+  .prose h4,
+  .prose h5,
+  .prose h6 {
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+    scroll-margin-top: 6rem;
+  }
+
+  /* Vibrant list styling with colored bullets */
   .prose ul,
   .prose ol {
     margin-top: 1.25em;
     margin-bottom: 1.25em;
   }
 
+  .prose ul {
+    list-style: none;
+    padding-left: 1.5em;
+  }
+
+  .prose ul>li {
+    position: relative;
+    margin-top: 0.75em;
+    margin-bottom: 0.75em;
+  }
+
+  .prose ul>li::before {
+    content: "•";
+    position: absolute;
+    left: -1.5em;
+    color: #10b981;
+    font-size: 1.25em;
+    font-weight: bold;
+    line-height: 1.5;
+  }
+
+  /* Nested list with different colors */
+  .prose ul ul>li::before {
+    content: "◆";
+    color: #3b82f6;
+  }
+
+  .prose ul ul ul>li::before {
+    content: "▸";
+    color: #8b5cf6;
+  }
+
+  .prose ol {
+    padding-left: 1.5em;
+  }
+
+  .prose ol>li {
+    margin-top: 0.75em;
+    margin-bottom: 0.75em;
+  }
+
+  .prose ol>li::marker {
+    color: #10b981;
+    font-weight: 600;
+  }
+
   .prose li {
     margin-top: 0.5em;
     margin-bottom: 0.5em;
+  }
+
+
+
+  /* Enhance strong/bold text with color */
+  .prose strong {
+    font-weight: 700;
+    color: #10b981;
+  }
+
+  .dark .prose strong {
+    color: #34d399;
+  }
+
+  /* Add visual interest to em/italic */
+  .prose em {
+    font-style: italic;
+    color: #3b82f6;
+  }
+
+  .dark .prose em {
+    color: #60a5fa;
+  }
+
+  /* Enhanced table styling */
+  .prose table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 2em;
+    margin-bottom: 2em;
+    font-size: 0.875em;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+  }
+
+  .prose thead {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .prose th {
+    background-color: var(--muted);
+    font-weight: 600;
+    text-align: left;
+    padding: 0.875em 1em;
+    border: 1px solid var(--border);
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .prose td {
+    padding: 0.875em 1em;
+    border: 1px solid var(--border);
+    transition: background-color 0.15s ease;
+  }
+
+  .prose tbody tr {
+    transition: background-color 0.15s ease;
+  }
+
+  .prose tbody tr:hover {
+    background-color: var(--accent);
+  }
+
+  .prose tr:nth-child(even) {
+    background-color: var(--muted);
+    opacity: 0.3;
+  }
+
+  .prose tbody tr:nth-child(even):hover {
+    opacity: 1;
+  }
+
+  /* Inline code styling with gradient */
+  .prose :not(pre)>code {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(59, 130, 246, 0.15));
+    padding: 0.2em 0.5em;
+    border-radius: 0.375rem;
+    font-size: 0.875em;
+    font-weight: 600;
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+
+  .dark .prose :not(pre)>code {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(59, 130, 246, 0.2));
+    color: #34d399;
+    border-color: rgba(16, 185, 129, 0.4);
+  }
+
+  /* Enhanced code blocks with colored top border */
+  .prose pre {
+    position: relative;
+    padding: 1.25rem 1rem;
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+    overflow-x: auto;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 10px 20px -5px rgba(16, 185, 129, 0.1);
+    border-top: 3px solid;
+    border-image: linear-gradient(90deg, #10b981, #3b82f6, #8b5cf6) 1;
+  }
+
+  .prose pre code {
+    background: none;
+    padding: 0;
+    border: none;
+    color: inherit;
+    font-size: 0.875em;
+    line-height: 1.7;
+  }
+
+  /* Beautiful gradient horizontal dividers */
+  .prose hr {
+    border: none;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #10b981, #3b82f6, #8b5cf6, transparent);
+    margin: 3em 0;
+    border-radius: 2px;
+    position: relative;
+  }
+
+  .prose hr::before {
+    content: '✦';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--background);
+    padding: 0 1em;
+    color: #10b981;
+    font-size: 1.2em;
+  }
+
+  /* Blockquote enhancements */
+  .prose blockquote {
+    font-style: italic;
+    border-left-width: 4px;
+    padding-left: 1em;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    background: linear-gradient(90deg, rgba(16, 185, 129, 0.08), transparent);
+    border-radius: 0.25rem;
+    margin: 1.5em 0;
+  }
+
+  /* Target highlight when clicking from TOC */
+  .prose :target {
+    animation: highlight 2s ease-out;
+  }
+
+  @keyframes highlight {
+    0% {
+      background-color: rgba(16, 185, 129, 0.2);
+    }
+
+    100% {
+      background-color: transparent;
+    }
+  }
+
+  /* Better focus states for accessibility */
+  *:focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 2px;
+    border-radius: 0.25rem;
   }
 }
 
