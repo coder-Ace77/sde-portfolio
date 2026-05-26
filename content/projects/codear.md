@@ -3,7 +3,7 @@ title: "CodeArena | Competitive Programming Platform"
 description: "DSA and CP platform built for high-performance code execution and real-time judging."
 date: "2024-03-20"
 tech_stack: ["Spring Boot", "React", "Kafka", "Docker", "PostgreSQL", "Redis"]
-demo_link: "https://codear.apilabs.top/"
+demo_link: "https://codear-murex.vercel.app/"
 repo_link: "https://github.com/coder-Ace77/codear"
 image: "/projects/codear.png"
 ---

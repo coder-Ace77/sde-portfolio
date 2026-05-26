@@ -3,7 +3,7 @@ title: "Drive | Your storage space"
 description: "An storage space designed to "
 date: "2024-03-20"
 tech_stack: ["Spring Boot", "React", "Kafka", "Docker", "PostgreSQL", "Redis"]
-demo_link: "https://drive.apilabs.top"
+demo_link: "https://drive-lovat-mu.vercel.app/"
 repo_link: "https://github.com/coder-Ace77/drive"
 image: "/projects/drive.png"
 ---
